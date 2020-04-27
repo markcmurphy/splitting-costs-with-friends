@@ -1,22 +1,22 @@
-import { todosRef } from "../firebase";
-const FETCH_TODOS = "FETCH_TODOS";
+import { friendsRef } from "../firebase";
+const FETCH_FRIENDS = "FETCH_FRIENDS";
 
-const addToDo = (newToDo) => async (dispatch) => {
-  todosRef.push().set(newToDo);
-  console.log("addTodo ran");
+const addFriend = (newFriend) => async (dispatch) => {
+  friendsRef.push().set(newFriend);
+  console.log("addFriend ran");
 };
 
-const completeToDo = (completeToDo) => async (dispatch) => {
-  todosRef.child(completeToDo).remove();
+const deleteFriend = (deleteFriend) => async (dispatch) => {
+  friendsRef.child(deleteFriend).remove();
 };
 
-const fetchToDos = () => async (dispatch) => {
-  todosRef.on("value", (snapshot) => {
+const fetchFriends = () => async (dispatch) => {
+  friendsRef.on("value", (snapshot) => {
     dispatch({
-      type: FETCH_TODOS,
+      type: FETCH_FRIENDS,
       payload: snapshot.val(),
     });
   });
 };
 
-export { addToDo, completeToDo, fetchToDos, FETCH_TODOS };
+export { addFriend, deleteFriend, fetchFriends, FETCH_FRIENDS };

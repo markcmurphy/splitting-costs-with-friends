@@ -16,9 +16,9 @@ class List extends Component {
 
   formSubmit = (e) => {
     const { formValue } = this.state;
-    const { addToDo } = this.props;
+    const { addFriend } = this.props;
     e.preventDefault();
-    addToDo({ title: formValue });
+    addFriend({ name: formValue });
     this.setState({ formValue: "" });
   };
 
@@ -33,10 +33,10 @@ class List extends Component {
               <input
                 value={formValue}
                 onChange={this.inputChange}
-                id="toDoNext"
+                id="friendNext"
                 type="text"
               />
-              {/* <label htmlFor="toDoNext">What Next?</label> */}
+              <label htmlFor="friendNext">Who Next?</label>
             </div>
             <input type="submit" value="Submit" />
           </form>
@@ -44,22 +44,22 @@ class List extends Component {
       );
     }
   };
-  renderToDo() {
+  renderFriend() {
     const { data } = this.props;
-    const toDos = _.map(data, (value, key) => {
-      return <ListItem key={key} todoId={key} todo={value} />;
+    const friends = _.map(data, (value, key) => {
+      return <ListItem key={key} friendId={key} friend={value} />;
     });
-    if (!_.isEmpty(toDos)) {
-      return toDos;
+    if (!_.isEmpty(friends)) {
+      return friends;
     }
     return (
       <div>
-        <h4>You have no more things ToDo!</h4>
+        <h4>You have no more things friends!</h4>
       </div>
     );
   }
   componentWillMount() {
-    this.props.fetchToDos();
+    this.props.fetchFriends();
   }
   render() {
     const { showForm } = this.state;
@@ -67,7 +67,7 @@ class List extends Component {
       <div>
         <div>
           {this.renderForm()}
-          {this.renderToDo()}
+          {this.renderFriend()}
         </div>
         <div>
           <button onClick={() => this.setState({ showForm: !showForm })}>
