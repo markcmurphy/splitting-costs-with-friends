@@ -1,20 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { completeToDo } from "../actions/index.js";
+import { deleteFriend } from "../actions/index.js";
 
 class ListItem extends Component {
-  handleComplete = (completed) => {
-    const { completeToDo } = this.props;
-    completeToDo(completed);
+  handleDelete = (deleted) => {
+    const { deleteFriend } = this.props;
+    deleteFriend(deleted);
   };
 
   render() {
-    const { todoId, todo } = this.props;
+    const { friendId, friend } = this.props;
     return (
-      <div key="toDoName">
+      <div key="friendName">
         <h4>
-          {todo.title}
-          <span onClick={() => this.handleComplete(todoId)}>
+          {friend.name}
+          <span onClick={() => this.handleDelete(friendId)}>
             <i>Done</i>
           </span>
         </h4>
@@ -23,4 +23,4 @@ class ListItem extends Component {
   }
 }
 
-export default connect(null, { completeToDo })(ListItem);
+export default connect(null, { deleteFriend })(ListItem);

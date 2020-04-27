@@ -1,7 +1,7 @@
-import { FETCH_TODOS } from "../actions/index.js";
+import { FETCH_FRIENDS } from "../actions/index.js";
 export default (state = {}, action) => {
   switch (action.type) {
-    case FETCH_TODOS:
+    case FETCH_FRIENDS:
       return action.payload;
     default:
       return state;
