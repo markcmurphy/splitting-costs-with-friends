@@ -8,7 +8,6 @@ function App() {
     <div className="App">
       <h1>Splitting Costs with Friends</h1>
       <List />
-      {/* <Friend /> */}
     </div>
   );
 }

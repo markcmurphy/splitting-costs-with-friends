@@ -11,11 +11,11 @@ class ListItem extends Component {
   render() {
     const { friendId, friend } = this.props;
     return (
-      <div key="friendName">
+      <div className="mt-4" key="friendName">
         <h4>
-          {friend.name}
+          {friend.name} - {friend.expenseAmount}
           <span onClick={() => this.handleDelete(friendId)}>
-            <i>Done</i>
+            <i className="ml-4">X</i>
           </span>
         </h4>
       </div>

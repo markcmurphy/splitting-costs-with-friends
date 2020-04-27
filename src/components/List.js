@@ -5,45 +5,62 @@ import * as actions from "../actions/index.js";
 import ListItem from "./ListItem";
 
 class List extends Component {
-  state = {
-    showForm: false,
-    formValue: "",
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      showForm: false,
+      firstName: "",
+      amount: 0,
+    };
+  }
 
   inputChange = (e) => {
-    this.setState({ formValue: e.target.value });
+    // const target = e.target;
+    this.setState({ [e.target.name]: e.target.value });
   };
 
   formSubmit = (e) => {
-    const { formValue } = this.state;
+    const { firstName, amount } = this.state;
     const { addFriend } = this.props;
     e.preventDefault();
-    addFriend({ name: formValue });
-    this.setState({ formValue: "" });
+    addFriend({ name: firstName, expenseAmount: amount });
+    this.setState({ firstName: "", amount: "" });
   };
 
   renderForm = () => {
-    const { showForm, formValue } = this.state;
+    const { showForm, firstName, amount } = this.state;
     if (showForm) {
       return (
-        <div>
+        <div className="mt-4">
           <form onSubmit={this.formSubmit}>
             <div>
               <i>add</i>
-              <input
-                value={formValue}
-                onChange={this.inputChange}
-                id="friendNext"
-                type="text"
-              />
-              <label htmlFor="friendNext">Who Next?</label>
+              <div className="form-group">
+                <input
+                  value={firstName}
+                  onChange={this.inputChange}
+                  id="friendNext"
+                  type="text"
+                  name="firstName"
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  name="amount"
+                  type="number"
+                  value={amount}
+                  onChange={this.inputChange}
+                />
+              </div>
+              {/* <label htmlFor="friendNext">Who Next?</label> */}
             </div>
-            <input type="submit" value="Submit" />
+            <input className="btn btn-primary" type="submit" value="Submit" />
           </form>
         </div>
       );
     }
   };
+
   renderFriend() {
     const { data } = this.props;
     const friends = _.map(data, (value, key) => {
@@ -54,7 +71,7 @@ class List extends Component {
     }
     return (
       <div>
-        <h4>You have no more things friends!</h4>
+        <h4 className="mt-4">You have no more friends!</h4>
       </div>
     );
   }
@@ -66,11 +83,14 @@ class List extends Component {
     return (
       <div>
         <div>
-          {this.renderForm()}
           {this.renderFriend()}
+          {this.renderForm()}
         </div>
         <div>
-          <button onClick={() => this.setState({ showForm: !showForm })}>
+          <button
+            className="mt-4 btn btn-primary"
+            onClick={() => this.setState({ showForm: !showForm })}
+          >
             {showForm ? <i>Close</i> : <i>Add</i>}
           </button>
         </div>
