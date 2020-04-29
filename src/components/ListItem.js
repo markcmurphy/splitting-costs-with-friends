@@ -13,7 +13,7 @@ class ListItem extends Component {
     return (
       <div className="mt-4" key="friendName">
         <h4>
-          {friend.name} - {friend.expenseAmount}
+          {friend.name}
           <span onClick={() => this.handleDelete(friendId)}>
             <i className="ml-4">X</i>
           </span>

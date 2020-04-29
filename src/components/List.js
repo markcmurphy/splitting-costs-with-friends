@@ -15,7 +15,6 @@ class List extends Component {
   }
 
   inputChange = (e) => {
-    // const target = e.target;
     this.setState({ [e.target.name]: e.target.value });
   };
 
@@ -34,7 +33,7 @@ class List extends Component {
         <div className="mt-4">
           <form onSubmit={this.formSubmit}>
             <div>
-              <i>add</i>
+              <i>Add Friend</i>
               <div className="form-group">
                 <input
                   value={firstName}
@@ -44,15 +43,6 @@ class List extends Component {
                   name="firstName"
                 />
               </div>
-              <div className="form-group">
-                <input
-                  name="amount"
-                  type="number"
-                  value={amount}
-                  onChange={this.inputChange}
-                />
-              </div>
-              {/* <label htmlFor="friendNext">Who Next?</label> */}
             </div>
             <input className="btn btn-primary" type="submit" value="Submit" />
           </form>
@@ -91,7 +81,7 @@ class List extends Component {
             className="mt-4 btn btn-primary"
             onClick={() => this.setState({ showForm: !showForm })}
           >
-            {showForm ? <i>Close</i> : <i>Add</i>}
+            {showForm ? <i>Close</i> : <i>Add Friend</i>}
           </button>
         </div>
       </div>

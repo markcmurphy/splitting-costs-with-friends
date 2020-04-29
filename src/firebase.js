@@ -11,5 +11,7 @@ const config = {
 };
 
 firebase.initializeApp(config);
-const databaseRef = firebase.database().ref();
+export const databaseRef = firebase.database().ref();
 export const friendsRef = databaseRef.child("friends");
+export const expensesRef = databaseRef.child("expenses");
+export const totalsRef = databaseRef.child("totals");
