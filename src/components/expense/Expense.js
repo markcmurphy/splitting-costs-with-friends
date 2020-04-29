@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import * as actions from "../../actions/index.js";
 import ExpenseList from "./ExpenseList";
+import WhoPaid from "./WhoPaid.js";
 
 class Expense extends Component {
   constructor(props) {
@@ -30,6 +31,26 @@ class Expense extends Component {
     return newTotal;
   };
 
+  renderFriend() {
+    const { data } = this.props;
+    const friends = (
+      <select
+        multiple={false}
+        value={this.state.whoPaid}
+        onChange={this.inputChange}
+        id="whoPaid"
+        type="text"
+        name="whoPaid"
+      >
+        {_.map(data, (value, key) => {
+          return <WhoPaid key={key} friendId={key} friend={value} />;
+        })}
+      </select>
+    );
+
+    return <div>{friends}</div>;
+  }
+
   formSubmit = (e) => {
     const { expense, amount, friendsInvolved, whoPaid } = this.state;
     const { addExpense } = this.props;
@@ -51,7 +72,7 @@ class Expense extends Component {
   };
 
   renderForm = () => {
-    const { showForm, expense, amount, friendsInvolved, whoPaid } = this.state;
+    const { showForm, expense, amount, friendsInvolved } = this.state;
     if (showForm) {
       return (
         <div className="mt-4">
@@ -99,16 +120,8 @@ class Expense extends Component {
               </div>
               {/* Who Paid */}
               <div className="form-group">
-                <label>
-                  Who Paid
-                  <input
-                    value={whoPaid}
-                    onChange={this.inputChange}
-                    id="whoPaid"
-                    type="text"
-                    name="whoPaid"
-                  />
-                </label>
+                <label>Who Paid</label>
+                {this.renderFriend()}
               </div>
             </div>
             <input className="btn btn-primary" type="submit" value="Submit" />
@@ -122,7 +135,7 @@ class Expense extends Component {
     const { expenseData } = this.props;
 
     const expenses = _.map(expenseData, (value, key) => {
-      return <ExpenseList key={key} expenseId={key} expense={value} />;
+      return <ExpenseList expenseId={key} expense={value} />;
     });
     if (!_.isEmpty(expenses)) {
       return expenses;
@@ -133,8 +146,10 @@ class Expense extends Component {
       </div>
     );
   }
+
   componentWillMount() {
     this.props.fetchExpenses();
+    this.props.fetchFriends();
   }
 
   render() {
@@ -143,7 +158,7 @@ class Expense extends Component {
       <div>
         <div>
           {this.renderExpense()}
-
+          <hr />
           <p>Total = ${this.addTotalExpenses()}</p>
           {this.renderForm()}
         </div>
@@ -160,9 +175,10 @@ class Expense extends Component {
   }
 }
 
-const mapStateToProps = ({ expenseData }) => {
+const mapStateToProps = ({ expenseData, data }) => {
   return {
     expenseData,
+    data,
   };
 };
 

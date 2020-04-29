@@ -11,8 +11,7 @@ class ExpenseList extends Component {
   render() {
     const { expenseId, expense } = this.props;
     return (
-      <div className="mt-4" key="expenseName">
-        {/* {console.log(this.addTotalExpenses())} */}
+      <div className="mt-4" key="expenseId">
         <h4>
           {expense.name} - ${expense.expenseAmount}
           <span onClick={() => this.handleDelete(expenseId)}>

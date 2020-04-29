@@ -9,7 +9,7 @@ const addFriend = (newFriend) => async (dispatch) => {
 
 const addExpense = (newExpense) => async (dispatch) => {
   expensesRef.push().set(newExpense);
-  console.log("addExpense ran");
+  console.log(newExpense);
 };
 
 const addTotal = (newTotal) => async (dispatch) => {
