@@ -10,6 +10,7 @@ class ExpenseList extends Component {
 
   render() {
     const { expenseId, expense } = this.props;
+    console.log(expenseId);
     return (
       <div className="mt-4" key="expenseId">
         <h4>

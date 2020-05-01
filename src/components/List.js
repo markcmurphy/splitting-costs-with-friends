@@ -11,6 +11,7 @@ class List extends Component {
       showForm: false,
       firstName: "",
       amount: 0,
+      // friendId: undefined,
     };
   }
 
@@ -22,7 +23,8 @@ class List extends Component {
     const { firstName, amount } = this.state;
     const { addFriend } = this.props;
     e.preventDefault();
-    addFriend({ name: firstName, expenseAmount: amount });
+    // addFriend({ name: firstName, expenseAmount: amount, friendId: firstName });
+    addFriend({ name: firstName });
     this.setState({ firstName: "", amount: "" });
   };
 
@@ -73,6 +75,7 @@ class List extends Component {
     return (
       <div>
         <div>
+          {/* {actions.searchFriends()} */}
           {this.renderFriend()}
           {this.renderForm()}
         </div>

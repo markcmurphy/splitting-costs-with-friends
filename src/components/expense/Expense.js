@@ -53,15 +53,19 @@ class Expense extends Component {
 
   formSubmit = (e) => {
     const { expense, amount, friendsInvolved, whoPaid } = this.state;
-    const { addExpense } = this.props;
+    const { addExpense, addPaidToFriend } = this.props;
     e.preventDefault();
 
     addExpense({
       name: expense,
       expenseAmount: amount,
-      friendsInvolved: [friendsInvolved],
+      // friendsInvolved: { friendsInvolved },
       whoPaid: whoPaid,
     });
+
+    // addPaidToFriend({
+    //   expenseAmount: amount,
+    // });
 
     this.setState({
       expense: "",
@@ -135,7 +139,7 @@ class Expense extends Component {
     const { expenseData } = this.props;
 
     const expenses = _.map(expenseData, (value, key) => {
-      return <ExpenseList expenseId={key} expense={value} />;
+      return <ExpenseList key={key} expenseId={key} expense={value} />;
     });
     if (!_.isEmpty(expenses)) {
       return expenses;
