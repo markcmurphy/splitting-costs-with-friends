@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { deleteExpense } from "../../actions/index.js";
+// import { deleteExpense } from "../../actions/index.js";
 
 class ExpenseList extends Component {
   handleDelete = (deleted) => {
-    const { deleteExpense } = this.props;
-    deleteExpense(deleted);
+    // const { deleteExpense } = this.props;
+    // deleteExpense(deleted);
   };
 
   render() {
@@ -23,4 +23,7 @@ class ExpenseList extends Component {
   }
 }
 
-export default connect(null, { deleteExpense })(ExpenseList);
+export default connect(
+  null
+  // { deleteExpense }
+)(ExpenseList);
