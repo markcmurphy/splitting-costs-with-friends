@@ -3,36 +3,33 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { compose } from "redux";
 import { firestoreConnect } from "react-redux-firebase";
-// import { deleteFriend } from "../../actions/index.js";
 
 class FriendDetails extends Component {
-  // handleDelete = (deleted) => {
-  //   // const { deleteFriend } = this.props;
-  //   // deleteFriend(deleted);
-  // };
-  // console.log(this.props)
-
   handleDelete = () => {
     const { friends, firestore } = this.props;
-    console.log(firestore);
     firestore.delete({ collection: "friends", doc: friends.id });
     // .then(() => this.props.history.push("/"));
   };
 
+  renderWhoseInvolved(id) {
+    const { friend } = this.props;
+    return <td>{friend[id].name}</td>;
+  }
+
   render() {
-    console.log(this.props);
     const { friends } = this.props;
-    // console.log(friends);
     return (
-      <div className="mt-4">
-        <h4>{friends.name}</h4>
-        <button onClick={this.handleDelete} className="btn btn-danger">
-          Delete
-        </button>
-        {/* <span onClick={() => this.handleDelete(friendId)}>
-            <i className="ml-4">X</i>
-          </span> */}
-      </div>
+      <tbody>
+        <tr key={friends.id}>
+          <td>{friends.name}</td>
+          {/* <td>${parseFloat(expenses.expenseAmount).toFixed(2)}</td> */}
+          <td>
+            <button onClick={this.handleDelete} className="btn-sm btn-danger">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
     );
   }
 }
