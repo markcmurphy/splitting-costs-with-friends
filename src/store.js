@@ -60,9 +60,3 @@ export const rrfProps = {
 };
 
 export default store;
-
-// firebase.initializeApp(config);
-// export const databaseRef = firebase.database().ref();
-// export const friendsRef = databaseRef.child("friends");
-// export const expensesRef = databaseRef.child("expenses");
-// export const totalsRef = databaseRef.child("totals");

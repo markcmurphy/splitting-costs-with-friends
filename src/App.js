@@ -2,13 +2,18 @@ import React from "react";
 import "./App.css";
 import Friends from "./components/friends/Friends";
 import AddExpense from "./components/expense/AddExpense";
+import Navbar from "./components/layout/Navbar";
+import RenderExpenseList from "./components/expense/RenderExpenseList";
 
 function App() {
   return (
     <div className="App">
-      <h1>Splitting Costs with Friends</h1>
-      <AddExpense />
-      <Friends />
+      <Navbar />
+      <div className="main">
+        <RenderExpenseList />
+        <AddExpense />
+        <Friends />
+      </div>
     </div>
   );
 }

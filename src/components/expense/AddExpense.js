@@ -1,11 +1,9 @@
-import React, { Component, useEffect } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
-import { Link } from "react-router-dom";
 import { compose } from "redux";
 import { firestoreConnect } from "react-redux-firebase";
 
-import ExpenseList from "./ExpenseList";
 import WhoPaid from "./WhoPaid.js";
 import FriendsInvolved from "./FriendsInvolved";
 
@@ -17,7 +15,6 @@ class AddExpense extends Component {
     friendsInvolved: [""],
     whoPaid: "",
     total: 0,
-    totalExpensesPerPerson: {},
   };
 
   inputChange = (e) => {
@@ -35,15 +32,6 @@ class AddExpense extends Component {
     });
   };
 
-  addTotalExpenses = () => {
-    const { expenses } = this.props;
-    let newTotal = 0;
-    for (let x in expenses) {
-      newTotal += Number(expenses[x].expenseAmount);
-    }
-    return newTotal;
-  };
-
   renderFriend() {
     const { friends } = this.props;
     const friendSelect = (
@@ -51,6 +39,7 @@ class AddExpense extends Component {
         multiple={false}
         value={this.state.whoPaid}
         onChange={this.inputChange}
+        className="form-control"
         id="whoPaid"
         type="text"
         name="whoPaid"
@@ -64,19 +53,6 @@ class AddExpense extends Component {
     return <div>{friendSelect}</div>;
   }
 
-  renderFriendHeader = (props) => {
-    const { friends } = this.props;
-    const friendsList = _.map(friends, (value, key) => {
-      return <th key={key}>{value.name}</th>;
-    });
-
-    if (friends) {
-      return friendsList;
-    } else {
-      return <th>Loading</th>;
-    }
-  };
-
   renderFriendsInvolved() {
     const { friends } = this.props;
     const { friendsInvolved } = this.state;
@@ -85,6 +61,7 @@ class AddExpense extends Component {
         multiple={true}
         value={friendsInvolved}
         onChange={this.inputChangeMultiple}
+        className="form-control"
         id="friendsInvolved"
         type="text"
       >
@@ -111,8 +88,6 @@ class AddExpense extends Component {
         whoPaid: whoPaid,
       }
     );
-    // this.renderTotalDifferencePerPerson();
-    // .then(() => this.props.history.push("/"));
     this.setState({
       expense: "",
       amount: 0,
@@ -122,38 +97,35 @@ class AddExpense extends Component {
   };
 
   renderForm = () => {
-    const { showForm, expense, amount, friendsInvolved, whoPaid } = this.state;
+    const { showForm, expense, amount } = this.state;
     if (showForm) {
       return (
-        <div className="mt-4">
-          <form onSubmit={this.formSubmit}>
-            <div>
-              <i>Add Expense</i>
-              {/* Cost */}
+        <div className="card mb-4 mt-4 bg-dark">
+          <div className="card-header">Add Expense</div>
+          <div className="card-body">
+            <form onSubmit={this.formSubmit}>
               <div className="form-group mt-4">
-                <label>
-                  Cost {""}
-                  <input
-                    value={expense}
-                    onChange={this.inputChange}
-                    id="friendNext"
-                    type="text"
-                    name="expense"
-                  />
-                </label>
+                <label>Cost</label>
+                <input
+                  value={expense}
+                  className="form-control"
+                  onChange={this.inputChange}
+                  id="friendNext"
+                  type="text"
+                  name="expense"
+                />
               </div>
-              {/* Amount */}
+
               <div className="form-group">
-                <label>
-                  Amount {""}
-                  <input
-                    value={amount}
-                    onChange={this.inputChange}
-                    type="number"
-                    id="amount"
-                    name="amount"
-                  />
-                </label>
+                <label>Amount</label>
+                <input
+                  value={amount}
+                  onChange={this.inputChange}
+                  className="form-control"
+                  type="number"
+                  id="amount"
+                  name="amount"
+                />
               </div>
               {/* Friends involved */}
               <div className="form-group">
@@ -165,205 +137,26 @@ class AddExpense extends Component {
                 <label>Who Paid</label>
                 {this.renderFriend()}
               </div>
-            </div>
-            <input className="btn btn-primary" type="submit" value="Submit" />
-          </form>
+
+              <input
+                type="submit"
+                value="Submit"
+                className="btn btn-primary btn-block"
+              />
+            </form>
+          </div>
         </div>
       );
     }
   };
 
-  renderExpense = (props) => {
-    const { expenses } = this.props;
-
-    const expensesList = _.map(expenses, (value, key) => {
-      return <ExpenseList key={value.id} expenses={value} />;
-    });
-    if (!_.isEmpty(expenses)) {
-      return expensesList;
-    }
-    return (
-      <div>
-        <h4 className="mt-4">You have no expenses logged!</h4>
-      </div>
-    );
-  };
-
-  renderTotalPerPerson() {
-    const { friends, expenses } = this.props;
-    // console.log(expenses);
-    const friendsObj = {};
-
-    _.map(friends, (value, key) => {
-      for (let expense of expenses) {
-        if (
-          friendsObj[value.id] &&
-          expense.friendsInvolved.includes(value.id)
-        ) {
-          let bal = expense.expenseAmount / expense.friendsInvolved.length;
-          friendsObj[value.id] += bal;
-        } else if (
-          !friendsObj[value.id] &&
-          expense.friendsInvolved.includes(value.id)
-        ) {
-          let bal = expense.expenseAmount / expense.friendsInvolved.length;
-          friendsObj[value.id] = bal;
-        }
-      }
-    });
-
-    const map = _.map(friends, (value, key) => {
-      if (friendsObj[value.id]) {
-        return (
-          <td key={value.id}>${parseFloat(friendsObj[value.id]).toFixed(2)}</td>
-        );
-      } else {
-        return <td key={value.id}>$0</td>;
-      }
-    });
-    // console.log(friendsObj);
-    return map;
-  }
-  renderTotalAmountPaidPerPerson() {
-    const { friends, expenses } = this.props;
-    const friendsObj = {};
-
-    _.map(friends, (value, key) => {
-      for (let expense of expenses) {
-        console.log(expense.expenseAmount);
-        console.log(value.id);
-        if (friendsObj[value.id] && expense.whoPaid.includes(value.id)) {
-          let bal = expense.expenseAmount;
-          friendsObj[value.id] += bal;
-        } else if (
-          !friendsObj[value.id] &&
-          expense.whoPaid.includes(value.id)
-        ) {
-          let bal = expense.expenseAmount;
-          friendsObj[value.id] = bal;
-        }
-      }
-    });
-
-    const map1 = _.map(friends, (value, key) => {
-      if (friendsObj[value.id]) {
-        return <td key={value.id}>${friendsObj[value.id].toFixed(2)}</td>;
-      } else {
-        return <td key={value.id}>$0</td>;
-      }
-    });
-    console.log(friendsObj);
-    return map1;
-  }
-
-  renderTotalDifferencePerPerson() {
-    const { friends, expenses } = this.props;
-    const { totalExpensesPerPerson } = this.state;
-    const friendsObj = {};
-
-    _.map(friends, (value, key) => {
-      for (let expense of expenses) {
-        let expenseAmount = expense.expenseAmount;
-        let costPerPerson = expenseAmount / expense.friendsInvolved.length;
-        let net = costPerPerson - expenseAmount;
-
-        if (friendsObj[value.id]) {
-          if (
-            expense.friendsInvolved.includes(value.id) &&
-            expense.whoPaid.includes(value.id)
-          ) {
-            friendsObj[value.id] += net;
-          } else if (expense.whoPaid.includes(value.id)) {
-            friendsObj[value.id] += expenseAmount;
-          } else if (expense.friendsInvolved.includes(value.id)) {
-            friendsObj[value.id] += costPerPerson;
-          }
-        } else if (!friendsObj[value.id]) {
-          if (
-            expense.friendsInvolved.includes(value.id) &&
-            expense.whoPaid.includes(value.id)
-          ) {
-            friendsObj[value.id] = net;
-          } else if (expense.whoPaid.includes(value.id)) {
-            friendsObj[value.id] = expenseAmount;
-          } else if (expense.friendsInvolved.includes(value.id)) {
-            friendsObj[value.id] = costPerPerson;
-          }
-        }
-      }
-    });
-
-    console.log(friendsObj);
-
-    const map = _.map(friends, (value, key) => {
-      if (friendsObj[value.id]) {
-        return <td key={value.id}>${friendsObj[value.id].toFixed(2)}</td>;
-      } else {
-        return <td key={value.id}>$0</td>;
-      }
-    });
-
-    return map;
-  }
-
   render() {
     const { showForm } = this.state;
+
     return (
       <div>
         <div>
-          <div className="mt-4">
-            <hr style={{ backgroundColor: "#fff" }} />
-
-            <table className="table table-bordered table-dark ">
-              <thead className="thead-inverse">
-                <tr>
-                  <th>Delete</th>
-                  <th>Expense Name</th>
-                  <th>Who Paid</th>
-                  {/* Insert name of friend as table heading */}
-                  <th>Cost Per Person</th>
-                  {this.renderFriendHeader()}
-                  <th>Expense Amount</th>
-                </tr>
-              </thead>
-              {this.renderExpense()}
-              <tr>
-                <th colspan="4">Total Owed</th>
-                {/* <td colspan="3">{""}</td> */}
-                {/* <td>{""}</td> */}
-                {this.renderTotalPerPerson()}
-                {/* <td colspan="1">{""}</td> */}
-                {/* <td className="table-danger" style={{ color: "black" }}>
-                  <strong>${this.addTotalExpenses()}</strong>
-                </td> */}
-              </tr>
-              <tr>
-                <th colspan="4">Total Paid</th>
-                {/* <td colspan="3">{""}</td> */}
-                {/* <td>{""}</td> */}
-                {this.renderTotalAmountPaidPerPerson()}
-                {/* <td colspan="1">{""}</td> */}
-                {/* <td className="table-success" style={{ color: "black" }}>
-                  <strong>${this.addTotalExpenses()}</strong>
-                </td> */}
-              </tr>
-              <tr>
-                <th colspan="4">Difference</th>
-                {/* <td colspan="3">{""}</td> */}
-                {/* <td>{""}</td> */}
-                {this.renderTotalDifferencePerPerson()}
-                {/* <td colspan="1">{""}</td> */}
-                <td className="table-success" style={{ color: "black" }}>
-                  <strong>${this.addTotalExpenses()}</strong>
-                </td>
-              </tr>
-              {/* <AddTotalExpensesPerPerson /> */}
-            </table>
-          </div>
-
-          {/* <hr style={{ backgroundColor: "#fff" }} /> */}
-          {/* <p>Total = ${this.addTotalExpenses()}</p> */}
-          {this.renderForm()}
+          <div className="mt-4">{this.renderForm()}</div>
         </div>
         <div>
           <button

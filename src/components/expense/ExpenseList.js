@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { compose } from "redux";
 import { firestoreConnect } from "react-redux-firebase";
 import _ from "lodash";
@@ -22,7 +22,7 @@ class ExpenseList extends Component {
   renderWhoPaid(id) {
     const { friend } = this.props;
     if (friend && friend[id]) {
-      return <td>{friend[id].name}</td>;
+      return <td>{friend[id].firstName}</td>;
     }
   }
 
@@ -37,7 +37,7 @@ class ExpenseList extends Component {
   };
 
   renderExpenseTable = () => {
-    const { expenses, expense, friend, friends } = this.props;
+    const { expenses, friend } = this.props;
     const friendsInvolved = expenses.friendsInvolved;
 
     if (expenses) {
