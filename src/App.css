@@ -4,14 +4,15 @@
   display: flex;
   flex-direction: column;
   /* align-items: center; */
-  justify-content: center;
+  /* justify-content: center; */
   /* font-size: calc(10px + 2vmin); */
   color: white;
   /* padding: 5%; */
 }
 
 .main {
-  padding: 3%;
+  padding-left: 15%;
+  padding-right: 15%;
 }
 
 @media (prefers-reduced-motion: no-preference) {

@@ -92,10 +92,6 @@ class RenderExpenseList extends Component {
   renderExpense() {
     const { expenses, friends } = this.props;
 
-    if (!isEmpty(expenses) && !isEmpty(friends)) {
-      console.log(this.props);
-    } // console.log(this.state);
-
     const expensesList = _.map(expenses, (value, key) => {
       console.log(value);
       return (

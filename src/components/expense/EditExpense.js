@@ -1,117 +1,139 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { compose } from "redux";
 import { connect } from "react-redux";
+import _ from "lodash";
+import { compose } from "redux";
 import { firestoreConnect } from "react-redux-firebase";
-import PropTypes from "prop-types";
 import LoadingSpinner from "../loading/LoadingSpinner";
+import FriendsInvolved from "./FriendsInvolved";
 
 class EditExpense extends Component {
   constructor(props) {
     super(props);
+
     // Create refs
-    this.firstNameInput = React.createRef();
-    this.lastNameInput = React.createRef();
-    this.emailInput = React.createRef();
-    this.phoneInput = React.createRef();
-    this.balanceInput = React.createRef();
+    this.nameInput = React.createRef();
+    this.amountInput = React.createRef();
+    this.friendsInvolvedInput = React.createRef();
+    this.whoPaidInput = React.createRef();
   }
 
-  onSubmit = (e) => {
+  renderFriend() {
+    const { friends, expense } = this.props;
+
+    const friendSelect = (
+      <select
+        multiple={false}
+        defaultValue={expense.whoPaid}
+        // onChange={this.inputChange}
+        className="form-control"
+        id="whoPaid"
+        type="text"
+        name="whoPaid"
+      >
+        <option value="">Select Option</option>
+        {_.map(friends, (value, key) => {
+          return <option value={value.id}>{value.firstName}</option>;
+        })}
+      </select>
+    );
+
+    return friendSelect;
+  }
+
+  inputChangeMultiple = (e) => {
+    this.setState({
+      friendsInvolvedInput: Array.from(
+        e.target.selectedOptions,
+        (item) => item.value
+      ),
+    });
+  };
+
+  renderFriendsInvolved() {
+    const { friends, expense } = this.props;
+    // const { friendsInvolved } = this.state;
+    const friendSelectMultiple = (
+      <select
+        multiple={true}
+        defaultValue={expense.friendsInvolved}
+        // onChange={this.inputChangeMultiple}
+        ref={this.friendsInvolved}
+        className="form-control"
+        id="friendsInvolved"
+        type="text"
+      >
+        {_.map(friends, (value, key) => {
+          return <FriendsInvolved key={value.id} friends={value} />;
+        })}
+      </select>
+    );
+    return <div>{friendSelectMultiple}</div>;
+  }
+
+  formSubmit = (e) => {
     e.preventDefault();
 
-    const { firestore, friend, history } = this.props;
+    const { firestore, expense } = this.props;
 
-    // Update friend
-    const updFriend = {
-      firstName: this.firstNameInput.current.value,
-      lastName: this.lastNameInput.current.value,
-      email: this.emailInput.current.value,
-      phone: this.phoneInput.current.value,
-      balance:
-        this.balanceInput.current.value === ""
-          ? 0
-          : this.balanceInput.current.value,
+    // Update expense
+    const updExpense = {
+      name: this.nameInput.current.value,
+      expenseAmount: Number(this.amountInput.current.value),
+      // friendsInvolved: this.friendsInvolvedInput.current.value,
+      // whoPaid: this.whoPaidInput.current.value,
     };
 
-    // update friend in firestore
-    firestore
-      .update({ collection: "friends", doc: friend.id }, updFriend)
-      .then(history.push("/"));
+    // update expense in firestore
+    firestore.update({ collection: "expenses", doc: expense.id }, updExpense);
   };
 
   render() {
-    const { friend } = this.props;
-
-    if (friend) {
+    const { expense } = this.props;
+    console.log(expense);
+    if (this.props) {
       return (
         <div>
-          <div className="card mb-4 mt-4">
-            <div className="card-header">Add Friend</div>
+          <div className="card mb-4 mt-4 bg-dark">
+            <div className="card-header">Edit Expense</div>
             <div className="card-body">
-              <form onSubmit={this.onSubmit}>
+              <form onSubmit={this.formSubmit}>
                 <div className="form-group">
-                  <label htmlFor="firstName">First Name</label>
+                  <label htmlFor="name">Expense Name</label>
                   <input
                     type="text"
                     className="form-control"
-                    name="firstName"
+                    name="expense name"
                     minLength="2"
                     required
-                    ref={this.firstNameInput}
-                    defaultValue={friend.firstName}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="lastName">Last Name</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="lastName"
-                    minLength="2"
-                    required
-                    ref={this.lastNameInput}
-                    defaultValue={friend.lastName}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="email"
-                    minLength="2"
-                    required
-                    ref={this.emailInput}
-                    defaultValue={friend.email}
+                    ref={this.nameInput}
+                    defaultValue={expense.name}
                   />
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="phone">Phone</label>
+                  <label htmlFor="expenseAmount">Amount</label>
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
-                    name="phone"
-                    minLength="10"
+                    name="amount"
+                    // minLength="1"
                     required
-                    ref={this.phoneInput}
-                    defaultValue={friend.phone}
+                    ref={this.amountInput}
+                    defaultValue={expense.expenseAmount}
                   />
                 </div>
 
-                <div className="form-group">
-                  <label htmlFor="balance">Balance</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="balance"
-                    required
-                    ref={this.balanceInput}
-                    defaultValue={friend.balance}
-                    disabled={disableBalanceOnEdit}
-                  />
+                {/* <div className="form-group">
+                  <div className="form-group">
+                    <label>Friends Involved {""}</label>
+                    {this.renderFriendsInvolved()}
+                  </div>
                 </div>
+
+                <div className="form-group">
+                  <label>Who Paid</label>
+                  {this.renderFriend()}
+                </div> */}
 
                 <input
                   type="submit"
@@ -129,18 +151,25 @@ class EditExpense extends Component {
   }
 }
 
-EditExpense.propTypes = {
-  friend: PropTypes.any,
-  firestore: PropTypes.any,
-};
-
 export default compose(
-  // gets friends from firestore and puts them in the friends prop
+  // gets expenses from firestore and puts them in the expenses prop
   firestoreConnect((props) => [
-    { collection: "friends", storeAs: "friend", doc: props.match.params.id },
+    {
+      collection: "expenses",
+      storeAs: "expense",
+      doc: props.id,
+    },
   ]),
-  connect(({ firestore: { ordered }, settings }, props) => ({
-    friend: ordered.friend && ordered.friend[0],
-    settings: settings,
+  connect(({ firestore: { data } }, props) => ({
+    expense: data.expense && data.expense[props.id],
   }))
 )(EditExpense);
+
+// export default compose(
+//   firestoreConnect([{ collection: "expenses" }, { collection: "friends" }]),
+
+//   connect((state, props) => ({
+//     expenses: state.firestore.data.expenses,
+//     friends: state.firestore.data.friends,
+//   }))
+// )(EditExpense);

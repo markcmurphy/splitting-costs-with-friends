@@ -4,12 +4,14 @@ import { compose } from "redux";
 import { firestoreConnect, isEmpty, isLoaded } from "react-redux-firebase";
 import _ from "lodash";
 import WhoPaid from "./WhoPaid";
+import EditExpense from "./EditExpense";
 
 class ExpenseList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isIncluded: false,
+      showForm: false,
     };
   }
 
@@ -32,6 +34,24 @@ class ExpenseList extends Component {
     }
   }
 
+  renderEditForm(id) {
+    const { showForm } = this.state;
+    const { xexpenses } = this.props;
+    console.log(this.props);
+
+    if (showForm) {
+      return (
+        <EditExpense
+          id={id}
+          expense={xexpenses.name}
+          amount={xexpenses.amount}
+          friendsInvolved={xexpenses.friendsInvolved}
+          whoPaid={xexpenses.whoPaid}
+        />
+      );
+    }
+  }
+
   handleInputChange = (e) => {
     const target = e.target;
     const value = target.name === "isIncluded" ? target.checked : target.value;
@@ -45,6 +65,7 @@ class ExpenseList extends Component {
   renderExpenseTable() {
     const { xexpenses, xfriends } = this.props;
     const friendsInvolved = xexpenses.friendsInvolved;
+    const { showForm } = this.state;
 
     if (!isEmpty(xexpenses)) {
       return (
@@ -53,6 +74,14 @@ class ExpenseList extends Component {
           <td>
             <button onClick={this.handleDelete} className="btn-sm btn-danger">
               Delete
+            </button>
+            {/* <i onClick={this.handleDelete} classNames="fa fa-trash-alt" /> */}
+            {this.renderEditForm(xexpenses.id)}
+            <button
+              className="btn-sm ml-4 btn-primary"
+              onClick={() => this.setState({ showForm: !showForm })}
+            >
+              {showForm ? <i>Close</i> : <i className="fa fa-2x fa-edit" />}
             </button>
           </td>
           {/* Expense Name */}
