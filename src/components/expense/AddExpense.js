@@ -4,7 +4,6 @@ import _ from "lodash";
 import { compose } from "redux";
 import { firestoreConnect } from "react-redux-firebase";
 
-import WhoPaid from "./WhoPaid.js";
 import FriendsInvolved from "./FriendsInvolved";
 
 class AddExpense extends Component {
@@ -46,11 +45,12 @@ class AddExpense extends Component {
       >
         <option value="">Select Option</option>
         {_.map(friends, (value, key) => {
-          return <WhoPaid key={value.id} friends={value} />;
+          return <option value={value.id}>{value.firstName}</option>;
         })}
       </select>
     );
-    return <div>{friendSelect}</div>;
+
+    return friendSelect;
   }
 
   renderFriendsInvolved() {
@@ -79,15 +79,24 @@ class AddExpense extends Component {
     const { expense, amount, friendsInvolved, whoPaid } = this.state;
     const { firestore } = this.props;
 
-    firestore.add(
-      { collection: "expenses" },
-      {
-        name: expense,
-        expenseAmount: Number(amount),
-        friendsInvolved: friendsInvolved,
-        whoPaid: whoPaid,
-      }
-    );
+    firestore
+      .add(
+        { collection: "expenses" },
+        {
+          name: expense,
+          expenseAmount: Number(amount),
+          friendsInvolved: friendsInvolved,
+          whoPaid: whoPaid,
+        }
+      )
+      .then((docRef) => {
+        console.log("Document written with ID: ", docRef.id);
+        firestore.update(
+          { collection: "expenses", doc: docRef.id },
+          { id: docRef.id }
+        );
+      });
+
     this.setState({
       expense: "",
       amount: 0,
@@ -172,7 +181,6 @@ class AddExpense extends Component {
 }
 
 export default compose(
-  // gets clients from firestore and puts them in the clients prop
   firestoreConnect([{ collection: "expenses" }, { collection: "friends" }]),
 
   connect((state, props) => ({

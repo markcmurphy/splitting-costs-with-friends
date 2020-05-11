@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-// import { Link } from "react-router-dom";
 import { compose } from "redux";
 import { firestoreConnect } from "react-redux-firebase";
 import _ from "lodash";
 
-// import Spinner from "../Spinner";
 import FriendDetails from "./FriendDetails";
 import EditFriend from "./EditFriend";
 
@@ -113,7 +111,6 @@ class Friends extends Component {
 }
 
 export default compose(
-  // gets clients from firestore and puts them in the clients prop
   firestoreConnect([{ collection: "friends" }]),
 
   connect((state, props) => ({

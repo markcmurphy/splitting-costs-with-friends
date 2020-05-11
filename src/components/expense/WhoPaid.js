@@ -1,6 +1,10 @@
-import React from "react";
+import { useSelector } from "react-redux";
+import { useFirestoreConnect } from "react-redux-firebase";
 
-export default function WhoPaid(props) {
-  const { friends } = props;
-  return <option value={friends.id}>{friends.firstName}</option>;
+export default function WhoPaid(friendId) {
+  useFirestoreConnect(() => [{ collection: "friends", doc: friendId }]);
+  const friend = useSelector(
+    ({ firestore: { data } }) => data.friends && data.friends[friendId]
+  );
+  return friend;
 }

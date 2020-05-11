@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-// import { Link } from "react-router-dom";
 import { compose } from "redux";
-import { firestoreConnect } from "react-redux-firebase";
+import { firestoreConnect, isEmpty, isLoaded } from "react-redux-firebase";
 import _ from "lodash";
+import WhoPaid from "./WhoPaid";
 
 class ExpenseList extends Component {
   constructor(props) {
@@ -14,15 +14,21 @@ class ExpenseList extends Component {
   }
 
   handleDelete = () => {
-    const { expenses, firestore } = this.props;
-    firestore.delete({ collection: "expenses", doc: expenses.id });
+    const { xexpenses, firestore } = this.props;
+    console.log(xexpenses);
+    firestore.delete({ collection: "expenses", doc: xexpenses.id });
     // .then(() => this.props.history.push("/"));
   };
 
-  renderWhoPaid(id) {
-    const { friend } = this.props;
-    if (friend && friend[id]) {
-      return <td>{friend[id].firstName}</td>;
+  renderWhoPaid(whoPaid) {
+    const { xfriends, friends } = this.props;
+    console.log(xfriends);
+    console.log(friends);
+    console.log(whoPaid);
+    if (friends && friends[whoPaid]) {
+      return <td>{friends[whoPaid].firstName}</td>;
+    } else {
+      return <td>''</td>;
     }
   }
 
@@ -36,13 +42,13 @@ class ExpenseList extends Component {
     });
   };
 
-  renderExpenseTable = () => {
-    const { expenses, friend } = this.props;
-    const friendsInvolved = expenses.friendsInvolved;
+  renderExpenseTable() {
+    const { xexpenses, xfriends } = this.props;
+    const friendsInvolved = xexpenses.friendsInvolved;
 
-    if (expenses) {
+    if (!isEmpty(xexpenses)) {
       return (
-        <tr key={expenses.id}>
+        <tr key={xexpenses.id}>
           {/* Delete Button */}
           <td>
             <button onClick={this.handleDelete} className="btn-sm btn-danger">
@@ -50,33 +56,41 @@ class ExpenseList extends Component {
             </button>
           </td>
           {/* Expense Name */}
-          <td>{expenses.name}</td>
+          <td>{xexpenses.name}</td>
           {/* Who Paid for Expense */}
-          {this.renderWhoPaid(expenses.whoPaid)}
+          {this.renderWhoPaid(xexpenses.whoPaid)}
           {/* TODO: Render input for whether to include person in expense */}
           {/* Cost per person for expense */}
           <td>
             $
             {parseFloat(
-              expenses.expenseAmount / expenses.friendsInvolved.length
+              xexpenses.expenseAmount / xexpenses.friendsInvolved.length
             ).toFixed(2)}
           </td>
           {/* Whether Friend is Included in Expense */}
-          {_.map(friend, (value, key) => {
-            if (friendsInvolved.includes(key)) {
-              return <td>X</td>;
+          {_.map(xfriends, (value, key) => {
+            if (friendsInvolved.includes(value.id)) {
+              return (
+                <td style={{ textAlign: "center" }}>
+                  <i className="fa fa-2x fa-check-square" />
+                </td>
+              );
             } else {
-              return <td>$0</td>;
+              return (
+                <td style={{ textAlign: "center" }}>
+                  <i className="fa fa-2x fa-window-close" />
+                </td>
+              );
             }
           })}
           {/* Expense Amount */}
-          <td>${parseFloat(expenses.expenseAmount).toFixed(2)}</td>
+          <td>${parseFloat(xexpenses.expenseAmount).toFixed(2)}</td>
         </tr>
       );
     } else {
       return "loading";
     }
-  };
+  }
 
   render() {
     return this.renderExpenseTable();
@@ -84,23 +98,19 @@ class ExpenseList extends Component {
 }
 
 export default compose(
-  // gets expenses from firestore and puts them in the expenses prop
   firestoreConnect((props) => [
     {
       collection: "expenses",
       storeAs: "expense",
-      // doc: props.expense.id,
     },
     {
       collection: "friends",
       storeAs: "friend",
-      // doc: props.friend.id,
     },
   ]),
+
   connect(({ firestore: { data } }, props) => ({
-    expense: data.expense,
-    // && ordered.expense[0],
-    friend: data.friend,
-    // && ordered.friend[0],
+    expenses: data.expenses,
+    friends: data.friends,
   }))
 )(ExpenseList);

@@ -4,7 +4,7 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import { firestoreConnect } from "react-redux-firebase";
 import PropTypes from "prop-types";
-import Spinner from "../layout/Spinner";
+import LoadingSpinner from "../loading/LoadingSpinner";
 
 class EditExpense extends Component {
   constructor(props) {
@@ -42,19 +42,10 @@ class EditExpense extends Component {
 
   render() {
     const { friend } = this.props;
-    // const { disableBalanceOnEdit } = this.props.settings;
 
     if (friend) {
       return (
         <div>
-          <div className="row">
-            <div className="col-md-6">
-              <Link to="/" className="btn btn-link">
-                <i className="fa fa-arrow-circle-left" /> Back to Dashboard
-              </Link>
-            </div>
-          </div>
-
           <div className="card mb-4 mt-4">
             <div className="card-header">Add Friend</div>
             <div className="card-body">
@@ -133,7 +124,7 @@ class EditExpense extends Component {
         </div>
       );
     } else {
-      return <Spinner />;
+      return <LoadingSpinner />;
     }
   }
 }

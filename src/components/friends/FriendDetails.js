@@ -39,12 +39,13 @@ class FriendDetails extends Component {
             <button onClick={this.handleDelete} className="btn-sm btn-danger">
               Delete
             </button>
+            {/* <i onClick={this.handleDelete} classNames="fa fa-trash-alt" /> */}
             {this.renderEditForm(friends.id)}
             <button
               className="btn-sm ml-4 btn-primary"
               onClick={() => this.setState({ showForm: !showForm })}
             >
-              {showForm ? <i>Close</i> : <i>Edit Friend</i>}
+              {showForm ? <i>Close</i> : <i className="fa fa-2x fa-edit" />}
             </button>
           </td>
         </tr>
@@ -54,7 +55,6 @@ class FriendDetails extends Component {
 }
 
 export default compose(
-  // gets friends from firestore and puts them in the clients prop
   firestoreConnect((props) => [
     {
       collection: "friends",
