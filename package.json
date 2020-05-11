@@ -15,7 +15,10 @@
     "react-scripts": "3.4.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "uuid": "^8.0.0"
+    "classnames": "^2.2.6",
+    "react-redux-firebase": "^3.1.2",
+    "redux-auth-wrapper": "^3.0.0",
+    "redux-firestore": "^0.13.0"
   },
   "scripts": {
     "start": "react-scripts start",
