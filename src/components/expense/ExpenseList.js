@@ -24,9 +24,6 @@ class ExpenseList extends Component {
 
   renderWhoPaid(whoPaid) {
     const { xfriends, friends } = this.props;
-    console.log(xfriends);
-    console.log(friends);
-    console.log(whoPaid);
     if (friends && friends[whoPaid]) {
       return <td>{friends[whoPaid].firstName}</td>;
     } else {
@@ -36,17 +33,17 @@ class ExpenseList extends Component {
 
   renderEditForm(id) {
     const { showForm } = this.state;
-    const { xexpenses } = this.props;
-    console.log(this.props);
+    const { xexpenses, xfriends } = this.props;
 
     if (showForm) {
       return (
         <EditExpense
           id={id}
           expense={xexpenses.name}
-          amount={xexpenses.amount}
+          amount={xexpenses.expenseAmount}
           friendsInvolved={xexpenses.friendsInvolved}
           whoPaid={xexpenses.whoPaid}
+          friends={xfriends}
         />
       );
     }

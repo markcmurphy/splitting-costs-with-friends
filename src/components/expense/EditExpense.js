@@ -9,7 +9,7 @@ import FriendsInvolved from "./FriendsInvolved";
 class EditExpense extends Component {
   constructor(props) {
     super(props);
-
+    this.friendsInvolved = [];
     // Create refs
     this.nameInput = React.createRef();
     this.amountInput = React.createRef();
@@ -24,7 +24,6 @@ class EditExpense extends Component {
       <select
         multiple={false}
         defaultValue={expense.whoPaid}
-        // onChange={this.inputChange}
         className="form-control"
         id="whoPaid"
         type="text"
@@ -42,7 +41,7 @@ class EditExpense extends Component {
 
   inputChangeMultiple = (e) => {
     this.setState({
-      friendsInvolvedInput: Array.from(
+      friendsInvolved: Array.from(
         e.target.selectedOptions,
         (item) => item.value
       ),
@@ -50,20 +49,30 @@ class EditExpense extends Component {
   };
 
   renderFriendsInvolved() {
-    const { friends, expense } = this.props;
-    // const { friendsInvolved } = this.state;
+    const { friendsInvolved, friends } = this.props;
+    console.log(this.props);
     const friendSelectMultiple = (
       <select
         multiple={true}
-        defaultValue={expense.friendsInvolved}
-        // onChange={this.inputChangeMultiple}
-        ref={this.friendsInvolved}
+        defaultValue={_.map(friends, (value, key) => {
+          // if (friendsInvolved.includes(value.id)) {
+          return <FriendsInvolved key={value.id} friends={value} />;
+          // }
+        })}
+        //   {
+        //     _.map(friendsInvolved, (value, key) => {
+        //     return <FriendsInvolved key={value.id} friends={value} />;
+        //   })
+        // }
+        onChange={this.inputChangeMultiple}
         className="form-control"
         id="friendsInvolved"
         type="text"
       >
         {_.map(friends, (value, key) => {
+          // if (friendsInvolved.includes(value.id)) {
           return <FriendsInvolved key={value.id} friends={value} />;
+          // }
         })}
       </select>
     );
@@ -74,12 +83,13 @@ class EditExpense extends Component {
     e.preventDefault();
 
     const { firestore, expense } = this.props;
+    const { friendsInvolved } = this.state;
 
     // Update expense
     const updExpense = {
       name: this.nameInput.current.value,
       expenseAmount: Number(this.amountInput.current.value),
-      // friendsInvolved: this.friendsInvolvedInput.current.value,
+      friendsInvolved: friendsInvolved,
       // whoPaid: this.whoPaidInput.current.value,
     };
 
@@ -116,24 +126,24 @@ class EditExpense extends Component {
                     type="number"
                     className="form-control"
                     name="amount"
-                    // minLength="1"
+                    minLength="1"
                     required
                     ref={this.amountInput}
                     defaultValue={expense.expenseAmount}
                   />
                 </div>
 
-                {/* <div className="form-group">
+                <div className="form-group">
                   <div className="form-group">
                     <label>Friends Involved {""}</label>
                     {this.renderFriendsInvolved()}
                   </div>
                 </div>
-
+                {/* 
                 <div className="form-group">
                   <label>Who Paid</label>
                   {this.renderFriend()}
-                </div> */}
+                </div>  */}
 
                 <input
                   type="submit"
@@ -159,9 +169,15 @@ export default compose(
       storeAs: "expense",
       doc: props.id,
     },
+    {
+      collection: "friends",
+      storeAs: "friend",
+      doc: props.id,
+    },
   ]),
   connect(({ firestore: { data } }, props) => ({
     expense: data.expense && data.expense[props.id],
+    friend: data.friend && data.friend[props.id],
   }))
 )(EditExpense);
 

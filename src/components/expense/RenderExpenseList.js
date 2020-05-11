@@ -93,7 +93,6 @@ class RenderExpenseList extends Component {
     const { expenses, friends } = this.props;
 
     const expensesList = _.map(expenses, (value, key) => {
-      console.log(value);
       return (
         <ExpenseList key={value.id} xexpenses={value} xfriends={friends} />
       );
