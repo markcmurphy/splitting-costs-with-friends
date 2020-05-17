@@ -18,16 +18,17 @@ class EditExpense extends Component {
   }
 
   renderFriend() {
-    const { friends, expense } = this.props;
+    const { friends, whoPaid } = this.props;
 
     const friendSelect = (
       <select
         multiple={false}
-        defaultValue={expense.whoPaid}
+        defaultValue={whoPaid}
         className="form-control"
         id="whoPaid"
         type="text"
         name="whoPaid"
+        ref={this.whoPaidInput}
       >
         <option value="">Select Option</option>
         {_.map(friends, (value, key) => {
@@ -90,7 +91,7 @@ class EditExpense extends Component {
       name: this.nameInput.current.value,
       expenseAmount: Number(this.amountInput.current.value),
       friendsInvolved: friendsInvolved,
-      // whoPaid: this.whoPaidInput.current.value,
+      whoPaid: this.whoPaidInput.current.value,
     };
 
     // update expense in firestore
@@ -134,16 +135,14 @@ class EditExpense extends Component {
                 </div>
 
                 <div className="form-group">
-                  <div className="form-group">
-                    <label>Friends Involved {""}</label>
-                    {this.renderFriendsInvolved()}
-                  </div>
+                  <label>Friends Involved {""}</label>
+                  {this.renderFriendsInvolved()}
                 </div>
-                {/* 
+
                 <div className="form-group">
                   <label>Who Paid</label>
                   {this.renderFriend()}
-                </div>  */}
+                </div>
 
                 <input
                   type="submit"

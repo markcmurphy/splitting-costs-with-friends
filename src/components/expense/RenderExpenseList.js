@@ -19,6 +19,7 @@ class RenderExpenseList extends Component {
       friendsInvolved: [""],
       whoPaid: "",
       total: 0,
+      totals: {},
     };
   }
 
@@ -132,6 +133,9 @@ class RenderExpenseList extends Component {
         }
       });
     }
+    // this.setState({
+    //   totals: friendsObj,
+    // });
     return friendsObj;
   }
 
@@ -196,41 +200,58 @@ class RenderExpenseList extends Component {
     return map1;
   }
 
-  renderTotalDifferencePerPerson() {
+  renderTotalDifferencePerPerson1() {
     const { friends, expenses } = this.props;
-    const friendsObj = {};
+    let friendsObj = this.totalAmountPaidPerPerson();
+    let friendsObj1 = this.totalPerPerson();
+    let diffAmount = {};
+    console.log(friendsObj);
+    console.log(friendsObj1);
     if (!isEmpty(expenses) && !isEmpty(friends)) {
       _.map(friends, (value, key) => {
-        for (let expense of expenses) {
-          let expenseAmount = expense.expenseAmount;
-          let costPerPerson = expenseAmount / expense.friendsInvolved.length;
-          let net = costPerPerson - expenseAmount;
-
-          if (friendsObj[value.id]) {
-            if (
-              expense.friendsInvolved.includes(value.id) &&
-              expense.whoPaid.includes(value.id)
-            ) {
-              friendsObj[value.id] += net;
-            } else if (expense.whoPaid.includes(value.id)) {
-              friendsObj[value.id] += expenseAmount;
-            } else if (expense.friendsInvolved.includes(value.id)) {
-              friendsObj[value.id] += costPerPerson;
-            }
-          } else if (!friendsObj[value.id]) {
-            if (
-              expense.friendsInvolved.includes(value.id) &&
-              expense.whoPaid.includes(value.id)
-            ) {
-              friendsObj[value.id] = net;
-            } else if (expense.whoPaid.includes(value.id)) {
-              friendsObj[value.id] = expenseAmount;
-            } else if (expense.friendsInvolved.includes(value.id)) {
-              friendsObj[value.id] = costPerPerson;
-            }
-          }
+        diffAmount[value.id] = 0;
+        if (friendsObj[value.id]) {
+          diffAmount[value.id] -= friendsObj1[value.id];
         }
+
+        diffAmount[value.id] += friendsObj[value.id];
+        console.log(friendsObj1);
+        // console.log(value.id + " " + diffAmount[value.id]);
       });
+    }
+    console.log(diffAmount);
+  }
+
+  renderTotalDifferencePerPerson() {
+    const { friends, expenses } = this.props;
+    let friendsObj = this.totalAmountPaidPerPerson();
+    let friendsObj1 = this.totalPerPerson();
+    const diffAmount = {};
+    // const friendsObj = {};
+    if (!isEmpty(expenses) && !isEmpty(friends)) {
+      _.map(friends, (value, key) => {
+        // for (let expense of expenses) {
+        // let expenseAmount = expense.expenseAmount;
+        // let costPerPerson = expenseAmount / expense.friendsInvolved.length;
+        // let net = costPerPerson - expenseAmount;
+
+        // if (!diffAmount[value.id]) {
+        diffAmount[value.id] = 0;
+        // } else if (!diffAmount[value.id]) {
+        diffAmount[value.id] += friendsObj1[value.id] - friendsObj[value.id];
+        // if (
+        //   expense.friendsInvolved.includes(value.id) &&
+        //   expense.whoPaid.includes(value.id)
+        // ) {
+        //   friendsObj[value.id] = net * -1;
+        //   console.log(net);
+        // } else if (expense.whoPaid.includes(value.id)) {
+        //   friendsObj[value.id] = expenseAmount;
+        // } else if (expense.friendsInvolved.includes(value.id)) {
+        //   friendsObj[value.id] = costPerPerson;
+        // }
+      });
+      console.log(diffAmount);
     }
 
     const map = _.map(friends, (value, key) => {
@@ -243,6 +264,56 @@ class RenderExpenseList extends Component {
 
     return map;
   }
+  // renderTotalDifferencePerPerson() {
+  //   const { friends, expenses } = this.props;
+  //   const friendsObj = {};
+  //   if (!isEmpty(expenses) && !isEmpty(friends)) {
+  //     _.map(friends, (value, key) => {
+  //       for (let expense of expenses) {
+  //         let expenseAmount = expense.expenseAmount;
+  //         let costPerPerson = expenseAmount / expense.friendsInvolved.length;
+  //         let net = costPerPerson - expenseAmount;
+
+  //         if (friendsObj[value.id]) {
+  //           if (
+  //             expense.friendsInvolved.includes(value.id) &&
+  //             expense.whoPaid.includes(value.id)
+  //           ) {
+  //             friendsObj[value.id] -= net;
+  //             console.log(net);
+  //           } else if (expense.whoPaid.includes(value.id)) {
+  //             friendsObj[value.id] += expenseAmount;
+  //           } else if (expense.friendsInvolved.includes(value.id)) {
+  //             friendsObj[value.id] += costPerPerson;
+  //           }
+  //         } else if (!friendsObj[value.id]) {
+  //           if (
+  //             expense.friendsInvolved.includes(value.id) &&
+  //             expense.whoPaid.includes(value.id)
+  //           ) {
+  //             friendsObj[value.id] = net * -1;
+  //             console.log(net);
+  //           } else if (expense.whoPaid.includes(value.id)) {
+  //             friendsObj[value.id] = expenseAmount;
+  //           } else if (expense.friendsInvolved.includes(value.id)) {
+  //             friendsObj[value.id] = costPerPerson;
+  //           }
+  //         }
+  //       }
+  //     });
+  //     console.log(friendsObj);
+  //   }
+
+  //   const map = _.map(friends, (value, key) => {
+  //     if (friendsObj[value.id]) {
+  //       return <td key={value.id}>${friendsObj[value.id].toFixed(2)}</td>;
+  //     } else {
+  //       return <td key={value.id}>$0</td>;
+  //     }
+  //   });
+
+  //   return map;
+  // }
 
   render() {
     return (
