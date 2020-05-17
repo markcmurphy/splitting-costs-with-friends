@@ -169,6 +169,8 @@ class RenderExpenseList extends Component {
           ) {
             let bal = expense.expenseAmount;
             friendsObj[value.id] = bal;
+          } else if (!friendsObj[value.id]) {
+            friendsObj[value.id] = 0;
           }
         }
       });
@@ -234,11 +236,14 @@ class RenderExpenseList extends Component {
         // let expenseAmount = expense.expenseAmount;
         // let costPerPerson = expenseAmount / expense.friendsInvolved.length;
         // let net = costPerPerson - expenseAmount;
-
-        // if (!diffAmount[value.id]) {
+        console.log(friendsObj[value.id]);
+        console.log(friendsObj1[value.id]);
+        // if (diffAmount[value.id]) {
         diffAmount[value.id] = 0;
+        diffAmount[value.id] += friendsObj[value.id] - friendsObj1[value.id];
         // } else if (!diffAmount[value.id]) {
-        diffAmount[value.id] += friendsObj1[value.id] - friendsObj[value.id];
+        // diffAmount[value.id] = 0;
+        // }
         // if (
         //   expense.friendsInvolved.includes(value.id) &&
         //   expense.whoPaid.includes(value.id)
@@ -252,14 +257,16 @@ class RenderExpenseList extends Component {
         // }
       });
       console.log(diffAmount);
+      // return diffAmount;
     }
 
     const map = _.map(friends, (value, key) => {
-      if (friendsObj[value.id]) {
-        return <td key={value.id}>${friendsObj[value.id].toFixed(2)}</td>;
-      } else {
-        return <td key={value.id}>$0</td>;
+      if (diffAmount[value.id]) {
+        return <td key={value.id}>${diffAmount[value.id].toFixed(2)}</td>;
       }
+      // else {
+      // return <td key={value.id}>$0</td>;
+      // }
     });
 
     return map;
