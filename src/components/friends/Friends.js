@@ -88,23 +88,34 @@ class Friends extends Component {
   render() {
     const { showForm } = this.state;
     return (
-      <div>
-        <table className="table table-sm table-striped table-dark mt-4 ">
-          <thead className="thead-inverse">
-            <tr>
-              <th>Friend Name</th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          {this.renderFriend()}
-        </table>
+      <div
+        style={{
+          marginLeft: "5%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
         <button
+          style={{
+            width: "80%",
+            marginLeft: "10%",
+          }}
           className="mt-4 btn btn-primary"
           onClick={() => this.setState({ showForm: !showForm })}
         >
           {showForm ? <i>Close</i> : <i>Add Friend</i>}
         </button>
         {this.renderForm()}
+        <table className="table table-responseive table-striped table-dark mt-4">
+          <thead className="thead-inverse">
+            <tr>
+              <th>Friend Name</th>
+              {/* <th>{""}</th> */}
+            </tr>
+          </thead>
+          {this.renderFriend()}
+        </table>
       </div>
     );
   }

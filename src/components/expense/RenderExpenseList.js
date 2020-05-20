@@ -330,7 +330,7 @@ class RenderExpenseList extends Component {
             <table className="table table-bordered table-dark ">
               <thead className="thead-inverse">
                 <tr>
-                  <th>Delete</th>
+                  {/* <th>Delete</th> */}
                   <th>Expense Name</th>
                   <th>Who Paid</th>
                   <th>Cost Per Person</th>
@@ -342,7 +342,7 @@ class RenderExpenseList extends Component {
               <tbody>
                 {this.renderExpense()}
                 <tr>
-                  <th colSpan="4">Total Owed</th>
+                  <th colSpan="3">Total Owed</th>
                   {this.renderTotalPerPerson(this.totalPerPerson())}
                   <td className="table-success" style={{ color: "black" }}>
                     <strong>
@@ -351,7 +351,7 @@ class RenderExpenseList extends Component {
                   </td>
                 </tr>
                 <tr>
-                  <th colSpan="4">Total Paid</th>
+                  <th colSpan="3">Total Paid</th>
                   {this.renderTotalAmountPaidPerPerson()}
                   <td className="table-success" style={{ color: "black" }}>
                     <strong>
@@ -364,7 +364,7 @@ class RenderExpenseList extends Component {
                 </tr>
                 <tr>
                   {/* TODO: have conditional colors for cells */}
-                  <th colSpan="4">Difference</th>
+                  <th colSpan="3">Difference</th>
                   {this.renderTotalDifferencePerPerson()}
                 </tr>
               </tbody>

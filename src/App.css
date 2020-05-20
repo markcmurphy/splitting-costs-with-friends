@@ -1,8 +1,8 @@
 .App {
   background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  /* min-height: 100vh; */
+  /* display: flex; */
+  /* flex-direction: column; */
   /* align-items: center; */
   /* justify-content: center; */
   /* font-size: calc(10px + 2vmin); */
@@ -11,8 +11,11 @@
 }
 
 .main {
-  padding-left: 5%;
-  padding-right: 5%;
+  /* display: flex;
+  flex-direction: row; */
+  /* width: 100vw; */
+  /* padding-left: 5%; */
+  /* padding-right: 5%; */
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -23,4 +26,22 @@
 
 .App-link {
   color: #61dafb;
+}
+
+/* Sidebar Nav */
+.nav-wrapper {
+  /* display: flex; */
+  width: 100%;
+}
+
+#sidebar {
+  /* width: 250px; */
+  /* position: fixed; */
+  top: 0;
+  left: 0;
+  top: 5%;
+  margin-bottom: 12.3vh;
+  height: 100vh;
+  z-index: 999;
+  color: #fff;
 }

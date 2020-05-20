@@ -9,13 +9,16 @@ import FriendsInvolved from "./FriendsInvolved";
 class EditExpense extends Component {
   constructor(props) {
     super(props);
-    this.friendsInvolved = [];
     // Create refs
     this.nameInput = React.createRef();
     this.amountInput = React.createRef();
     this.friendsInvolvedInput = React.createRef();
     this.whoPaidInput = React.createRef();
   }
+
+  state = {
+    friendsInvolved: this.props.friendsInvolved,
+  };
 
   renderFriend() {
     const { friends, whoPaid } = this.props;
@@ -41,12 +44,21 @@ class EditExpense extends Component {
   }
 
   inputChangeMultiple = (e) => {
+    console.log(e.target.selectedOptions);
     this.setState({
       friendsInvolved: Array.from(
         e.target.selectedOptions,
         (item) => item.value
       ),
     });
+
+    const optionValues = _.map(e.target.selectedOptions, (value, key) => {
+      return value.value;
+    });
+
+    // this.setState({
+    //   friendsInvolved: optionValues,
+    // });
   };
 
   renderFriendsInvolved() {
@@ -55,11 +67,14 @@ class EditExpense extends Component {
     const friendSelectMultiple = (
       <select
         multiple={true}
-        defaultValue={_.map(friends, (value, key) => {
-          // if (friendsInvolved.includes(value.id)) {
-          return <FriendsInvolved key={value.id} friends={value} />;
-          // }
-        })}
+        // multiple
+        // defaultValue={_.map(friends, (value, key) => {
+        //   // if (friendsInvolved.includes(value.id)) {
+        //   return <FriendsInvolved key={value.id} friends={value} />;
+        //   // }
+        // })}
+
+        defaultValue={friendsInvolved}
         //   {
         //     _.map(friendsInvolved, (value, key) => {
         //     return <FriendsInvolved key={value.id} friends={value} />;
@@ -71,6 +86,7 @@ class EditExpense extends Component {
         type="text"
       >
         {_.map(friends, (value, key) => {
+          // console.log(defaultFriends);
           // if (friendsInvolved.includes(value.id)) {
           return <FriendsInvolved key={value.id} friends={value} />;
           // }
@@ -84,13 +100,14 @@ class EditExpense extends Component {
     e.preventDefault();
 
     const { firestore, expense } = this.props;
-    const { friendsInvolved } = this.state;
+    // const { friendsInvolved } = this.state;
+    console.log(this.state);
 
     // Update expense
     const updExpense = {
       name: this.nameInput.current.value,
       expenseAmount: Number(this.amountInput.current.value),
-      friendsInvolved: friendsInvolved,
+      friendsInvolved: this.state.friendsInvolved,
       whoPaid: this.whoPaidInput.current.value,
     };
 

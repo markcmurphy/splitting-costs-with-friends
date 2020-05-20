@@ -1,18 +1,18 @@
 import React from "react";
 import "./App.css";
-import Friends from "./components/friends/Friends";
-import AddExpense from "./components/expense/AddExpense";
+
+import Vertbody from "./components/layout/Vertbody";
 import Navbar from "./components/layout/Navbar";
-import RenderExpenseList from "./components/expense/RenderExpenseList";
 
 function App() {
   return (
     <div className="App">
       <Navbar />
       <div className="main">
-        <RenderExpenseList />
-        <AddExpense />
-        <Friends />
+        <Vertbody />
+        {/* <RenderExpenseList /> */}
+        {/* <AddExpense /> */}
+        {/* <Friends /> */}
       </div>
     </div>
   );
