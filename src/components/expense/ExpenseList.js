@@ -102,7 +102,7 @@ class ExpenseList extends Component {
 
     const editIcon = (
       <svg
-        class="bi bi-pencil-square"
+        className="bi bi-pencil-square"
         width="1em"
         height="1em"
         viewBox="0 0 16 16"
@@ -113,9 +113,9 @@ class ExpenseList extends Component {
       >
         <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z" />
         <path
-          fill-rule="evenodd"
+          fillRule="evenodd"
           d="M1 13.5A1.5 1.5 0 002.5 15h11a1.5 1.5 0 001.5-1.5v-6a.5.5 0 00-1 0v6a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5v-11a.5.5 0 01.5-.5H9a.5.5 0 000-1H2.5A1.5 1.5 0 001 2.5v11z"
-          clip-rule="evenodd"
+          clipRule="evenodd"
         />
       </svg>
     );
@@ -151,9 +151,9 @@ class ExpenseList extends Component {
                 cursor="pointer"
               >
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d="M2.5 1a1 1 0 00-1 1v1a1 1 0 001 1H3v9a2 2 0 002 2h6a2 2 0 002-2V4h.5a1 1 0 001-1V2a1 1 0 00-1-1H10a1 1 0 00-1-1H7a1 1 0 00-1 1H2.5zm3 4a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7a.5.5 0 01.5-.5zM8 5a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7A.5.5 0 018 5zm3 .5a.5.5 0 00-1 0v7a.5.5 0 001 0v-7z"
-                  clip-rule="evenodd"
+                  clipRule="evenodd"
                 />
               </svg>
               <span
@@ -193,12 +193,13 @@ class ExpenseList extends Component {
             if (friendsInvolved.includes(value.id)) {
               return (
                 <td
+                  key={value.id}
                   // onClick={() => this.setState({ isChecked: !isChecked })}
                   style={{ textAlign: "center" }}
                 >
                   {/* <i className="fa fa-2x fa-check-square" /> */}
                   <svg
-                    class="bi bi-check-box"
+                    className="bi bi-check-box"
                     width="1em"
                     height="1em"
                     viewBox="0 0 16 16"
@@ -208,24 +209,24 @@ class ExpenseList extends Component {
                     onClick={() => this.removeIncluded(xexpenses, value.id)}
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M15.354 2.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3-3a.5.5 0 11.708-.708L8 9.293l6.646-6.647a.5.5 0 01.708 0z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     />
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M1.5 13A1.5 1.5 0 003 14.5h10a1.5 1.5 0 001.5-1.5V8a.5.5 0 00-1 0v5a.5.5 0 01-.5.5H3a.5.5 0 01-.5-.5V3a.5.5 0 01.5-.5h8a.5.5 0 000-1H3A1.5 1.5 0 001.5 3v10z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     />
                   </svg>
                 </td>
               );
             } else {
               return (
-                <td style={{ textAlign: "center" }}>
+                <td key={value.id} style={{ textAlign: "center" }}>
                   {/* <i className="fa fa-2x fa-window-close" /> */}
                   <svg
-                    class="bi bi-x-square"
+                    className="bi bi-x-square"
                     width="1em"
                     height="1em"
                     viewBox="0 0 16 16"
@@ -235,19 +236,19 @@ class ExpenseList extends Component {
                     onClick={() => this.addIncluded(xexpenses, value.id)}
                   >
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M14 1H2a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V2a2 2 0 00-2-2H2z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     />
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     />
                     <path
-                      fill-rule="evenodd"
+                      fillRule="evenodd"
                       d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z"
-                      clip-rule="evenodd"
+                      clipRule="evenodd"
                     />
                   </svg>
                 </td>

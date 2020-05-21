@@ -234,8 +234,7 @@ class RenderExpenseList extends Component {
         // let expenseAmount = expense.expenseAmount;
         // let costPerPerson = expenseAmount / expense.friendsInvolved.length;
         // let net = costPerPerson - expenseAmount;
-        console.log(friendsObj[value.id]);
-        console.log(friendsObj1[value.id]);
+
         // if (diffAmount[value.id]) {
         diffAmount[value.id] = 0;
         diffAmount[value.id] += friendsObj[value.id] - friendsObj1[value.id];

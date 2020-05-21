@@ -97,17 +97,17 @@ class Friends extends Component {
         }}
       >
         {/* <div
-          class="btn-group-vertical ml-3 mr-2"
+          className="btn-group-vertical ml-3 mr-2"
           role="group"
           aria-label="Basic example"
         >
-          <button type="button" class="btn btn-secondary">
+          <button type="button" className="btn btn-secondary">
             Add Friend
           </button>
-          <button type="button" class="btn btn-secondary">
+          <button type="button" className="btn btn-secondary">
             Add Expense
           </button>
-          <button type="button" class="btn btn-secondary">
+          <button type="button" className="btn btn-secondary">
             Right
           </button>
         </div> */}
