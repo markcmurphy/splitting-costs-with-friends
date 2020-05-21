@@ -11,7 +11,7 @@ function App() {
       <Navbar />
       <div className="main">
         <AllTrips uid={"mmurphy"} />
-        <Vertbody />
+        {/* <Vertbody /> */}
         {/* <RenderExpenseList /> */}
         {/* <AddExpense /> */}
         {/* <Friends /> */}
