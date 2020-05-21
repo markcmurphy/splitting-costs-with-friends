@@ -207,8 +207,6 @@ class RenderExpenseList extends Component {
     let friendsObj = this.totalAmountPaidPerPerson();
     let friendsObj1 = this.totalPerPerson();
     let diffAmount = {};
-    console.log(friendsObj);
-    console.log(friendsObj1);
     if (!isEmpty(expenses) && !isEmpty(friends)) {
       _.map(friends, (value, key) => {
         diffAmount[value.id] = 0;

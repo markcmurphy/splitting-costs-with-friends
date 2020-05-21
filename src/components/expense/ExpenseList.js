@@ -59,6 +59,42 @@ class ExpenseList extends Component {
     });
   };
 
+  addIncluded = (expense, id) => {
+    // console.log(expense.friendsInvolved.filter((item) => !id.includes(item)));
+    // console.log(expense.friendsInvolved.concat(id));
+    const { firestore } = this.props;
+
+    // Update expense
+    const updExpense = {
+      //   name: this.nameInput.current.value,
+      // expenseAmount: Number(this.amountInput.current.value),
+      friendsInvolved: expense.friendsInvolved.concat(id),
+      // whoPaid: this.whoPaidInput.current.value,
+    };
+
+    // update expense in firestore
+    firestore.update({ collection: "expenses", doc: expense.id }, updExpense);
+  };
+
+  removeIncluded = (expense, id) => {
+    // console.log(expense.friendsInvolved.filter((item) => !id.includes(item)));
+    // console.log(expense.friendsInvolved.concat(id));
+    const { firestore } = this.props;
+
+    // Update expense
+    const updExpense = {
+      //   name: this.nameInput.current.value,
+      // expenseAmount: Number(this.amountInput.current.value),
+      friendsInvolved: expense.friendsInvolved.filter(
+        (item) => !id.includes(item)
+      ),
+      // whoPaid: this.whoPaidInput.current.value,
+    };
+
+    // update expense in firestore
+    firestore.update({ collection: "expenses", doc: expense.id }, updExpense);
+  };
+
   renderExpenseTable() {
     const { xexpenses, xfriends } = this.props;
     const friendsInvolved = xexpenses.friendsInvolved;
@@ -145,17 +181,75 @@ class ExpenseList extends Component {
             ).toFixed(2)}
           </td>
           {/* Whether Friend is Included in Expense */}
+          {/* {isChecked ? (
+            <button className="btn-danger">
+              <i>Close</i>
+            </button>
+          ) : (
+            editIcon
+          )} */}
+
           {_.map(xfriends, (value, key) => {
             if (friendsInvolved.includes(value.id)) {
               return (
-                <td style={{ textAlign: "center" }}>
-                  <i className="fa fa-2x fa-check-square" />
+                <td
+                  // onClick={() => this.setState({ isChecked: !isChecked })}
+                  style={{ textAlign: "center" }}
+                >
+                  {/* <i className="fa fa-2x fa-check-square" /> */}
+                  <svg
+                    class="bi bi-check-box"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                    cursor="pointer"
+                    onClick={() => this.removeIncluded(xexpenses, value.id)}
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M15.354 2.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3-3a.5.5 0 11.708-.708L8 9.293l6.646-6.647a.5.5 0 01.708 0z"
+                      clip-rule="evenodd"
+                    />
+                    <path
+                      fill-rule="evenodd"
+                      d="M1.5 13A1.5 1.5 0 003 14.5h10a1.5 1.5 0 001.5-1.5V8a.5.5 0 00-1 0v5a.5.5 0 01-.5.5H3a.5.5 0 01-.5-.5V3a.5.5 0 01.5-.5h8a.5.5 0 000-1H3A1.5 1.5 0 001.5 3v10z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
                 </td>
               );
             } else {
               return (
                 <td style={{ textAlign: "center" }}>
-                  <i className="fa fa-2x fa-window-close" />
+                  {/* <i className="fa fa-2x fa-window-close" /> */}
+                  <svg
+                    class="bi bi-x-square"
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                    cursor="pointer"
+                    onClick={() => this.addIncluded(xexpenses, value.id)}
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M14 1H2a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V2a2 2 0 00-2-2H2z"
+                      clip-rule="evenodd"
+                    />
+                    <path
+                      fill-rule="evenodd"
+                      d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z"
+                      clip-rule="evenodd"
+                    />
+                    <path
+                      fill-rule="evenodd"
+                      d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
                 </td>
               );
             }
