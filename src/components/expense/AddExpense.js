@@ -109,11 +109,11 @@ class AddExpense extends Component {
     const { showForm, expense, amount } = this.state;
     if (showForm) {
       return (
-        <div className="card mb-4 bg-dark">
+        <div className="card bg-dark mt-3 pl-1">
           <div className="card-header">Add Expense</div>
           <div className="card-body">
             <form onSubmit={this.formSubmit}>
-              <div className="form-group mt-4">
+              <div className="form-group">
                 <label>Cost</label>
                 <input
                   value={expense}
@@ -150,7 +150,7 @@ class AddExpense extends Component {
               <input
                 type="submit"
                 value="Submit"
-                className="btn btn-primary btn-block"
+                className="btn btn-success btn-block"
               />
             </form>
           </div>
@@ -163,17 +163,49 @@ class AddExpense extends Component {
     const { showForm } = this.state;
 
     return (
-      <div>
-        <div>
-          <div className="mt-4">{this.renderForm()}</div>
-        </div>
-        <div>
+      <div
+        style={{
+          marginLeft: "5%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
+        {/* <button
+          className="btn btn-secondary btn-sm mt-4"
+          onClick={() => this.setState({ showForm: !showForm })}
+          style={{
+            width: "80%",
+            marginLeft: "15%",
+          }}
+        >
+          {showForm ? <i>Close</i> : <i>Add Expense</i>}
+        </button> */}
+        {showForm ? (
           <button
-            className=" btn btn-primary"
+            className="btn btn-danger btn-block mt-4"
             onClick={() => this.setState({ showForm: !showForm })}
+            // style={{
+            //   width: "80%",
+            //   marginLeft: "15%",
+            // }}
           >
-            {showForm ? <i>Close</i> : <i>Add Expense</i>}
+            Close
           </button>
+        ) : (
+          <button
+            className="btn btn-secondary btn-block mt-4"
+            onClick={() => this.setState({ showForm: !showForm })}
+            // style={{
+            //   width: "80%",
+            //   marginLeft: "15%",
+            // }}
+          >
+            Add Expense{" "}
+          </button>
+        )}
+        <div>
+          <div className="">{this.renderForm()}</div>
         </div>
       </div>
     );

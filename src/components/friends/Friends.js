@@ -96,16 +96,54 @@ class Friends extends Component {
           justifyContent: "center",
         }}
       >
-        <button
+        {/* <div
+          class="btn-group-vertical ml-3 mr-2"
+          role="group"
+          aria-label="Basic example"
+        >
+          <button type="button" class="btn btn-secondary">
+            Add Friend
+          </button>
+          <button type="button" class="btn btn-secondary">
+            Add Expense
+          </button>
+          <button type="button" class="btn btn-secondary">
+            Right
+          </button>
+        </div> */}
+        {/* <button
           style={{
             width: "80%",
             marginLeft: "10%",
           }}
-          className="mt-4 btn btn-primary"
+          className="mt-4 btn btn-sm btn-secondary"
           onClick={() => this.setState({ showForm: !showForm })}
         >
           {showForm ? <i>Close</i> : <i>Add Friend</i>}
-        </button>
+        </button> */}
+        {showForm ? (
+          <button
+            className="btn btn-danger btn-block mt-4"
+            onClick={() => this.setState({ showForm: !showForm })}
+            // style={{
+            //   width: "80%",
+            //   marginLeft: "15%",
+            // }}
+          >
+            Close
+          </button>
+        ) : (
+          <button
+            className="btn btn-secondary btn-block mt-4"
+            onClick={() => this.setState({ showForm: !showForm })}
+            // style={{
+            //   width: "80%",
+            //   marginLeft: "15%",
+            // }}
+          >
+            Add Friend
+          </button>
+        )}
         {this.renderForm()}
         <table className="table table-responseive table-striped table-dark mt-4">
           <thead className="thead-inverse">

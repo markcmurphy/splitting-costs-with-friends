@@ -4,8 +4,8 @@ import AddExpense from "../expense/AddExpense";
 
 export default function MainViewContainer() {
   return (
-    <div>
-      <AddExpense />
+    <div className="pl-4 pr-4">
+      {/* <AddExpense /> */}
       <RenderExpenseList />
     </div>
   );

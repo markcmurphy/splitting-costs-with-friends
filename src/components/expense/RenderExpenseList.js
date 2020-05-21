@@ -256,7 +256,7 @@ class RenderExpenseList extends Component {
         //   friendsObj[value.id] = costPerPerson;
         // }
       });
-      console.log(diffAmount);
+      // console.log(diffAmount);
       // return diffAmount;
     }
 
