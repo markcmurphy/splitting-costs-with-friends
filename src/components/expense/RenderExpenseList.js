@@ -323,6 +323,8 @@ class RenderExpenseList extends Component {
     if (this.props) {
       console.log(this.props);
     }
+
+    console.log(this.state);
     return (
       <div>
         <div>
@@ -393,16 +395,25 @@ export default compose(
     {
       collection: "users",
       doc: "mmurphy",
-      storeAs: "trips",
-      subcollections: [{ collection: "trips", doc: props.props.id }],
+      storeAs: `${props.props.id}-expenses`,
+      subcollections: [
+        { collection: "trips", doc: props.props.id },
+        { collection: "expenses" },
+      ],
     },
 
     // { collection: "trips", storeAs: "trips", doc: props.id },
     // { collection: "friends", storeAs: "friends", doc: props.id },
     // { collection: "expenses", storeAs: "expenses", doc: props.id },
   ]),
+  //   connect((state) => ({
+  //     expenses: state.firestore.ordered.expenses,
+  //     // friends: state.firestore.ordered.friends,
+  //   }))
+  // )(RenderExpenseList);
   connect(({ firestore: { ordered } }, props) => ({
-    trips: ordered.trips && ordered.trips[0],
+    expenses: ordered[`${props.props.id}-expenses`],
+    //  && ordered.trips[0],
     // expenses: ordered.expenses && ordered.expenses[0],
   }))
 )(RenderExpenseList);
