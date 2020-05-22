@@ -58,14 +58,14 @@ class AllTrips extends Component {
 
 export default compose(
   firestoreConnect((props) => [
-    {
-      collection: "expenses",
-      storeAs: "expense",
-    },
-    {
-      collection: "friends",
-      storeAs: "friend",
-    },
+    // {
+    //   collection: "expenses",
+    //   storeAs: "expense",
+    // },
+    // {
+    //   collection: "friends",
+    //   storeAs: "friend",
+    // },
     {
       collection: "users",
       doc: props.uid,
@@ -77,8 +77,8 @@ export default compose(
   //   return [{ collection: "users", doc: props.uid, subcollections: [{ collection: "tasks" }], storeAs: `${props.uid}-tasks` }];
 
   connect(({ firestore: { data } }, props) => ({
-    expenses: data.expenses,
-    friends: data.friends,
+    // expenses: data.expenses,
+    // friends: data.friends,
     trips: data[`${props.uid}-trips`],
   }))
 )(AllTrips);

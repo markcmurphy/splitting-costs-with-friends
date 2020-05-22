@@ -28,7 +28,7 @@ export class VertBody extends Component {
             margin: "0",
           }}
         >
-          <Sidebar />
+          <Sidebar id={this.props.id} />
         </div>
         <div
           className="col-10"

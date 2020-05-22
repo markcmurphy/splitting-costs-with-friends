@@ -7,65 +7,8 @@ export class Sidebar extends Component {
     return (
       <div className="nav-wrapper pl-3 pr-2">
         <nav id="sidebar">
-          {/* <div className="sidebar-header">
-            <h3>Spodify</h3>
-          </div> */}
           <AddExpense id={this.props.id} />
           <Friends id={this.props.id} />
-
-          {/* <ul className="list-unstyled">
-            <li>Home</li>
-            <li>Search</li>
-            <li>Library</li>
-            <li>Home</li>
-            <li>Search</li>
-            <li>Library</li>
-            <li>Home</li>
-            <li>Search</li>
-            <li>Library</li>
-            <li>Home</li>
-            <li>Search</li>
-            <li>Library</li>
-            <li>Home</li>
-            <li>Search</li>
-            <li>Library</li>
-            <li>Home</li>
-            <li>Search</li>
-            <li>Library</li>
-            <li>Home</li>
-            <li>Search</li>
-            <li>Library</li>
-            <li>Home</li>
-            <li>Search</li>
-            <li>Library</li>
-            <li>Home</li>
-            <li>Search</li>
-            <li>Library</li>
-            <li>Home</li>
-            <li>Search</li>
-            <li>Library</li>
-            <li>Home</li>
-            <li>Search</li>
-            <li>Library</li>
-            <li>Home</li>
-            <li>Search</li>
-            <li>Library</li>
-            <li>Home</li>
-            <li>Search</li>
-            <li>Library</li>
-            <li>Home</li>
-            <li>Search</li>
-            <li>Library</li>
-            <li>Home</li>
-            <li>Search</li>
-            <li>Library</li>
-            <li>Home</li>
-            <li>Search</li>
-            <li>Library</li>
-            <li>Home</li>
-            <li>Search</li>
-            <li>Last</li>
-          </ul> */}
         </nav>
       </div>
     );

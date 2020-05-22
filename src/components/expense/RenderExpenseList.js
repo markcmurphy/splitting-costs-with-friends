@@ -401,6 +401,15 @@ export default compose(
         { collection: "expenses" },
       ],
     },
+    {
+      collection: "users",
+      doc: "mmurphy",
+      storeAs: `${props.props.id}-friends`,
+      subcollections: [
+        { collection: "trips", doc: props.props.id },
+        { collection: "friends" },
+      ],
+    },
 
     // { collection: "trips", storeAs: "trips", doc: props.id },
     // { collection: "friends", storeAs: "friends", doc: props.id },
@@ -413,6 +422,7 @@ export default compose(
   // )(RenderExpenseList);
   connect(({ firestore: { ordered } }, props) => ({
     expenses: ordered[`${props.props.id}-expenses`],
+    friends: ordered[`${props.props.id}-friends`],
     //  && ordered.trips[0],
     // expenses: ordered.expenses && ordered.expenses[0],
   }))

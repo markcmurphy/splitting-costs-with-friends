@@ -8,10 +8,13 @@ import FriendDetails from "./FriendDetails";
 import EditFriend from "./EditFriend";
 
 class Friends extends Component {
-  state = {
-    showForm: false,
-    firstName: "",
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      showForm: false,
+      firstName: "",
+    };
+  }
 
   inputChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
@@ -79,6 +82,7 @@ class Friends extends Component {
 
   renderFriend = (props) => {
     const { friends } = this.props;
+    console.log(this.props);
     const friendsList = _.map(friends, (value, key) => {
       return <FriendDetails key={value.id} friends={value} />;
     });
@@ -160,7 +164,6 @@ class Friends extends Component {
           <thead className="thead-inverse">
             <tr>
               <th>Friend Name</th>
-              {/* <th>{""}</th> */}
             </tr>
           </thead>
           {this.renderFriend()}
@@ -171,9 +174,19 @@ class Friends extends Component {
 }
 
 export default compose(
-  firestoreConnect([{ collection: "friends" }]),
+  firestoreConnect((props) => [
+    {
+      collection: "users",
+      doc: "mmurphy",
+      storeAs: `${props.id}-friends`,
+      subcollections: [
+        { collection: "trips", doc: props.id },
+        { collection: "friends" },
+      ],
+    },
+  ]),
 
-  connect((state, props) => ({
-    friends: state.firestore.ordered.friends,
+  connect(({ firestore: { ordered } }, props) => ({
+    friends: ordered[`${props.id}-friends`],
   }))
 )(Friends);
