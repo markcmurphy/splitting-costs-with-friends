@@ -16,14 +16,21 @@ class ExpenseList extends Component {
   }
 
   handleDelete = () => {
-    const { xexpenses, firestore } = this.props;
-    console.log(xexpenses);
-    firestore.delete({ collection: "expenses", doc: xexpenses.id });
-    // .then(() => this.props.history.push("/"));
+    const { expenses, firestore, tripId } = this.props;
+
+    firestore.delete({
+      collection: "users",
+      doc: "mmurphy",
+      storeAs: `${tripId.id}-expenses`,
+      subcollections: [
+        { collection: "trips", doc: tripId },
+        { collection: "expenses", doc: expenses.id },
+      ],
+    });
   };
 
   renderWhoPaid(whoPaid) {
-    const { xfriends, friends } = this.props;
+    const { friends } = this.props;
     if (friends && friends[whoPaid]) {
       return <td>{friends[whoPaid].firstName}</td>;
     } else {
@@ -33,17 +40,19 @@ class ExpenseList extends Component {
 
   renderEditForm(id) {
     const { showForm } = this.state;
-    const { xexpenses, xfriends } = this.props;
+    const { expenses, friends, firestore, tripId } = this.props;
 
     if (showForm) {
       return (
         <EditExpense
-          id={id}
-          expense={xexpenses.name}
-          amount={xexpenses.expenseAmount}
-          friendsInvolved={xexpenses.friendsInvolved}
-          whoPaid={xexpenses.whoPaid}
-          friends={xfriends}
+          expenseId={id}
+          expense={expenses.name}
+          amount={expenses.expenseAmount}
+          friendsInvolved={expenses.friendsInvolved}
+          whoPaid={expenses.whoPaid}
+          friends={friends}
+          tripId={tripId}
+          firestore={firestore}
         />
       );
     }
@@ -96,8 +105,8 @@ class ExpenseList extends Component {
   };
 
   renderExpenseTable() {
-    const { xexpenses, xfriends } = this.props;
-    const friendsInvolved = xexpenses.friendsInvolved;
+    const { expenses, friends } = this.props;
+    const friendsInvolved = expenses.friendsInvolved;
     const { showForm } = this.state;
 
     const editIcon = (
@@ -120,9 +129,9 @@ class ExpenseList extends Component {
       </svg>
     );
 
-    if (!isEmpty(xexpenses)) {
+    if (!isEmpty(expenses)) {
       return (
-        <tr key={xexpenses.id}>
+        <tr key={expenses.id}>
           {/* Delete Button */}
           {/* <td>
             <button onClick={this.handleDelete} className="btn-sm btn-danger">
@@ -137,8 +146,8 @@ class ExpenseList extends Component {
           </td> */}
           {/* Expense Name */}
           <td>
-            {xexpenses.name}
-            {this.renderEditForm(xexpenses.id)}
+            {expenses.name}
+            {this.renderEditForm(expenses.id)}
             <div style={{ float: "right" }}>
               <svg
                 className="bi bi-trash-fill ml-2"
@@ -171,13 +180,13 @@ class ExpenseList extends Component {
             </div>
           </td>
           {/* Who Paid for Expense */}
-          {this.renderWhoPaid(xexpenses.whoPaid)}
+          {this.renderWhoPaid(expenses.whoPaid)}
           {/* TODO: Render input for whether to include person in expense */}
           {/* Cost per person for expense */}
           <td>
             $
             {parseFloat(
-              xexpenses.expenseAmount / xexpenses.friendsInvolved.length
+              expenses.expenseAmount / expenses.friendsInvolved.length
             ).toFixed(2)}
           </td>
           {/* Whether Friend is Included in Expense */}
@@ -189,7 +198,7 @@ class ExpenseList extends Component {
             editIcon
           )} */}
 
-          {_.map(xfriends, (value, key) => {
+          {_.map(friends, (value, key) => {
             if (friendsInvolved.includes(value.id)) {
               return (
                 <td
@@ -206,7 +215,7 @@ class ExpenseList extends Component {
                     fill="currentColor"
                     xmlns="http://www.w3.org/2000/svg"
                     cursor="pointer"
-                    onClick={() => this.removeIncluded(xexpenses, value.id)}
+                    onClick={() => this.removeIncluded(expenses, value.id)}
                   >
                     <path
                       fillRule="evenodd"
@@ -233,7 +242,7 @@ class ExpenseList extends Component {
                     fill="currentColor"
                     xmlns="http://www.w3.org/2000/svg"
                     cursor="pointer"
-                    onClick={() => this.addIncluded(xexpenses, value.id)}
+                    onClick={() => this.addIncluded(expenses, value.id)}
                   >
                     <path
                       fillRule="evenodd"
@@ -256,7 +265,7 @@ class ExpenseList extends Component {
             }
           })}
           {/* Expense Amount */}
-          <td>${parseFloat(xexpenses.expenseAmount).toFixed(2)}</td>
+          <td>${parseFloat(expenses.expenseAmount).toFixed(2)}</td>
         </tr>
       );
     } else {
@@ -269,20 +278,21 @@ class ExpenseList extends Component {
   }
 }
 
-export default compose(
-  firestoreConnect((props) => [
-    {
-      collection: "expenses",
-      storeAs: "expense",
-    },
-    {
-      collection: "friends",
-      storeAs: "friend",
-    },
-  ]),
+export default ExpenseList;
+// compose(
+//   firestoreConnect((props) => [
+//     {
+//       collection: "expenses",
+//       storeAs: "expense",
+//     },
+//     {
+//       collection: "friends",
+//       storeAs: "friend",
+//     },
+//   ]),
 
-  connect(({ firestore: { data } }, props) => ({
-    expenses: data.expenses,
-    friends: data.friends,
-  }))
-)(ExpenseList);
+//   connect(({ firestore: { data } }, props) => ({
+//     expenses: data.expenses,
+//     friends: data.friends,
+//   }))
+// )(ExpenseList);

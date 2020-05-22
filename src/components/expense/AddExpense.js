@@ -230,10 +230,33 @@ class AddExpense extends Component {
 }
 
 export default compose(
-  firestoreConnect([{ collection: "expenses" }, { collection: "friends" }]),
+  firestoreConnect((props) => [
+    {
+      collection: "users",
+      doc: "mmurphy",
+      storeAs: `${props.id}-expenses`,
+      subcollections: [
+        { collection: "trips", doc: props.id },
+        { collection: "expenses" },
+      ],
+    },
+    {
+      collection: "users",
+      doc: "mmurphy",
+      storeAs: `${props.id}-friends`,
+      subcollections: [
+        { collection: "trips", doc: props.id },
+        { collection: "friends" },
+      ],
+    },
+  ]),
 
-  connect((state, props) => ({
-    expenses: state.firestore.ordered.expenses,
-    friends: state.firestore.ordered.friends,
+  connect(({ firestore: { ordered } }, props) => ({
+    friends: ordered[`${props.id}-friends`],
+    expenses: ordered[`${props.id}-expenses`],
   }))
+  // connect((state, props) => ({
+  //   expenses: state.firestore.ordered.expenses,
+  //   friends: state.firestore.ordered.friends,
+  // }))
 )(AddExpense);

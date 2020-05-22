@@ -3,11 +3,14 @@ import RenderExpenseList from "../expense/RenderExpenseList";
 import AddExpense from "../expense/AddExpense";
 
 export default function MainViewContainer(props) {
-  // console.log(props);
+  console.log(props);
   return (
     <div className="pl-4 pr-4">
       {/* <AddExpense /> */}
-      <RenderExpenseList props={props} />
+      <RenderExpenseList
+        // props={props}
+        tripId={props.id}
+      />
     </div>
   );
 }

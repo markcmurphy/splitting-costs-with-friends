@@ -92,11 +92,17 @@ class RenderExpenseList extends Component {
   }
 
   renderExpense() {
-    const { expenses, friends } = this.props;
+    const { expenses, friends, firestore, tripId } = this.props;
 
     const expensesList = _.map(expenses, (value, key) => {
       return (
-        <ExpenseList key={value.id} xexpenses={value} xfriends={friends} />
+        <ExpenseList
+          key={value.id}
+          expenses={value}
+          friends={friends}
+          firestore={firestore}
+          tripId={tripId}
+        />
       );
     });
     if (!isEmpty(expenses) && !isEmpty(friends)) {
@@ -395,18 +401,18 @@ export default compose(
     {
       collection: "users",
       doc: "mmurphy",
-      storeAs: `${props.props.id}-expenses`,
+      storeAs: `${props.tripId}-expenses`,
       subcollections: [
-        { collection: "trips", doc: props.props.id },
+        { collection: "trips", doc: props.tripId },
         { collection: "expenses" },
       ],
     },
     {
       collection: "users",
       doc: "mmurphy",
-      storeAs: `${props.props.id}-friends`,
+      storeAs: `${props.tripId}-friends`,
       subcollections: [
-        { collection: "trips", doc: props.props.id },
+        { collection: "trips", doc: props.tripId },
         { collection: "friends" },
       ],
     },
@@ -421,8 +427,8 @@ export default compose(
   //   }))
   // )(RenderExpenseList);
   connect(({ firestore: { ordered } }, props) => ({
-    expenses: ordered[`${props.props.id}-expenses`],
-    friends: ordered[`${props.props.id}-friends`],
+    expenses: ordered[`${props.tripId}-expenses`],
+    friends: ordered[`${props.tripId}-friends`],
     //  && ordered.trips[0],
     // expenses: ordered.expenses && ordered.expenses[0],
   }))

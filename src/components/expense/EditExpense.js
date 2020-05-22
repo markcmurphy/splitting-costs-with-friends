@@ -99,9 +99,7 @@ class EditExpense extends Component {
   formSubmit = (e) => {
     e.preventDefault();
 
-    const { firestore, expense } = this.props;
-    // const { friendsInvolved } = this.state;
-    console.log(this.state);
+    const { firestore, tripId, expenseId } = this.props;
 
     // Update expense
     const updExpense = {
@@ -112,12 +110,22 @@ class EditExpense extends Component {
     };
 
     // update expense in firestore
-    firestore.update({ collection: "expenses", doc: expense.id }, updExpense);
+    firestore.update(
+      {
+        collection: "users",
+        doc: "mmurphy",
+        storeAs: `${tripId}-expense`,
+        subcollections: [
+          { collection: "trips", doc: tripId },
+          { collection: "expenses", doc: expenseId },
+        ],
+      },
+      updExpense
+    );
   };
 
   render() {
-    const { expense } = this.props;
-    console.log(expense);
+    const { expense, amount } = this.props;
     if (this.props) {
       return (
         <div>
@@ -134,7 +142,7 @@ class EditExpense extends Component {
                     minLength="2"
                     required
                     ref={this.nameInput}
-                    defaultValue={expense.name}
+                    defaultValue={expense}
                   />
                 </div>
 
@@ -147,7 +155,7 @@ class EditExpense extends Component {
                     minLength="1"
                     required
                     ref={this.amountInput}
-                    defaultValue={expense.expenseAmount}
+                    defaultValue={amount}
                   />
                 </div>
 
@@ -177,25 +185,42 @@ class EditExpense extends Component {
   }
 }
 
-export default compose(
-  // gets expenses from firestore and puts them in the expenses prop
-  firestoreConnect((props) => [
-    {
-      collection: "expenses",
-      storeAs: "expense",
-      doc: props.id,
-    },
-    {
-      collection: "friends",
-      storeAs: "friend",
-      doc: props.id,
-    },
-  ]),
-  connect(({ firestore: { data } }, props) => ({
-    expense: data.expense && data.expense[props.id],
-    friend: data.friend && data.friend[props.id],
-  }))
-)(EditExpense);
+// export default compose(
+export default EditExpense;
+// gets expenses from firestore and puts them in the expenses prop
+//   firestoreConnect((props) => [
+//     {
+//       // collection: "expenses",
+//       // storeAs: "expense",
+//       // doc: props.id,
+//       collection: "users",
+//       doc: "mmurphy",
+//       // storeAs: `${props.tripId}-expenses`,
+//       storeAs: "expense",
+//       subcollections: [
+//         { collection: "trips", doc: props.tripId },
+//         { collection: "expenses", doc: props.id },
+//       ],
+//     },
+//     {
+//       // collection: "friends",
+//       // storeAs: "friend",
+//       // doc: props.id,
+//       collection: "users",
+//       doc: "mmurphy",
+//       // storeAs: `${props.tripId}-friends`,
+//       storeAs: "friend",
+//       subcollections: [
+//         { collection: "trips", doc: props.tripId },
+//         { collection: "friends", doc: props.id },
+//       ],
+//     },
+//   ]),
+//   connect(({ firestore: { data } }, props) => ({
+//     expense: data.expense && data.expense[props.id],
+//     friend: data.friend && data.friend[props.id],
+//   }))
+// )(EditExpense);
 
 // export default compose(
 //   firestoreConnect([{ collection: "expenses" }, { collection: "friends" }]),
