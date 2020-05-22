@@ -55,6 +55,7 @@ class AddExpense extends Component {
 
   renderFriendsInvolved() {
     const { friends } = this.props;
+    console.log(this.props);
     const { friendsInvolved } = this.state;
     const friendSelectMultiple = (
       <select
@@ -80,8 +81,24 @@ class AddExpense extends Component {
     const { firestore } = this.props;
 
     firestore
+      // .add(
+      //   { collection: "expenses" },
+      //   {
+      //     name: expense,
+      //     expenseAmount: Number(amount),
+      //     friendsInvolved: friendsInvolved,
+      //     whoPaid: whoPaid,
+      //   }
+      // )
       .add(
-        { collection: "expenses" },
+        {
+          collection: "users",
+          doc: "mmurphy",
+          subcollections: [
+            { collection: "trips", doc: this.props.id },
+            { collection: "expenses" },
+          ],
+        },
         {
           name: expense,
           expenseAmount: Number(amount),
@@ -91,10 +108,10 @@ class AddExpense extends Component {
       )
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
-        firestore.update(
-          { collection: "expenses", doc: docRef.id },
-          { id: docRef.id }
-        );
+        // firestore.update(
+        //   { collection: "expenses", doc: docRef.id },
+        //   { id: docRef.id }
+        // );
       });
 
     this.setState({

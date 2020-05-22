@@ -22,13 +22,24 @@ class Friends extends Component {
     const { firestore } = this.props;
     const { firstName } = this.state;
     firestore
-      .add({ collection: "friends" }, { firstName: firstName })
+      .add(
+        {
+          collection: "users",
+          doc: "mmurphy",
+          subcollections: [
+            { collection: "trips", doc: this.props.id },
+            { collection: "friends" },
+          ],
+        },
+        { firstName: firstName }
+      )
+      // .add({ collection: "friends" }, { firstName: firstName })
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
-        firestore.update(
-          { collection: "friends", doc: docRef.id },
-          { id: docRef.id }
-        );
+        // firestore.update(
+        //   { collection: "friends", doc: docRef.id },
+        //   { id: docRef.id }
+        // );
       });
 
     this.setState({ firstName: "" });

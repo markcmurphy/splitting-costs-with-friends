@@ -34,6 +34,7 @@ class RenderExpenseList extends Component {
 
   renderFriend() {
     const { friends } = this.props;
+
     const friendSelect = (
       <select
         multiple={false}
@@ -141,7 +142,6 @@ class RenderExpenseList extends Component {
 
   renderTotalPerPerson(friendsObj) {
     const { friends } = this.props;
-
     const map = _.map(friends, (value, key) => {
       if (friendsObj[value.id]) {
         return (
@@ -320,6 +320,9 @@ class RenderExpenseList extends Component {
   // }
 
   render() {
+    if (this.props) {
+      console.log(this.props);
+    }
     return (
       <div>
         <div>
@@ -373,13 +376,33 @@ class RenderExpenseList extends Component {
   }
 }
 
+// export default compose(
+//   firestoreConnect((props) => [
+//     { collection: "friends", storeAs: "guests" },
+//     { collection: "expenses", storeAs: "expenses" },
+//   ]),
+//   connect((state) => ({
+//     expenses: state.firestore.ordered.expenses,
+//     friends: state.firestore.ordered.friends,
+//   }))
+// )(RenderExpenseList);
+
 export default compose(
+  // gets clients from firestore and puts them in the clients prop
   firestoreConnect((props) => [
-    { collection: "friends", storeAs: "guests" },
-    { collection: "expenses", storeAs: "expenses" },
+    {
+      collection: "users",
+      doc: "mmurphy",
+      storeAs: "trips",
+      subcollections: [{ collection: "trips", doc: props.props.id }],
+    },
+
+    // { collection: "trips", storeAs: "trips", doc: props.id },
+    // { collection: "friends", storeAs: "friends", doc: props.id },
+    // { collection: "expenses", storeAs: "expenses", doc: props.id },
   ]),
-  connect((state) => ({
-    expenses: state.firestore.ordered.expenses,
-    friends: state.firestore.ordered.friends,
+  connect(({ firestore: { ordered } }, props) => ({
+    trips: ordered.trips && ordered.trips[0],
+    // expenses: ordered.expenses && ordered.expenses[0],
   }))
 )(RenderExpenseList);

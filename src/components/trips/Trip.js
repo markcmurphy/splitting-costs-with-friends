@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import Sidebar from "./Sidebar.js";
-import MainViewContainer from "./MainViewContainer.js";
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,10 +8,13 @@ import {
   useRouteMatch,
   useParams,
 } from "react-router-dom";
+import MainViewContainer from "../layout/MainViewContainer";
+import Sidebar from "../layout/Sidebar";
 
-export class VertBody extends Component {
+export class Trip extends Component {
   render() {
     // const { id } = useParams();
+    // console.log(this.props.id);
 
     return (
       <div
@@ -28,7 +30,7 @@ export class VertBody extends Component {
             margin: "0",
           }}
         >
-          <Sidebar />
+          <Sidebar id={this.props.id} />
         </div>
         <div
           className="col-10"
@@ -37,11 +39,11 @@ export class VertBody extends Component {
             backgroundColor: "#121212",
           }}
         >
-          <MainViewContainer />
+          <MainViewContainer id={this.props.id} />
         </div>
       </div>
     );
   }
 }
 
-export default VertBody;
+export default Trip;

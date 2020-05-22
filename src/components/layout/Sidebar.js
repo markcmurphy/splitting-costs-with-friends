@@ -10,8 +10,8 @@ export class Sidebar extends Component {
           {/* <div className="sidebar-header">
             <h3>Spodify</h3>
           </div> */}
-          <AddExpense />
-          <Friends />
+          <AddExpense id={this.props.id} />
+          <Friends id={this.props.id} />
 
           {/* <ul className="list-unstyled">
             <li>Home</li>

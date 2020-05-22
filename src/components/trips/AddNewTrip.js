@@ -91,7 +91,7 @@ class AddNewTrip extends Component {
 
   render() {
     const { showForm } = this.state;
-    console.log(this.props);
+    // console.log(this.props);
 
     return (
       <div

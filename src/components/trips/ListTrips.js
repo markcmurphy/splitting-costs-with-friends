@@ -3,18 +3,31 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import { compose } from "redux";
 import { firestoreConnect, isLoaded, isEmpty } from "react-redux-firebase";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+  useParams,
+} from "react-router-dom";
 import LoadingSpinner from "../loading/LoadingSpinner";
 
 class ListTrips extends Component {
   render() {
     const { trips } = this.props;
-    console.log(this.props.trips);
+    // const match = useRouteMatch();
+
     return (
       <ul>
         {trips ? (
           trips.map((item) => {
-            console.log(item);
-            return <li key={item.id}>{item.tripName}</li>;
+            // console.log(item);
+            return (
+              <li key={item.id}>
+                <Link to={`/trip/${item.id}`}>{item.tripName}</Link>
+              </li>
+            );
           })
         ) : (
           <LoadingSpinner />
