@@ -84,7 +84,14 @@ class Friends extends Component {
     const { friends } = this.props;
     console.log(this.props);
     const friendsList = _.map(friends, (value, key) => {
-      return <FriendDetails key={value.id} friends={value} />;
+      return (
+        <FriendDetails
+          key={value.id}
+          friends={value}
+          tripId={this.props.id}
+          firestore={this.props.firestore}
+        />
+      );
     });
 
     if (friends) {

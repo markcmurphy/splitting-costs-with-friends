@@ -12,7 +12,14 @@ class FriendDetails extends Component {
 
   handleDelete = () => {
     const { friends, firestore } = this.props;
-    firestore.delete({ collection: "friends", doc: friends.id });
+    firestore.delete({
+      collection: "users",
+      doc: "mmurphy",
+      subcollections: [
+        { collection: "trips", doc: this.props.tripId },
+        { collection: "friends", doc: friends.id },
+      ],
+    });
   };
 
   renderWhoseInvolved(id) {
@@ -37,7 +44,6 @@ class FriendDetails extends Component {
         viewBox="0 0 16 16"
         fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
-        // onClick={() => this.setState({ showForm: !showForm })}
         cursor="pointer"
       >
         <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z" />
@@ -72,11 +78,6 @@ class FriendDetails extends Component {
                   clipRule="evenodd"
                 />
               </svg>
-              {/* <i className="fa fa-edit" /> */}
-              {/* <button onClick={this.handleDelete} className="btn-sm btn-danger">
-              Delete
-            </button> */}
-              {/* <i onClick={this.handleDelete} classNames="fa fa-trash-alt" /> */}
               {this.renderEditForm(friends.id)}
               <span
                 className="ml-2"
@@ -98,15 +99,50 @@ class FriendDetails extends Component {
   }
 }
 
-export default compose(
-  firestoreConnect((props) => [
-    {
-      collection: "friends",
-      storeAs: "friend",
-      doc: props.id,
-    },
-  ]),
-  connect(({ firestore: { ordered } }, props) => ({
-    friend: ordered.friend && ordered.friend[0],
-  }))
-)(FriendDetails);
+// export default compose(
+export default FriendDetails;
+// firestoreConnect((props) => [
+//   console.log(props),
+//   {
+//     collection: "users",
+//     doc: "mmurphy",
+//     storeAs: `${props.id}-friends`,
+//     subcollections: [
+//       { collection: "trips", doc: props.id },
+//       { collection: "friends" },
+//     ],
+//   },
+// ]),
+
+// connect(({ firestore: { ordered } }, props) => ({
+//   friends: ordered[`${props.id}-friends`],
+// }))
+
+// firestoreConnect((props) => [
+//   {
+//     collection: "users",
+//     doc: "mmurphy",
+//     // storeAs: `${props.id}-friends`,
+//     storeAs: "friend",
+//     subcollections: [
+//       { collection: "trips", doc: props.tripId },
+//       { collection: "friends" },
+//     ],
+//   },
+// ]),
+// connect(({ firestore: { ordered } }, props) => ({
+//   // friend: ordered[`${props.id}-friends`],
+//   friend: ordered.friend,
+// }))
+
+// firestoreConnect((props) => [
+//   {
+//     collection: "friends",
+//     storeAs: "friend",
+//     doc: props.id,
+//   },
+// ]),
+// connect(({ firestore: { ordered } }, props) => ({
+//   friend: ordered.friend && ordered.friend[0],
+// }))
+// )(FriendDetails);
