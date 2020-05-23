@@ -7,10 +7,7 @@ export default function MainViewContainer(props) {
   return (
     <div className="pl-4 pr-4">
       {/* <AddExpense /> */}
-      <RenderExpenseList
-        // props={props}
-        tripId={props.id}
-      />
+      <RenderExpenseList tripId={props.id} />
     </div>
   );
 }

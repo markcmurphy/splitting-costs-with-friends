@@ -30,9 +30,9 @@ class ExpenseList extends Component {
   };
 
   renderWhoPaid(whoPaid) {
-    const { friends } = this.props;
-    if (friends && friends[whoPaid]) {
-      return <td>{friends[whoPaid].firstName}</td>;
+    const { friendsObj } = this.props;
+    if (friendsObj && friendsObj[whoPaid]) {
+      return <td>{friendsObj[whoPaid].firstName}</td>;
     } else {
       return <td>''</td>;
     }
@@ -71,7 +71,7 @@ class ExpenseList extends Component {
   addIncluded = (expense, id) => {
     // console.log(expense.friendsInvolved.filter((item) => !id.includes(item)));
     // console.log(expense.friendsInvolved.concat(id));
-    const { firestore } = this.props;
+    const { firestore, tripId } = this.props;
 
     // Update expense
     const updExpense = {
@@ -82,13 +82,25 @@ class ExpenseList extends Component {
     };
 
     // update expense in firestore
-    firestore.update({ collection: "expenses", doc: expense.id }, updExpense);
+    // firestore.update({ collection: "expenses", doc: expense.id }, updExpense);
+    firestore.update(
+      {
+        collection: "users",
+        doc: "mmurphy",
+        storeAs: `${tripId}-expenses`,
+        subcollections: [
+          { collection: "trips", doc: tripId },
+          { collection: "expenses", doc: expense.id },
+        ],
+      },
+      updExpense
+    );
   };
 
   removeIncluded = (expense, id) => {
     // console.log(expense.friendsInvolved.filter((item) => !id.includes(item)));
     // console.log(expense.friendsInvolved.concat(id));
-    const { firestore } = this.props;
+    const { firestore, tripId } = this.props;
 
     // Update expense
     const updExpense = {
@@ -101,14 +113,26 @@ class ExpenseList extends Component {
     };
 
     // update expense in firestore
-    firestore.update({ collection: "expenses", doc: expense.id }, updExpense);
+    // firestore.update({ collection: "expenses", doc: expense.id }, updExpense);
+    firestore.update(
+      {
+        collection: "users",
+        doc: "mmurphy",
+        storeAs: `${tripId}-expenses`,
+        subcollections: [
+          { collection: "trips", doc: tripId },
+          { collection: "expenses", doc: expense.id },
+        ],
+      },
+      updExpense
+    );
   };
 
   renderExpenseTable() {
-    const { expenses, friends } = this.props;
+    const { expensesObj, expenses, friends, friendsObj } = this.props;
     const friendsInvolved = expenses.friendsInvolved;
     const { showForm } = this.state;
-
+    console.log(this.props);
     const editIcon = (
       <svg
         className="bi bi-pencil-square"
@@ -278,21 +302,41 @@ class ExpenseList extends Component {
   }
 }
 
-export default ExpenseList;
-// compose(
-//   firestoreConnect((props) => [
-//     {
-//       collection: "expenses",
-//       storeAs: "expense",
-//     },
-//     {
-//       collection: "friends",
-//       storeAs: "friend",
-//     },
-//   ]),
+export default compose(
+  //   firestoreConnect((props) => [
+  //     {
+  //       collection: "expenses",
+  //       storeAs: "expense",
+  //     },
+  //     {
+  //       collection: "friends",
+  //       storeAs: "friend",
+  //     },
+  //   ]),
 
-//   connect(({ firestore: { data } }, props) => ({
-//     expenses: data.expenses,
-//     friends: data.friends,
-//   }))
-// )(ExpenseList);
+  firestoreConnect((props) => [
+    {
+      collection: "users",
+      doc: "mmurphy",
+      storeAs: `${props.tripId}-expenses`,
+      subcollections: [
+        { collection: "trips", doc: props.tripId },
+        { collection: "expenses" },
+      ],
+    },
+    {
+      collection: "users",
+      doc: "mmurphy",
+      storeAs: `${props.tripId}-friends`,
+      subcollections: [
+        { collection: "trips", doc: props.tripId },
+        { collection: "friends" },
+      ],
+    },
+  ]),
+
+  connect(({ firestore: { data } }, props) => ({
+    expensesObj: data[`${props.tripId}-expenses`],
+    friendsObj: data[`${props.tripId}-friends`],
+  }))
+)(ExpenseList);

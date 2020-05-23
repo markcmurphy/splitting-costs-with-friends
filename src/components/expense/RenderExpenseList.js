@@ -34,7 +34,7 @@ class RenderExpenseList extends Component {
 
   renderFriend() {
     const { friends } = this.props;
-
+    console.log(friends);
     const friendSelect = (
       <select
         multiple={false}
@@ -221,8 +221,6 @@ class RenderExpenseList extends Component {
         }
 
         diffAmount[value.id] += friendsObj[value.id];
-        console.log(friendsObj1);
-        // console.log(value.id + " " + diffAmount[value.id]);
       });
     }
     console.log(diffAmount);
