@@ -14,9 +14,10 @@ class Login extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
+    console.log(this.props);
 
-    // const { firebase, notifyUser } = this.props;
-    const { firebase } = this.props;
+    const { firebase, notifyUser } = this.props;
+    // const { firebase } = this.props;
     const { email, password } = this.state;
 
     firebase
@@ -24,22 +25,24 @@ class Login extends Component {
         email,
         password,
       })
-      .catch((err) => notifyUser("Invalid Login Info", "error"));
-    // .then(this.props.history.push("/"));
+      .catch((err) => notifyUser("Invalid Login Info", "error"))
+      .then(this.props.history.push("/"));
   };
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
   render() {
-    // const { message, messageType } = this.props.notify;
+    console.log(this.props);
+    console.log(this.state);
+    const { message, messageType } = this.props.notify;
     return (
       <div className="row">
         <div className="col-md-6 mx-auto">
           <div className="card">
             <div className="card-body">
-              {/* {message ? (
+              {message ? (
                 <Alert message={message} messageType={messageType} />
-              ) : null} */}
+              ) : null}
               <h1 className="text-center pb-4 pt-3">
                 <span className="text-primary">
                   <i className="fa fa-lock"></i>

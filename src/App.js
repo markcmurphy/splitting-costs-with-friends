@@ -17,22 +17,17 @@ import LoadingSpinner from "./components/loading/LoadingSpinner";
 
 class App extends Component {
   AllTripsPage = (props) => {
-    // console.log(props);
     return <AllTrips {...props} uid={this.props.auth.uid} />;
   };
 
   render() {
     const { auth } = this.props;
-    if (this.props.auth) {
-      console.log(this.props);
-    }
 
     return (
       <div className="App">
         <Navbar />
         <div className="main">
           <Switch>
-            {/* <AllTrips uid={"Dv8b8sjyMrX8HdWC13Gk3tZrUM22"} /> */}
             <Route
               exact
               path="/login"
@@ -43,27 +38,20 @@ class App extends Component {
               path="/register"
               component={UserIsNotAuthenticated(Register)}
             />
-            {!this.props.auth.uid ? (
-              <LoadingSpinner />
-            ) : (
-              <Route
-                exact
-                path="/"
-                component={UserIsAuthenticated(() => (
-                  <AllTrips uid={auth.uid} />
-                ))}
-              />
-            )}
+            <Route
+              exact
+              path="/"
+              component={UserIsAuthenticated(() => (
+                <AllTrips uid={auth.uid} />
+              ))}
+            />
+
             <Route
               exact
               path="/"
               component={UserIsNotAuthenticated(LoadingSpinner)}
             />
           </Switch>
-          {/* <Vertbody /> */}
-          {/* <RenderExpenseList /> */}
-          {/* <AddExpense /> */}
-          {/* <Friends /> */}
         </div>
       </div>
     );

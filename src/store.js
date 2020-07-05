@@ -8,6 +8,7 @@ import { createFirestoreInstance } from "redux-firestore";
 // Reducers
 import data from "./reducers/data";
 import expenseData from "./reducers/expenseData";
+import notifyReducer from "./reducers/notifyReducer";
 
 const fbConfig = {
   apiKey: process.env.REACT_APP_APIKEY,
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   firebase: firebaseReducer,
   firestore: firestoreReducer,
   data: data,
+  notify: notifyReducer,
   expenseData: expenseData,
 });
 
