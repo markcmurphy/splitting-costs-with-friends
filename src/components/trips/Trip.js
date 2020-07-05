@@ -14,7 +14,7 @@ import Sidebar from "../layout/Sidebar";
 export class Trip extends Component {
   render() {
     // const { id } = useParams();
-    // console.log(this.props.id);
+    console.log(this.props.id);
 
     return (
       <div

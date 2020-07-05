@@ -93,7 +93,7 @@ class AddExpense extends Component {
       .add(
         {
           collection: "users",
-          doc: "mmurphy",
+          doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
           subcollections: [
             { collection: "trips", doc: this.props.id },
             { collection: "expenses" },
@@ -233,7 +233,7 @@ export default compose(
   firestoreConnect((props) => [
     {
       collection: "users",
-      doc: "mmurphy",
+      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
       storeAs: `${props.id}-expenses`,
       subcollections: [
         { collection: "trips", doc: props.id },
@@ -242,7 +242,7 @@ export default compose(
     },
     {
       collection: "users",
-      doc: "mmurphy",
+      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
       storeAs: `${props.id}-friends`,
       subcollections: [
         { collection: "trips", doc: props.id },

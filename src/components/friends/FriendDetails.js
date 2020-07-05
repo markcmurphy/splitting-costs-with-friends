@@ -14,7 +14,7 @@ class FriendDetails extends Component {
     const { friends, firestore } = this.props;
     firestore.delete({
       collection: "users",
-      doc: "mmurphy",
+      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
       subcollections: [
         { collection: "trips", doc: this.props.tripId },
         { collection: "friends", doc: friends.id },
@@ -105,7 +105,7 @@ export default FriendDetails;
 //   console.log(props),
 //   {
 //     collection: "users",
-//     doc: "mmurphy",
+//     doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
 //     storeAs: `${props.id}-friends`,
 //     subcollections: [
 //       { collection: "trips", doc: props.id },
@@ -121,7 +121,7 @@ export default FriendDetails;
 // firestoreConnect((props) => [
 //   {
 //     collection: "users",
-//     doc: "mmurphy",
+//     doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
 //     // storeAs: `${props.id}-friends`,
 //     storeAs: "friend",
 //     subcollections: [

@@ -113,7 +113,7 @@ class EditExpense extends Component {
     firestore.update(
       {
         collection: "users",
-        doc: "mmurphy",
+        doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
         storeAs: `${tripId}-expense`,
         subcollections: [
           { collection: "trips", doc: tripId },
@@ -194,7 +194,7 @@ export default EditExpense;
 //       // storeAs: "expense",
 //       // doc: props.id,
 //       collection: "users",
-//       doc: "mmurphy",
+//       doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
 //       // storeAs: `${props.tripId}-expenses`,
 //       storeAs: "expense",
 //       subcollections: [
@@ -207,7 +207,7 @@ export default EditExpense;
 //       // storeAs: "friend",
 //       // doc: props.id,
 //       collection: "users",
-//       doc: "mmurphy",
+//       doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
 //       // storeAs: `${props.tripId}-friends`,
 //       storeAs: "friend",
 //       subcollections: [

@@ -398,7 +398,7 @@ export default compose(
   firestoreConnect((props) => [
     {
       collection: "users",
-      doc: "mmurphy",
+      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
       storeAs: `${props.tripId}-expenses`,
       subcollections: [
         { collection: "trips", doc: props.tripId },
@@ -407,7 +407,7 @@ export default compose(
     },
     {
       collection: "users",
-      doc: "mmurphy",
+      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
       storeAs: `${props.tripId}-friends`,
       subcollections: [
         { collection: "trips", doc: props.tripId },

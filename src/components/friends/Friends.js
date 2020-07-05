@@ -28,7 +28,7 @@ class Friends extends Component {
       .add(
         {
           collection: "users",
-          doc: "mmurphy",
+          doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
           subcollections: [
             { collection: "trips", doc: this.props.id },
             { collection: "friends" },
@@ -184,7 +184,7 @@ export default compose(
   firestoreConnect((props) => [
     {
       collection: "users",
-      doc: "mmurphy",
+      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
       storeAs: `${props.id}-friends`,
       subcollections: [
         { collection: "trips", doc: props.id },

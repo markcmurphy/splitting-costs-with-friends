@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { compose } from "redux";
-import { firestoreConnect, isEmpty, isLoaded } from "react-redux-firebase";
+import { firestoreConnect, isEmpty } from "react-redux-firebase";
 import _ from "lodash";
-import WhoPaid from "./WhoPaid";
 import EditExpense from "./EditExpense";
 
 class ExpenseList extends Component {
@@ -15,12 +14,13 @@ class ExpenseList extends Component {
     };
   }
 
+  // handles deletion of expense from Firestore
   handleDelete = () => {
     const { expenses, firestore, tripId } = this.props;
 
     firestore.delete({
       collection: "users",
-      doc: "mmurphy",
+      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
       storeAs: `${tripId.id}-expenses`,
       subcollections: [
         { collection: "trips", doc: tripId },
@@ -29,6 +29,7 @@ class ExpenseList extends Component {
     });
   };
 
+  // renders name of friend who paid for expense
   renderWhoPaid(whoPaid) {
     const { friendsObj } = this.props;
     if (friendsObj && friendsObj[whoPaid]) {
@@ -38,6 +39,7 @@ class ExpenseList extends Component {
     }
   }
 
+  // shows edit form to change expense details
   renderEditForm(id) {
     const { showForm } = this.state;
     const { expenses, friends, firestore, tripId } = this.props;
@@ -58,6 +60,7 @@ class ExpenseList extends Component {
     }
   }
 
+  // handles input from form
   handleInputChange = (e) => {
     const target = e.target;
     const value = target.name === "isIncluded" ? target.checked : target.value;
@@ -68,25 +71,20 @@ class ExpenseList extends Component {
     });
   };
 
+  // upon checkbox click, adds friend to friendsIncluded array on expense and updates Firestore
   addIncluded = (expense, id) => {
-    // console.log(expense.friendsInvolved.filter((item) => !id.includes(item)));
-    // console.log(expense.friendsInvolved.concat(id));
     const { firestore, tripId } = this.props;
 
     // Update expense
     const updExpense = {
-      //   name: this.nameInput.current.value,
-      // expenseAmount: Number(this.amountInput.current.value),
       friendsInvolved: expense.friendsInvolved.concat(id),
-      // whoPaid: this.whoPaidInput.current.value,
     };
 
     // update expense in firestore
-    // firestore.update({ collection: "expenses", doc: expense.id }, updExpense);
     firestore.update(
       {
         collection: "users",
-        doc: "mmurphy",
+        doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
         storeAs: `${tripId}-expenses`,
         subcollections: [
           { collection: "trips", doc: tripId },
@@ -97,27 +95,23 @@ class ExpenseList extends Component {
     );
   };
 
+  // upon checkbox click, removes friend from friendsIncluded array on expense and updates Firestore
+
   removeIncluded = (expense, id) => {
-    // console.log(expense.friendsInvolved.filter((item) => !id.includes(item)));
-    // console.log(expense.friendsInvolved.concat(id));
     const { firestore, tripId } = this.props;
 
     // Update expense
     const updExpense = {
-      //   name: this.nameInput.current.value,
-      // expenseAmount: Number(this.amountInput.current.value),
       friendsInvolved: expense.friendsInvolved.filter(
         (item) => !id.includes(item)
       ),
-      // whoPaid: this.whoPaidInput.current.value,
     };
 
     // update expense in firestore
-    // firestore.update({ collection: "expenses", doc: expense.id }, updExpense);
     firestore.update(
       {
         collection: "users",
-        doc: "mmurphy",
+        doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
         storeAs: `${tripId}-expenses`,
         subcollections: [
           { collection: "trips", doc: tripId },
@@ -128,12 +122,13 @@ class ExpenseList extends Component {
     );
   };
 
+  // method to render expense table in app
   renderExpenseTable() {
     const { expensesObj, expenses, friends, friendsObj } = this.props;
     const friendsInvolved = expenses.friendsInvolved;
     const { showForm } = this.state;
-    console.log(this.props);
     const editIcon = (
+      // pencil/edit icon
       <svg
         className="bi bi-pencil-square"
         width="1em"
@@ -141,7 +136,6 @@ class ExpenseList extends Component {
         viewBox="0 0 16 16"
         fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
-        // onClick={() => this.setState({ showForm: !showForm })}
         cursor="pointer"
       >
         <path d="M15.502 1.94a.5.5 0 010 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 01.707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 00-.121.196l-.805 2.414a.25.25 0 00.316.316l2.414-.805a.5.5 0 00.196-.12l6.813-6.814z" />
@@ -156,23 +150,11 @@ class ExpenseList extends Component {
     if (!isEmpty(expenses)) {
       return (
         <tr key={expenses.id}>
-          {/* Delete Button */}
-          {/* <td>
-            <button onClick={this.handleDelete} className="btn-sm btn-danger">
-              Delete
-            </button>
-            <button
-              className="btn-sm ml-4 btn-primary"
-              onClick={() => this.setState({ showForm: !showForm })}
-            >
-              {showForm ? <i>Close</i> : <i className="fa fa-2x fa-edit" />}
-            </button>
-          </td> */}
-          {/* Expense Name */}
           <td>
             {expenses.name}
             {this.renderEditForm(expenses.id)}
             <div style={{ float: "right" }}>
+              {/* trash/delete icon */}
               <svg
                 className="bi bi-trash-fill ml-2"
                 width="1em"
@@ -205,7 +187,6 @@ class ExpenseList extends Component {
           </td>
           {/* Who Paid for Expense */}
           {this.renderWhoPaid(expenses.whoPaid)}
-          {/* TODO: Render input for whether to include person in expense */}
           {/* Cost per person for expense */}
           <td>
             $
@@ -213,24 +194,12 @@ class ExpenseList extends Component {
               expenses.expenseAmount / expenses.friendsInvolved.length
             ).toFixed(2)}
           </td>
-          {/* Whether Friend is Included in Expense */}
-          {/* {isChecked ? (
-            <button className="btn-danger">
-              <i>Close</i>
-            </button>
-          ) : (
-            editIcon
-          )} */}
 
           {_.map(friends, (value, key) => {
             if (friendsInvolved.includes(value.id)) {
               return (
-                <td
-                  key={value.id}
-                  // onClick={() => this.setState({ isChecked: !isChecked })}
-                  style={{ textAlign: "center" }}
-                >
-                  {/* <i className="fa fa-2x fa-check-square" /> */}
+                <td key={value.id} style={{ textAlign: "center" }}>
+                  {/* checkbox to signify friend is included in expense, clicking will remove friend */}
                   <svg
                     className="bi bi-check-box"
                     width="1em"
@@ -257,7 +226,8 @@ class ExpenseList extends Component {
             } else {
               return (
                 <td key={value.id} style={{ textAlign: "center" }}>
-                  {/* <i className="fa fa-2x fa-window-close" /> */}
+                  {/* checkbox to signify friend is NOT included in expense, clicking will add friend */}
+
                   <svg
                     className="bi bi-x-square"
                     width="1em"
@@ -293,31 +263,23 @@ class ExpenseList extends Component {
         </tr>
       );
     } else {
+      // if no expenses loaded from Firestore yet, signify loading
       return "loading";
     }
   }
 
   render() {
+    // show expense table
     return this.renderExpenseTable();
   }
 }
 
+// connects to relevent Firestore collections and documents and passes to props
 export default compose(
-  //   firestoreConnect((props) => [
-  //     {
-  //       collection: "expenses",
-  //       storeAs: "expense",
-  //     },
-  //     {
-  //       collection: "friends",
-  //       storeAs: "friend",
-  //     },
-  //   ]),
-
   firestoreConnect((props) => [
     {
       collection: "users",
-      doc: "mmurphy",
+      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
       storeAs: `${props.tripId}-expenses`,
       subcollections: [
         { collection: "trips", doc: props.tripId },
@@ -326,7 +288,7 @@ export default compose(
     },
     {
       collection: "users",
-      doc: "mmurphy",
+      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
       storeAs: `${props.tripId}-friends`,
       subcollections: [
         { collection: "trips", doc: props.tripId },
