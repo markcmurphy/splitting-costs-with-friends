@@ -8,10 +8,13 @@ import FriendDetails from "./FriendDetails";
 import EditFriend from "./EditFriend";
 
 class Friends extends Component {
-  state = {
-    showForm: false,
-    firstName: "",
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      showForm: false,
+      firstName: "",
+    };
+  }
 
   inputChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
@@ -19,16 +22,22 @@ class Friends extends Component {
 
   formSubmit = (e) => {
     e.preventDefault();
-    const { firestore } = this.props;
+    const { firestore, uid } = this.props;
     const { firstName } = this.state;
     firestore
-      .add({ collection: "friends" }, { firstName: firstName })
+      .add(
+        {
+          collection: "users",
+          doc: uid,
+          subcollections: [
+            { collection: "trips", doc: this.props.id },
+            { collection: "friends" },
+          ],
+        },
+        { firstName: firstName }
+      )
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
-        firestore.update(
-          { collection: "friends", doc: docRef.id },
-          { id: docRef.id }
-        );
       });
 
     this.setState({ firstName: "" });
@@ -67,9 +76,18 @@ class Friends extends Component {
   };
 
   renderFriend = (props) => {
-    const { friends } = this.props;
+    const { friends, uid } = this.props;
+    console.log(this.props);
     const friendsList = _.map(friends, (value, key) => {
-      return <FriendDetails key={value.id} friends={value} />;
+      return (
+        <FriendDetails
+          key={value.id}
+          friends={value}
+          tripId={this.props.id}
+          firestore={this.props.firestore}
+          uid={uid}
+        />
+      );
     });
 
     if (friends) {
@@ -88,32 +106,57 @@ class Friends extends Component {
   render() {
     const { showForm } = this.state;
     return (
-      <div>
-        <table className="table table-sm table-striped table-dark mt-4 ">
+      <div
+        style={{
+          marginLeft: "5%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
+        {showForm ? (
+          <button
+            className="btn btn-danger btn-block mt-4"
+            onClick={() => this.setState({ showForm: !showForm })}
+          >
+            Close
+          </button>
+        ) : (
+          <button
+            className="btn btn-secondary btn-block mt-4"
+            onClick={() => this.setState({ showForm: !showForm })}
+          >
+            Add Friend
+          </button>
+        )}
+        {this.renderForm()}
+        <table className="table table-responseive table-striped table-dark mt-4">
           <thead className="thead-inverse">
             <tr>
               <th>Friend Name</th>
-              <th>Delete</th>
             </tr>
           </thead>
           {this.renderFriend()}
         </table>
-        <button
-          className="mt-4 btn btn-primary"
-          onClick={() => this.setState({ showForm: !showForm })}
-        >
-          {showForm ? <i>Close</i> : <i>Add Friend</i>}
-        </button>
-        {this.renderForm()}
       </div>
     );
   }
 }
 
 export default compose(
-  firestoreConnect([{ collection: "friends" }]),
+  firestoreConnect((props) => [
+    {
+      collection: "users",
+      doc: props.uid,
+      storeAs: `${props.id}-friends`,
+      subcollections: [
+        { collection: "trips", doc: props.id },
+        { collection: "friends" },
+      ],
+    },
+  ]),
 
-  connect((state, props) => ({
-    friends: state.firestore.ordered.friends,
+  connect(({ firestore: { ordered } }, props) => ({
+    friends: ordered[`${props.id}-friends`],
   }))
 )(Friends);

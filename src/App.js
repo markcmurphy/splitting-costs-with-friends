@@ -1,21 +1,63 @@
-import React from "react";
+import React, { Component } from "react";
 import "./App.css";
-import Friends from "./components/friends/Friends";
-import AddExpense from "./components/expense/AddExpense";
-import Navbar from "./components/layout/Navbar";
-import RenderExpenseList from "./components/expense/RenderExpenseList";
+import { UserIsAuthenticated, UserIsNotAuthenticated } from "./helpers/auth";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <Navbar />
-      <div className="main">
-        <RenderExpenseList />
-        <AddExpense />
-        <Friends />
+import { compose } from "redux";
+
+import { connect } from "react-redux";
+import { firebaseConnect } from "react-redux-firebase";
+
+import Vertbody from "./components/layout/Vertbody";
+import Navbar from "./components/layout/Navbar";
+import AllTrips from "./components/trips/AllTrips";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
+import LoadingSpinner from "./components/loading/LoadingSpinner";
+
+class App extends Component {
+  render() {
+    const { auth } = this.props;
+
+    return (
+      <div className="App">
+        <Navbar />
+        <div className="main">
+          <Switch>
+            <Route
+              exact
+              path="/login"
+              component={UserIsNotAuthenticated(Login)}
+            />
+            <Route
+              exact
+              path="/register"
+              component={UserIsNotAuthenticated(Register)}
+            />
+            <Route
+              exact
+              path="/"
+              component={UserIsAuthenticated(() => (
+                <AllTrips uid={auth.uid} />
+              ))}
+            />
+
+            <Route
+              exact
+              path="/"
+              component={UserIsNotAuthenticated(LoadingSpinner)}
+            />
+          </Switch>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
-export default App;
+// export default App;
+export default compose(
+  firebaseConnect(),
+  connect((state) => ({
+    auth: state.firebase.auth,
+  }))
+)(App);

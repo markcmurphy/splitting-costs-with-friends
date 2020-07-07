@@ -9,13 +9,16 @@ import FriendsInvolved from "./FriendsInvolved";
 class EditExpense extends Component {
   constructor(props) {
     super(props);
-    this.friendsInvolved = [];
     // Create refs
     this.nameInput = React.createRef();
     this.amountInput = React.createRef();
     this.friendsInvolvedInput = React.createRef();
     this.whoPaidInput = React.createRef();
   }
+
+  state = {
+    friendsInvolved: this.props.friendsInvolved,
+  };
 
   renderFriend() {
     const { friends, whoPaid } = this.props;
@@ -41,39 +44,33 @@ class EditExpense extends Component {
   }
 
   inputChangeMultiple = (e) => {
+    console.log(e.target.selectedOptions);
     this.setState({
       friendsInvolved: Array.from(
         e.target.selectedOptions,
         (item) => item.value
       ),
     });
+
+    const optionValues = _.map(e.target.selectedOptions, (value, key) => {
+      return value.value;
+    });
   };
 
   renderFriendsInvolved() {
-    const { friendsInvolved, friends } = this.props;
+    const { friendsInvolved, friends, uid } = this.props;
     console.log(this.props);
     const friendSelectMultiple = (
       <select
         multiple={true}
-        defaultValue={_.map(friends, (value, key) => {
-          // if (friendsInvolved.includes(value.id)) {
-          return <FriendsInvolved key={value.id} friends={value} />;
-          // }
-        })}
-        //   {
-        //     _.map(friendsInvolved, (value, key) => {
-        //     return <FriendsInvolved key={value.id} friends={value} />;
-        //   })
-        // }
+        defaultValue={friendsInvolved}
         onChange={this.inputChangeMultiple}
         className="form-control"
         id="friendsInvolved"
         type="text"
       >
         {_.map(friends, (value, key) => {
-          // if (friendsInvolved.includes(value.id)) {
-          return <FriendsInvolved key={value.id} friends={value} />;
-          // }
+          return <FriendsInvolved key={value.id} friends={value} uid={uid} />;
         })}
       </select>
     );
@@ -83,24 +80,34 @@ class EditExpense extends Component {
   formSubmit = (e) => {
     e.preventDefault();
 
-    const { firestore, expense } = this.props;
-    const { friendsInvolved } = this.state;
+    const { firestore, tripId, expenseId, uid } = this.props;
 
     // Update expense
     const updExpense = {
       name: this.nameInput.current.value,
       expenseAmount: Number(this.amountInput.current.value),
-      friendsInvolved: friendsInvolved,
+      friendsInvolved: this.state.friendsInvolved,
       whoPaid: this.whoPaidInput.current.value,
     };
 
     // update expense in firestore
-    firestore.update({ collection: "expenses", doc: expense.id }, updExpense);
+    firestore.update(
+      {
+        collection: "users",
+        doc: uid,
+        storeAs: `${tripId}-expense`,
+        subcollections: [
+          { collection: "trips", doc: tripId },
+          { collection: "expenses", doc: expenseId },
+        ],
+      },
+      updExpense
+    );
   };
 
   render() {
-    const { expense } = this.props;
-    console.log(expense);
+    const { expense, amount } = this.props;
+    console.log(this.props);
     if (this.props) {
       return (
         <div>
@@ -117,7 +124,7 @@ class EditExpense extends Component {
                     minLength="2"
                     required
                     ref={this.nameInput}
-                    defaultValue={expense.name}
+                    defaultValue={expense}
                   />
                 </div>
 
@@ -130,7 +137,7 @@ class EditExpense extends Component {
                     minLength="1"
                     required
                     ref={this.amountInput}
-                    defaultValue={expense.expenseAmount}
+                    defaultValue={amount}
                   />
                 </div>
 
@@ -160,31 +167,4 @@ class EditExpense extends Component {
   }
 }
 
-export default compose(
-  // gets expenses from firestore and puts them in the expenses prop
-  firestoreConnect((props) => [
-    {
-      collection: "expenses",
-      storeAs: "expense",
-      doc: props.id,
-    },
-    {
-      collection: "friends",
-      storeAs: "friend",
-      doc: props.id,
-    },
-  ]),
-  connect(({ firestore: { data } }, props) => ({
-    expense: data.expense && data.expense[props.id],
-    friend: data.friend && data.friend[props.id],
-  }))
-)(EditExpense);
-
-// export default compose(
-//   firestoreConnect([{ collection: "expenses" }, { collection: "friends" }]),
-
-//   connect((state, props) => ({
-//     expenses: state.firestore.data.expenses,
-//     friends: state.firestore.data.friends,
-//   }))
-// )(EditExpense);
+export default EditExpense;

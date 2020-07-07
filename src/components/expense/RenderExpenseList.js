@@ -34,6 +34,7 @@ class RenderExpenseList extends Component {
 
   renderFriend() {
     const { friends } = this.props;
+    console.log(friends);
     const friendSelect = (
       <select
         multiple={false}
@@ -82,7 +83,13 @@ class RenderExpenseList extends Component {
         type="text"
       >
         {_.map(friends, (value, key) => {
-          return <FriendsInvolved key={value.id} friends={value} />;
+          return (
+            <FriendsInvolved
+              key={value.id}
+              friends={value}
+              uid={this.props.uid}
+            />
+          );
         })}
       </select>
     );
@@ -91,11 +98,18 @@ class RenderExpenseList extends Component {
   }
 
   renderExpense() {
-    const { expenses, friends } = this.props;
+    const { expenses, friends, firestore, tripId } = this.props;
 
     const expensesList = _.map(expenses, (value, key) => {
       return (
-        <ExpenseList key={value.id} xexpenses={value} xfriends={friends} />
+        <ExpenseList
+          key={value.id}
+          expenses={value}
+          friends={friends}
+          firestore={firestore}
+          tripId={tripId}
+          uid={this.props.uid}
+        />
       );
     });
     if (!isEmpty(expenses) && !isEmpty(friends)) {
@@ -133,15 +147,11 @@ class RenderExpenseList extends Component {
         }
       });
     }
-    // this.setState({
-    //   totals: friendsObj,
-    // });
     return friendsObj;
   }
 
   renderTotalPerPerson(friendsObj) {
     const { friends } = this.props;
-
     const map = _.map(friends, (value, key) => {
       if (friendsObj[value.id]) {
         return (
@@ -169,6 +179,8 @@ class RenderExpenseList extends Component {
           ) {
             let bal = expense.expenseAmount;
             friendsObj[value.id] = bal;
+          } else if (!friendsObj[value.id]) {
+            friendsObj[value.id] = 0;
           }
         }
       });
@@ -205,8 +217,6 @@ class RenderExpenseList extends Component {
     let friendsObj = this.totalAmountPaidPerPerson();
     let friendsObj1 = this.totalPerPerson();
     let diffAmount = {};
-    console.log(friendsObj);
-    console.log(friendsObj1);
     if (!isEmpty(expenses) && !isEmpty(friends)) {
       _.map(friends, (value, key) => {
         diffAmount[value.id] = 0;
@@ -215,8 +225,6 @@ class RenderExpenseList extends Component {
         }
 
         diffAmount[value.id] += friendsObj[value.id];
-        console.log(friendsObj1);
-        // console.log(value.id + " " + diffAmount[value.id]);
       });
     }
     console.log(diffAmount);
@@ -230,92 +238,26 @@ class RenderExpenseList extends Component {
     // const friendsObj = {};
     if (!isEmpty(expenses) && !isEmpty(friends)) {
       _.map(friends, (value, key) => {
-        // for (let expense of expenses) {
-        // let expenseAmount = expense.expenseAmount;
-        // let costPerPerson = expenseAmount / expense.friendsInvolved.length;
-        // let net = costPerPerson - expenseAmount;
-
-        // if (!diffAmount[value.id]) {
         diffAmount[value.id] = 0;
-        // } else if (!diffAmount[value.id]) {
-        diffAmount[value.id] += friendsObj1[value.id] - friendsObj[value.id];
-        // if (
-        //   expense.friendsInvolved.includes(value.id) &&
-        //   expense.whoPaid.includes(value.id)
-        // ) {
-        //   friendsObj[value.id] = net * -1;
-        //   console.log(net);
-        // } else if (expense.whoPaid.includes(value.id)) {
-        //   friendsObj[value.id] = expenseAmount;
-        // } else if (expense.friendsInvolved.includes(value.id)) {
-        //   friendsObj[value.id] = costPerPerson;
-        // }
+        diffAmount[value.id] += friendsObj[value.id] - friendsObj1[value.id];
       });
-      console.log(diffAmount);
     }
 
     const map = _.map(friends, (value, key) => {
-      if (friendsObj[value.id]) {
-        return <td key={value.id}>${friendsObj[value.id].toFixed(2)}</td>;
-      } else {
-        return <td key={value.id}>$0</td>;
+      if (diffAmount[value.id]) {
+        return <td key={value.id}>${diffAmount[value.id].toFixed(2)}</td>;
       }
     });
 
     return map;
   }
-  // renderTotalDifferencePerPerson() {
-  //   const { friends, expenses } = this.props;
-  //   const friendsObj = {};
-  //   if (!isEmpty(expenses) && !isEmpty(friends)) {
-  //     _.map(friends, (value, key) => {
-  //       for (let expense of expenses) {
-  //         let expenseAmount = expense.expenseAmount;
-  //         let costPerPerson = expenseAmount / expense.friendsInvolved.length;
-  //         let net = costPerPerson - expenseAmount;
-
-  //         if (friendsObj[value.id]) {
-  //           if (
-  //             expense.friendsInvolved.includes(value.id) &&
-  //             expense.whoPaid.includes(value.id)
-  //           ) {
-  //             friendsObj[value.id] -= net;
-  //             console.log(net);
-  //           } else if (expense.whoPaid.includes(value.id)) {
-  //             friendsObj[value.id] += expenseAmount;
-  //           } else if (expense.friendsInvolved.includes(value.id)) {
-  //             friendsObj[value.id] += costPerPerson;
-  //           }
-  //         } else if (!friendsObj[value.id]) {
-  //           if (
-  //             expense.friendsInvolved.includes(value.id) &&
-  //             expense.whoPaid.includes(value.id)
-  //           ) {
-  //             friendsObj[value.id] = net * -1;
-  //             console.log(net);
-  //           } else if (expense.whoPaid.includes(value.id)) {
-  //             friendsObj[value.id] = expenseAmount;
-  //           } else if (expense.friendsInvolved.includes(value.id)) {
-  //             friendsObj[value.id] = costPerPerson;
-  //           }
-  //         }
-  //       }
-  //     });
-  //     console.log(friendsObj);
-  //   }
-
-  //   const map = _.map(friends, (value, key) => {
-  //     if (friendsObj[value.id]) {
-  //       return <td key={value.id}>${friendsObj[value.id].toFixed(2)}</td>;
-  //     } else {
-  //       return <td key={value.id}>$0</td>;
-  //     }
-  //   });
-
-  //   return map;
-  // }
 
   render() {
+    if (this.props) {
+      console.log(this.props);
+    }
+
+    console.log(this.state);
     return (
       <div>
         <div>
@@ -323,7 +265,7 @@ class RenderExpenseList extends Component {
             <table className="table table-bordered table-dark ">
               <thead className="thead-inverse">
                 <tr>
-                  <th>Delete</th>
+                  {/* <th>Delete</th> */}
                   <th>Expense Name</th>
                   <th>Who Paid</th>
                   <th>Cost Per Person</th>
@@ -335,7 +277,7 @@ class RenderExpenseList extends Component {
               <tbody>
                 {this.renderExpense()}
                 <tr>
-                  <th colSpan="4">Total Owed</th>
+                  <th colSpan="3">Total Owed</th>
                   {this.renderTotalPerPerson(this.totalPerPerson())}
                   <td className="table-success" style={{ color: "black" }}>
                     <strong>
@@ -344,7 +286,7 @@ class RenderExpenseList extends Component {
                   </td>
                 </tr>
                 <tr>
-                  <th colSpan="4">Total Paid</th>
+                  <th colSpan="3">Total Paid</th>
                   {this.renderTotalAmountPaidPerPerson()}
                   <td className="table-success" style={{ color: "black" }}>
                     <strong>
@@ -357,7 +299,7 @@ class RenderExpenseList extends Component {
                 </tr>
                 <tr>
                   {/* TODO: have conditional colors for cells */}
-                  <th colSpan="4">Difference</th>
+                  <th colSpan="3">Difference</th>
                   {this.renderTotalDifferencePerPerson()}
                 </tr>
               </tbody>
@@ -370,12 +312,30 @@ class RenderExpenseList extends Component {
 }
 
 export default compose(
+  // gets clients from firestore and puts them in the clients prop
   firestoreConnect((props) => [
-    { collection: "friends", storeAs: "guests" },
-    { collection: "expenses", storeAs: "expenses" },
+    {
+      collection: "users",
+      doc: props.uid,
+      storeAs: `${props.tripId}-expenses`,
+      subcollections: [
+        { collection: "trips", doc: props.tripId },
+        { collection: "expenses" },
+      ],
+    },
+    {
+      collection: "users",
+      doc: props.uid,
+      storeAs: `${props.tripId}-friends`,
+      subcollections: [
+        { collection: "trips", doc: props.tripId },
+        { collection: "friends" },
+      ],
+    },
   ]),
-  connect((state) => ({
-    expenses: state.firestore.ordered.expenses,
-    friends: state.firestore.ordered.friends,
+
+  connect(({ firestore: { ordered } }, props) => ({
+    expenses: ordered[`${props.tripId}-expenses`],
+    friends: ordered[`${props.tripId}-friends`],
   }))
 )(RenderExpenseList);

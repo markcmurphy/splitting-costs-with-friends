@@ -77,11 +77,18 @@ class AddExpense extends Component {
   formSubmit = (e) => {
     e.preventDefault();
     const { expense, amount, friendsInvolved, whoPaid } = this.state;
-    const { firestore } = this.props;
+    const { firestore, uid } = this.props;
 
     firestore
       .add(
-        { collection: "expenses" },
+        {
+          collection: "users",
+          doc: uid,
+          subcollections: [
+            { collection: "trips", doc: this.props.id },
+            { collection: "expenses" },
+          ],
+        },
         {
           name: expense,
           expenseAmount: Number(amount),
@@ -91,10 +98,6 @@ class AddExpense extends Component {
       )
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
-        firestore.update(
-          { collection: "expenses", doc: docRef.id },
-          { id: docRef.id }
-        );
       });
 
     this.setState({
@@ -109,11 +112,11 @@ class AddExpense extends Component {
     const { showForm, expense, amount } = this.state;
     if (showForm) {
       return (
-        <div className="card mb-4 mt-4 bg-dark">
+        <div className="card bg-dark mt-3 pl-1">
           <div className="card-header">Add Expense</div>
           <div className="card-body">
             <form onSubmit={this.formSubmit}>
-              <div className="form-group mt-4">
+              <div className="form-group">
                 <label>Cost</label>
                 <input
                   value={expense}
@@ -150,7 +153,7 @@ class AddExpense extends Component {
               <input
                 type="submit"
                 value="Submit"
-                className="btn btn-primary btn-block"
+                className="btn btn-success btn-block"
               />
             </form>
           </div>
@@ -163,17 +166,31 @@ class AddExpense extends Component {
     const { showForm } = this.state;
 
     return (
-      <div>
-        <div>
-          <div className="mt-4">{this.renderForm()}</div>
-        </div>
-        <div>
+      <div
+        style={{
+          marginLeft: "5%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
+        {showForm ? (
           <button
-            className="mt-4 btn btn-primary"
+            className="btn btn-danger btn-block mt-4"
             onClick={() => this.setState({ showForm: !showForm })}
           >
-            {showForm ? <i>Close</i> : <i>Add Expense</i>}
+            Close
           </button>
+        ) : (
+          <button
+            className="btn btn-secondary btn-block mt-4"
+            onClick={() => this.setState({ showForm: !showForm })}
+          >
+            Add Expense{" "}
+          </button>
+        )}
+        <div>
+          <div className="">{this.renderForm()}</div>
         </div>
       </div>
     );
@@ -181,10 +198,29 @@ class AddExpense extends Component {
 }
 
 export default compose(
-  firestoreConnect([{ collection: "expenses" }, { collection: "friends" }]),
+  firestoreConnect((props) => [
+    {
+      collection: "users",
+      doc: props.uid,
+      storeAs: `${props.id}-expenses`,
+      subcollections: [
+        { collection: "trips", doc: props.id },
+        { collection: "expenses" },
+      ],
+    },
+    {
+      collection: "users",
+      doc: props.uid,
+      storeAs: `${props.id}-friends`,
+      subcollections: [
+        { collection: "trips", doc: props.id },
+        { collection: "friends" },
+      ],
+    },
+  ]),
 
-  connect((state, props) => ({
-    expenses: state.firestore.ordered.expenses,
-    friends: state.firestore.ordered.friends,
+  connect(({ firestore: { ordered } }, props) => ({
+    friends: ordered[`${props.id}-friends`],
+    expenses: ordered[`${props.id}-expenses`],
   }))
 )(AddExpense);
