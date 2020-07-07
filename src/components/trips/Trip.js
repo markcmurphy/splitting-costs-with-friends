@@ -14,7 +14,8 @@ import Sidebar from "../layout/Sidebar";
 export class Trip extends Component {
   render() {
     // const { id } = useParams();
-    console.log(this.props.id);
+    // console.log(this.props);
+    console.log(this.props.location);
 
     return (
       <div
@@ -30,7 +31,7 @@ export class Trip extends Component {
             margin: "0",
           }}
         >
-          <Sidebar id={this.props.id} />
+          <Sidebar id={this.props.id} uid={this.props.uid} />
         </div>
         <div
           className="col-10"
@@ -39,7 +40,7 @@ export class Trip extends Component {
             backgroundColor: "#121212",
           }}
         >
-          <MainViewContainer id={this.props.id} />
+          <MainViewContainer id={this.props.id} uid={this.props.uid} />
         </div>
       </div>
     );

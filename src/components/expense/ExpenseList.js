@@ -17,7 +17,7 @@ class ExpenseList extends Component {
   // handles deletion of expense from Firestore
   handleDelete = () => {
     const { expenses, firestore, tripId } = this.props;
-
+    console.log(this.props);
     firestore.delete({
       collection: "users",
       doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",

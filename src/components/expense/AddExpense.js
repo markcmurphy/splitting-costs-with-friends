@@ -55,7 +55,6 @@ class AddExpense extends Component {
 
   renderFriendsInvolved() {
     const { friends } = this.props;
-    console.log(this.props);
     const { friendsInvolved } = this.state;
     const friendSelectMultiple = (
       <select

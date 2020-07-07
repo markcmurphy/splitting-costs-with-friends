@@ -15,7 +15,8 @@ import LoadingSpinner from "../loading/LoadingSpinner";
 
 class ListTrips extends Component {
   render() {
-    const { trips } = this.props;
+    console.log(this.props);
+    const { trips, uid } = this.props;
     // const match = useRouteMatch();
 
     return (
@@ -25,7 +26,15 @@ class ListTrips extends Component {
             // console.log(item);
             return (
               <li key={item.id}>
-                <Link to={`/trip/${item.id}`}>{item.tripName}</Link>
+                <Link
+                  to={{
+                    pathname: `/trip/${item.id}`,
+                    // tripProps: { uid: uid },
+                    tripProps: { uid: "uid" },
+                  }}
+                >
+                  {item.tripName}
+                </Link>
               </li>
             );
           })

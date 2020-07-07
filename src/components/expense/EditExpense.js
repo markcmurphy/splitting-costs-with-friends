@@ -185,48 +185,4 @@ class EditExpense extends Component {
   }
 }
 
-// export default compose(
 export default EditExpense;
-// gets expenses from firestore and puts them in the expenses prop
-//   firestoreConnect((props) => [
-//     {
-//       // collection: "expenses",
-//       // storeAs: "expense",
-//       // doc: props.id,
-//       collection: "users",
-//       doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
-//       // storeAs: `${props.tripId}-expenses`,
-//       storeAs: "expense",
-//       subcollections: [
-//         { collection: "trips", doc: props.tripId },
-//         { collection: "expenses", doc: props.id },
-//       ],
-//     },
-//     {
-//       // collection: "friends",
-//       // storeAs: "friend",
-//       // doc: props.id,
-//       collection: "users",
-//       doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
-//       // storeAs: `${props.tripId}-friends`,
-//       storeAs: "friend",
-//       subcollections: [
-//         { collection: "trips", doc: props.tripId },
-//         { collection: "friends", doc: props.id },
-//       ],
-//     },
-//   ]),
-//   connect(({ firestore: { data } }, props) => ({
-//     expense: data.expense && data.expense[props.id],
-//     friend: data.friend && data.friend[props.id],
-//   }))
-// )(EditExpense);
-
-// export default compose(
-//   firestoreConnect([{ collection: "expenses" }, { collection: "friends" }]),
-
-//   connect((state, props) => ({
-//     expenses: state.firestore.data.expenses,
-//     friends: state.firestore.data.friends,
-//   }))
-// )(EditExpense);
