@@ -23,8 +23,7 @@ const fbConfig = {
 // react-redux-firebase config
 const rrfConfig = {
   userProfile: "users",
-  useFirestoreForProfile: true, // Firestore for Profile instead of Realtime DB
-  // enableClaims: true // Get custom claims along with the profile
+  useFirestoreForProfile: true,
 };
 
 // Init firebase instance
@@ -42,14 +41,12 @@ const rootReducer = combineReducers({
   expenseData: expenseData,
 });
 
-// Create store with reducers and initial state
 const initialState = {};
 
 const store = createStore(
   rootReducer,
   initialState,
   compose(
-    // setting up redux devtools
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   )
 );

@@ -4,12 +4,11 @@ import AddExpense from "../expense/AddExpense.js";
 
 export class Sidebar extends Component {
   render() {
-    console.log(this.props);
     return (
       <div className="nav-wrapper pl-3 pr-2">
         <nav id="sidebar">
-          <AddExpense id={this.props.id} />
-          <Friends id={this.props.id} />
+          <AddExpense id={this.props.id} uid={this.props.uid} />
+          <Friends id={this.props.id} uid={this.props.uid} />
         </nav>
       </div>
     );

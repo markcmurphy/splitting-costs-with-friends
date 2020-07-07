@@ -77,22 +77,13 @@ class AddExpense extends Component {
   formSubmit = (e) => {
     e.preventDefault();
     const { expense, amount, friendsInvolved, whoPaid } = this.state;
-    const { firestore } = this.props;
+    const { firestore, uid } = this.props;
 
     firestore
-      // .add(
-      //   { collection: "expenses" },
-      //   {
-      //     name: expense,
-      //     expenseAmount: Number(amount),
-      //     friendsInvolved: friendsInvolved,
-      //     whoPaid: whoPaid,
-      //   }
-      // )
       .add(
         {
           collection: "users",
-          doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
+          doc: uid,
           subcollections: [
             { collection: "trips", doc: this.props.id },
             { collection: "expenses" },
@@ -107,10 +98,6 @@ class AddExpense extends Component {
       )
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
-        // firestore.update(
-        //   { collection: "expenses", doc: docRef.id },
-        //   { id: docRef.id }
-        // );
       });
 
     this.setState({
@@ -187,24 +174,10 @@ class AddExpense extends Component {
           justifyContent: "center",
         }}
       >
-        {/* <button
-          className="btn btn-secondary btn-sm mt-4"
-          onClick={() => this.setState({ showForm: !showForm })}
-          style={{
-            width: "80%",
-            marginLeft: "15%",
-          }}
-        >
-          {showForm ? <i>Close</i> : <i>Add Expense</i>}
-        </button> */}
         {showForm ? (
           <button
             className="btn btn-danger btn-block mt-4"
             onClick={() => this.setState({ showForm: !showForm })}
-            // style={{
-            //   width: "80%",
-            //   marginLeft: "15%",
-            // }}
           >
             Close
           </button>
@@ -212,10 +185,6 @@ class AddExpense extends Component {
           <button
             className="btn btn-secondary btn-block mt-4"
             onClick={() => this.setState({ showForm: !showForm })}
-            // style={{
-            //   width: "80%",
-            //   marginLeft: "15%",
-            // }}
           >
             Add Expense{" "}
           </button>
@@ -232,7 +201,7 @@ export default compose(
   firestoreConnect((props) => [
     {
       collection: "users",
-      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
+      doc: props.uid,
       storeAs: `${props.id}-expenses`,
       subcollections: [
         { collection: "trips", doc: props.id },
@@ -241,7 +210,7 @@ export default compose(
     },
     {
       collection: "users",
-      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
+      doc: props.uid,
       storeAs: `${props.id}-friends`,
       subcollections: [
         { collection: "trips", doc: props.id },
@@ -254,8 +223,4 @@ export default compose(
     friends: ordered[`${props.id}-friends`],
     expenses: ordered[`${props.id}-expenses`],
   }))
-  // connect((state, props) => ({
-  //   expenses: state.firestore.ordered.expenses,
-  //   friends: state.firestore.ordered.friends,
-  // }))
 )(AddExpense);

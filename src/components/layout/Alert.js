@@ -1,6 +1,5 @@
 import React from "react";
 import classnames from "classnames";
-// import PropTypes from "prop-types";
 
 const Alert = (props) => {
   const { message, messageType } = props;
@@ -15,10 +14,5 @@ const Alert = (props) => {
     </div>
   );
 };
-
-// Alert.propTypes = {
-//   message: PropTypes.any,
-//   messageType: PropTypes.any,
-// };
 
 export default Alert;

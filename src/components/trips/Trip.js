@@ -13,16 +13,10 @@ import Sidebar from "../layout/Sidebar";
 
 export class Trip extends Component {
   render() {
-    // const { id } = useParams();
-    // console.log(this.props);
-    console.log(this.props.location);
+    console.log(this.props);
 
     return (
-      <div
-        className="row"
-        //   style={{ minHeight: "87.7vh" }}
-      >
-        {/* <h3>Requested ID: {id}</h3> */}
+      <div className="row">
         <div
           className="col-2"
           style={{

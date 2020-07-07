@@ -22,13 +22,13 @@ class Friends extends Component {
 
   formSubmit = (e) => {
     e.preventDefault();
-    const { firestore } = this.props;
+    const { firestore, uid } = this.props;
     const { firstName } = this.state;
     firestore
       .add(
         {
           collection: "users",
-          doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
+          doc: uid,
           subcollections: [
             { collection: "trips", doc: this.props.id },
             { collection: "friends" },
@@ -36,13 +36,8 @@ class Friends extends Component {
         },
         { firstName: firstName }
       )
-      // .add({ collection: "friends" }, { firstName: firstName })
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
-        // firestore.update(
-        //   { collection: "friends", doc: docRef.id },
-        //   { id: docRef.id }
-        // );
       });
 
     this.setState({ firstName: "" });
@@ -81,7 +76,7 @@ class Friends extends Component {
   };
 
   renderFriend = (props) => {
-    const { friends } = this.props;
+    const { friends, uid } = this.props;
     console.log(this.props);
     const friendsList = _.map(friends, (value, key) => {
       return (
@@ -90,6 +85,7 @@ class Friends extends Component {
           friends={value}
           tripId={this.props.id}
           firestore={this.props.firestore}
+          uid={uid}
         />
       );
     });
@@ -118,39 +114,10 @@ class Friends extends Component {
           justifyContent: "center",
         }}
       >
-        {/* <div
-          className="btn-group-vertical ml-3 mr-2"
-          role="group"
-          aria-label="Basic example"
-        >
-          <button type="button" className="btn btn-secondary">
-            Add Friend
-          </button>
-          <button type="button" className="btn btn-secondary">
-            Add Expense
-          </button>
-          <button type="button" className="btn btn-secondary">
-            Right
-          </button>
-        </div> */}
-        {/* <button
-          style={{
-            width: "80%",
-            marginLeft: "10%",
-          }}
-          className="mt-4 btn btn-sm btn-secondary"
-          onClick={() => this.setState({ showForm: !showForm })}
-        >
-          {showForm ? <i>Close</i> : <i>Add Friend</i>}
-        </button> */}
         {showForm ? (
           <button
             className="btn btn-danger btn-block mt-4"
             onClick={() => this.setState({ showForm: !showForm })}
-            // style={{
-            //   width: "80%",
-            //   marginLeft: "15%",
-            // }}
           >
             Close
           </button>
@@ -158,10 +125,6 @@ class Friends extends Component {
           <button
             className="btn btn-secondary btn-block mt-4"
             onClick={() => this.setState({ showForm: !showForm })}
-            // style={{
-            //   width: "80%",
-            //   marginLeft: "15%",
-            // }}
           >
             Add Friend
           </button>
@@ -184,7 +147,7 @@ export default compose(
   firestoreConnect((props) => [
     {
       collection: "users",
-      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
+      doc: props.uid,
       storeAs: `${props.id}-friends`,
       subcollections: [
         { collection: "trips", doc: props.id },

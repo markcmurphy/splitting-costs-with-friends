@@ -12,14 +12,8 @@ import {
 
 export class VertBody extends Component {
   render() {
-    // const { id } = useParams();
-
     return (
-      <div
-        className="row"
-        //   style={{ minHeight: "87.7vh" }}
-      >
-        {/* <h3>Requested ID: {id}</h3> */}
+      <div className="row">
         <div
           className="col-2"
           style={{

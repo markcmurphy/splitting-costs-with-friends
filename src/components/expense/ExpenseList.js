@@ -16,11 +16,10 @@ class ExpenseList extends Component {
 
   // handles deletion of expense from Firestore
   handleDelete = () => {
-    const { expenses, firestore, tripId } = this.props;
-    console.log(this.props);
+    const { expenses, firestore, tripId, uid } = this.props;
     firestore.delete({
       collection: "users",
-      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
+      doc: uid,
       storeAs: `${tripId.id}-expenses`,
       subcollections: [
         { collection: "trips", doc: tripId },
@@ -42,7 +41,7 @@ class ExpenseList extends Component {
   // shows edit form to change expense details
   renderEditForm(id) {
     const { showForm } = this.state;
-    const { expenses, friends, firestore, tripId } = this.props;
+    const { expenses, friends, firestore, tripId, uid } = this.props;
 
     if (showForm) {
       return (
@@ -55,6 +54,7 @@ class ExpenseList extends Component {
           friends={friends}
           tripId={tripId}
           firestore={firestore}
+          uid={uid}
         />
       );
     }
@@ -73,8 +73,7 @@ class ExpenseList extends Component {
 
   // upon checkbox click, adds friend to friendsIncluded array on expense and updates Firestore
   addIncluded = (expense, id) => {
-    const { firestore, tripId } = this.props;
-
+    const { firestore, tripId, uid } = this.props;
     // Update expense
     const updExpense = {
       friendsInvolved: expense.friendsInvolved.concat(id),
@@ -84,7 +83,7 @@ class ExpenseList extends Component {
     firestore.update(
       {
         collection: "users",
-        doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
+        doc: uid,
         storeAs: `${tripId}-expenses`,
         subcollections: [
           { collection: "trips", doc: tripId },
@@ -98,7 +97,7 @@ class ExpenseList extends Component {
   // upon checkbox click, removes friend from friendsIncluded array on expense and updates Firestore
 
   removeIncluded = (expense, id) => {
-    const { firestore, tripId } = this.props;
+    const { firestore, tripId, uid } = this.props;
 
     // Update expense
     const updExpense = {
@@ -111,7 +110,7 @@ class ExpenseList extends Component {
     firestore.update(
       {
         collection: "users",
-        doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
+        doc: uid,
         storeAs: `${tripId}-expenses`,
         subcollections: [
           { collection: "trips", doc: tripId },
@@ -279,7 +278,7 @@ export default compose(
   firestoreConnect((props) => [
     {
       collection: "users",
-      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
+      doc: props.uid,
       storeAs: `${props.tripId}-expenses`,
       subcollections: [
         { collection: "trips", doc: props.tripId },
@@ -288,7 +287,7 @@ export default compose(
     },
     {
       collection: "users",
-      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
+      doc: props.uid,
       storeAs: `${props.tripId}-friends`,
       subcollections: [
         { collection: "trips", doc: props.tripId },

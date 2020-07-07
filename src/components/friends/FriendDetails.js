@@ -11,10 +11,10 @@ class FriendDetails extends Component {
   };
 
   handleDelete = () => {
-    const { friends, firestore } = this.props;
+    const { friends, firestore, uid } = this.props;
     firestore.delete({
       collection: "users",
-      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
+      doc: uid,
       subcollections: [
         { collection: "trips", doc: this.props.tripId },
         { collection: "friends", doc: friends.id },
@@ -99,50 +99,4 @@ class FriendDetails extends Component {
   }
 }
 
-// export default compose(
 export default FriendDetails;
-// firestoreConnect((props) => [
-//   console.log(props),
-//   {
-//     collection: "users",
-//     doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
-//     storeAs: `${props.id}-friends`,
-//     subcollections: [
-//       { collection: "trips", doc: props.id },
-//       { collection: "friends" },
-//     ],
-//   },
-// ]),
-
-// connect(({ firestore: { ordered } }, props) => ({
-//   friends: ordered[`${props.id}-friends`],
-// }))
-
-// firestoreConnect((props) => [
-//   {
-//     collection: "users",
-//     doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
-//     // storeAs: `${props.id}-friends`,
-//     storeAs: "friend",
-//     subcollections: [
-//       { collection: "trips", doc: props.tripId },
-//       { collection: "friends" },
-//     ],
-//   },
-// ]),
-// connect(({ firestore: { ordered } }, props) => ({
-//   // friend: ordered[`${props.id}-friends`],
-//   friend: ordered.friend,
-// }))
-
-// firestoreConnect((props) => [
-//   {
-//     collection: "friends",
-//     storeAs: "friend",
-//     doc: props.id,
-//   },
-// ]),
-// connect(({ firestore: { ordered } }, props) => ({
-//   friend: ordered.friend && ordered.friend[0],
-// }))
-// )(FriendDetails);

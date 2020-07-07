@@ -83,7 +83,13 @@ class RenderExpenseList extends Component {
         type="text"
       >
         {_.map(friends, (value, key) => {
-          return <FriendsInvolved key={value.id} friends={value} />;
+          return (
+            <FriendsInvolved
+              key={value.id}
+              friends={value}
+              uid={this.props.uid}
+            />
+          );
         })}
       </select>
     );
@@ -102,6 +108,7 @@ class RenderExpenseList extends Component {
           friends={friends}
           firestore={firestore}
           tripId={tripId}
+          uid={this.props.uid}
         />
       );
     });
@@ -140,9 +147,6 @@ class RenderExpenseList extends Component {
         }
       });
     }
-    // this.setState({
-    //   totals: friendsObj,
-    // });
     return friendsObj;
   }
 
@@ -234,94 +238,19 @@ class RenderExpenseList extends Component {
     // const friendsObj = {};
     if (!isEmpty(expenses) && !isEmpty(friends)) {
       _.map(friends, (value, key) => {
-        // for (let expense of expenses) {
-        // let expenseAmount = expense.expenseAmount;
-        // let costPerPerson = expenseAmount / expense.friendsInvolved.length;
-        // let net = costPerPerson - expenseAmount;
-
-        // if (diffAmount[value.id]) {
         diffAmount[value.id] = 0;
         diffAmount[value.id] += friendsObj[value.id] - friendsObj1[value.id];
-        // } else if (!diffAmount[value.id]) {
-        // diffAmount[value.id] = 0;
-        // }
-        // if (
-        //   expense.friendsInvolved.includes(value.id) &&
-        //   expense.whoPaid.includes(value.id)
-        // ) {
-        //   friendsObj[value.id] = net * -1;
-        //   console.log(net);
-        // } else if (expense.whoPaid.includes(value.id)) {
-        //   friendsObj[value.id] = expenseAmount;
-        // } else if (expense.friendsInvolved.includes(value.id)) {
-        //   friendsObj[value.id] = costPerPerson;
-        // }
       });
-      // console.log(diffAmount);
-      // return diffAmount;
     }
 
     const map = _.map(friends, (value, key) => {
       if (diffAmount[value.id]) {
         return <td key={value.id}>${diffAmount[value.id].toFixed(2)}</td>;
       }
-      // else {
-      // return <td key={value.id}>$0</td>;
-      // }
     });
 
     return map;
   }
-  // renderTotalDifferencePerPerson() {
-  //   const { friends, expenses } = this.props;
-  //   const friendsObj = {};
-  //   if (!isEmpty(expenses) && !isEmpty(friends)) {
-  //     _.map(friends, (value, key) => {
-  //       for (let expense of expenses) {
-  //         let expenseAmount = expense.expenseAmount;
-  //         let costPerPerson = expenseAmount / expense.friendsInvolved.length;
-  //         let net = costPerPerson - expenseAmount;
-
-  //         if (friendsObj[value.id]) {
-  //           if (
-  //             expense.friendsInvolved.includes(value.id) &&
-  //             expense.whoPaid.includes(value.id)
-  //           ) {
-  //             friendsObj[value.id] -= net;
-  //             console.log(net);
-  //           } else if (expense.whoPaid.includes(value.id)) {
-  //             friendsObj[value.id] += expenseAmount;
-  //           } else if (expense.friendsInvolved.includes(value.id)) {
-  //             friendsObj[value.id] += costPerPerson;
-  //           }
-  //         } else if (!friendsObj[value.id]) {
-  //           if (
-  //             expense.friendsInvolved.includes(value.id) &&
-  //             expense.whoPaid.includes(value.id)
-  //           ) {
-  //             friendsObj[value.id] = net * -1;
-  //             console.log(net);
-  //           } else if (expense.whoPaid.includes(value.id)) {
-  //             friendsObj[value.id] = expenseAmount;
-  //           } else if (expense.friendsInvolved.includes(value.id)) {
-  //             friendsObj[value.id] = costPerPerson;
-  //           }
-  //         }
-  //       }
-  //     });
-  //     console.log(friendsObj);
-  //   }
-
-  //   const map = _.map(friends, (value, key) => {
-  //     if (friendsObj[value.id]) {
-  //       return <td key={value.id}>${friendsObj[value.id].toFixed(2)}</td>;
-  //     } else {
-  //       return <td key={value.id}>$0</td>;
-  //     }
-  //   });
-
-  //   return map;
-  // }
 
   render() {
     if (this.props) {
@@ -382,23 +311,12 @@ class RenderExpenseList extends Component {
   }
 }
 
-// export default compose(
-//   firestoreConnect((props) => [
-//     { collection: "friends", storeAs: "guests" },
-//     { collection: "expenses", storeAs: "expenses" },
-//   ]),
-//   connect((state) => ({
-//     expenses: state.firestore.ordered.expenses,
-//     friends: state.firestore.ordered.friends,
-//   }))
-// )(RenderExpenseList);
-
 export default compose(
   // gets clients from firestore and puts them in the clients prop
   firestoreConnect((props) => [
     {
       collection: "users",
-      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
+      doc: props.uid,
       storeAs: `${props.tripId}-expenses`,
       subcollections: [
         { collection: "trips", doc: props.tripId },
@@ -407,27 +325,17 @@ export default compose(
     },
     {
       collection: "users",
-      doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
+      doc: props.uid,
       storeAs: `${props.tripId}-friends`,
       subcollections: [
         { collection: "trips", doc: props.tripId },
         { collection: "friends" },
       ],
     },
-
-    // { collection: "trips", storeAs: "trips", doc: props.id },
-    // { collection: "friends", storeAs: "friends", doc: props.id },
-    // { collection: "expenses", storeAs: "expenses", doc: props.id },
   ]),
-  //   connect((state) => ({
-  //     expenses: state.firestore.ordered.expenses,
-  //     // friends: state.firestore.ordered.friends,
-  //   }))
-  // )(RenderExpenseList);
+
   connect(({ firestore: { ordered } }, props) => ({
     expenses: ordered[`${props.tripId}-expenses`],
     friends: ordered[`${props.tripId}-friends`],
-    //  && ordered.trips[0],
-    // expenses: ordered.expenses && ordered.expenses[0],
   }))
 )(RenderExpenseList);

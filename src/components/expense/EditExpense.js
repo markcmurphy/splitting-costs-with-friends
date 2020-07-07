@@ -55,41 +55,22 @@ class EditExpense extends Component {
     const optionValues = _.map(e.target.selectedOptions, (value, key) => {
       return value.value;
     });
-
-    // this.setState({
-    //   friendsInvolved: optionValues,
-    // });
   };
 
   renderFriendsInvolved() {
-    const { friendsInvolved, friends } = this.props;
+    const { friendsInvolved, friends, uid } = this.props;
     console.log(this.props);
     const friendSelectMultiple = (
       <select
         multiple={true}
-        // multiple
-        // defaultValue={_.map(friends, (value, key) => {
-        //   // if (friendsInvolved.includes(value.id)) {
-        //   return <FriendsInvolved key={value.id} friends={value} />;
-        //   // }
-        // })}
-
         defaultValue={friendsInvolved}
-        //   {
-        //     _.map(friendsInvolved, (value, key) => {
-        //     return <FriendsInvolved key={value.id} friends={value} />;
-        //   })
-        // }
         onChange={this.inputChangeMultiple}
         className="form-control"
         id="friendsInvolved"
         type="text"
       >
         {_.map(friends, (value, key) => {
-          // console.log(defaultFriends);
-          // if (friendsInvolved.includes(value.id)) {
-          return <FriendsInvolved key={value.id} friends={value} />;
-          // }
+          return <FriendsInvolved key={value.id} friends={value} uid={uid} />;
         })}
       </select>
     );
@@ -99,7 +80,7 @@ class EditExpense extends Component {
   formSubmit = (e) => {
     e.preventDefault();
 
-    const { firestore, tripId, expenseId } = this.props;
+    const { firestore, tripId, expenseId, uid } = this.props;
 
     // Update expense
     const updExpense = {
@@ -113,7 +94,7 @@ class EditExpense extends Component {
     firestore.update(
       {
         collection: "users",
-        doc: "Dv8b8sjyMrX8HdWC13Gk3tZrUM22",
+        doc: uid,
         storeAs: `${tripId}-expense`,
         subcollections: [
           { collection: "trips", doc: tripId },
@@ -126,6 +107,7 @@ class EditExpense extends Component {
 
   render() {
     const { expense, amount } = this.props;
+    console.log(this.props);
     if (this.props) {
       return (
         <div>

@@ -5,26 +5,12 @@ import { connect } from "react-redux";
 import { firebaseConnect } from "react-redux-firebase";
 
 class Navbar extends Component {
-  //   render() {
-  //     return (
-  //       <nav className="navbar bg-dark ">
-  //         <span className="navbar-brand mb-0 h1">
-  //           <Link to="/">Splitting Costs with Friends!</Link>
-  //         </span>
-  //       </nav>
-  //     );
-  //   }
-  // }
-
   state = {
     isAuthenticated: false,
   };
 
   static getDerivedStateFromProps(props, state) {
-    console.log(props);
     const { auth } = props;
-    // console.log(this.state.props);
-    // console.log(auth);
 
     if (auth.uid) {
       return { isAuthenticated: true };
@@ -42,7 +28,6 @@ class Navbar extends Component {
   render() {
     const { isAuthenticated } = this.state;
     const { auth } = this.props;
-    // const { allowRegistration } = this.props.settings;
     return (
       <nav className="navbar navbar-expand-md navbar-dark bg-primary mb-4">
         <div className="container">
@@ -74,11 +59,6 @@ class Navbar extends Component {
                     {auth.email}
                   </a>
                 </li>
-                {/* <li className="nav-item">
-                  <Link to="/settings" className="nav-link">
-                    Settings
-                  </Link>
-                </li> */}
                 <li className="nav-item">
                   <a
                     href="#!"
@@ -116,6 +96,5 @@ export default compose(
   firebaseConnect(),
   connect((state, props) => ({
     auth: state.firebase.auth,
-    // settings: state.settings,
   }))
 )(Navbar);

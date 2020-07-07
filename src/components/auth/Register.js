@@ -92,7 +92,6 @@ export default compose(
   connect(
     (state, props) => ({
       notify: state.notify,
-      // settings: state.settings,
     }),
     { notifyUser }
   )

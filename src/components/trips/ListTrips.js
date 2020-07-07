@@ -17,19 +17,16 @@ class ListTrips extends Component {
   render() {
     console.log(this.props);
     const { trips, uid } = this.props;
-    // const match = useRouteMatch();
 
     return (
       <ul>
         {trips ? (
           trips.map((item) => {
-            // console.log(item);
             return (
               <li key={item.id}>
                 <Link
                   to={{
                     pathname: `/trip/${item.id}`,
-                    // tripProps: { uid: uid },
                     tripProps: { uid: "uid" },
                   }}
                 >
@@ -48,14 +45,6 @@ class ListTrips extends Component {
 
 export default compose(
   firestoreConnect((props) => [
-    // {
-    //   collection: "expenses",
-    //   storeAs: "expense",
-    // },
-    // {
-    //   collection: "friends",
-    //   storeAs: "friend",
-    // },
     {
       collection: "users",
       doc: props.uid,
@@ -64,11 +53,7 @@ export default compose(
     },
   ]),
 
-  //   return [{ collection: "users", doc: props.uid, subcollections: [{ collection: "tasks" }], storeAs: `${props.uid}-tasks` }];
-
   connect(({ firestore: { ordered } }, props) => ({
-    // expenses: data.expenses,
-    // friends: data.friends,
     trips: ordered[`${props.uid}-trips`],
   }))
 )(ListTrips);

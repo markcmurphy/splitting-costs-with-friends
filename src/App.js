@@ -16,10 +16,6 @@ import Register from "./components/auth/Register";
 import LoadingSpinner from "./components/loading/LoadingSpinner";
 
 class App extends Component {
-  AllTripsPage = (props) => {
-    return <AllTrips {...props} uid={this.props.auth.uid} />;
-  };
-
   render() {
     const { auth } = this.props;
 
@@ -63,6 +59,5 @@ export default compose(
   firebaseConnect(),
   connect((state) => ({
     auth: state.firebase.auth,
-    // settings: state.settings,
   }))
 )(App);
