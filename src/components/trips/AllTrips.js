@@ -15,6 +15,7 @@ import LoadingSpinner from "../loading/LoadingSpinner";
 import AddNewTrip from "./AddNewTrip";
 import ListTrips from "./ListTrips";
 import Trip from "./Trip.js";
+import Sidebar from "../layout/Sidebar";
 
 class AllTrips extends Component {
   render() {
@@ -24,22 +25,45 @@ class AllTrips extends Component {
         {!this.props.uid ? (
           <LoadingSpinner />
         ) : (
-          <div>
-            <h1>All Trips</h1>
-            <Router>
-              <ListTrips uid={this.props.uid} />
-              <Switch>
-                <Route
-                  path="/trip/:id"
-                  render={({ match }) => (
-                    <Trip id={match.params.id} uid={this.props.uid} />
-                  )}
-                />
-              </Switch>
-            </Router>
-
-            <AddNewTrip uid={this.props.uid} />
-          </div>
+          <Router>
+            <Switch>
+              {/* <nav
+                className="col-2"
+                style={{
+                  padding: "0",
+                  // backgroundColor: "#050405",
+                  margin: "0",
+                }}
+              >
+                <Sidebar id={this.props.id} uid={this.props.uid} />
+              </nav> */}
+              <div>
+                <div
+                  className="card"
+                  style={
+                    {
+                      // marginLeft: "35%",
+                      // marginRight: "35%",
+                    }
+                  }
+                >
+                  <div className="card-body">
+                    <h1>All Trips</h1>
+                    <AddNewTrip uid={this.props.uid} />
+                    <ListTrips uid={this.props.uid} />
+                  </div>
+                </div>
+                <div>
+                  <Route
+                    path="/trip/:id"
+                    render={({ match }) => (
+                      <Trip id={match.params.id} uid={this.props.uid} />
+                    )}
+                  />
+                </div>
+              </div>
+            </Switch>
+          </Router>
         )}
       </div>
     );

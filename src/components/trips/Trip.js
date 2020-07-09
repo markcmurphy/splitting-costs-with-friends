@@ -16,27 +16,27 @@ export class Trip extends Component {
     console.log(this.props);
 
     return (
-      <div className="row">
-        <div
+      <>
+        {/* <nav
           className="col-2"
           style={{
             padding: "0",
-            backgroundColor: "#050405",
+            // backgroundColor: "#050405",
             margin: "0",
           }}
         >
           <Sidebar id={this.props.id} uid={this.props.uid} />
-        </div>
+        </nav> */}
         <div
           className="col-10"
           style={{
             padding: "0",
-            backgroundColor: "#121212",
+            // backgroundColor: "#121212",
           }}
         >
           <MainViewContainer id={this.props.id} uid={this.props.uid} />
         </div>
-      </div>
+      </>
     );
   }
 }

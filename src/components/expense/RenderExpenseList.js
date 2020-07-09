@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import { compose } from "redux";
 import { firestoreConnect, isLoaded, isEmpty } from "react-redux-firebase";
+import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 
 import ExpenseList from "./ExpenseList";
 import WhoPaid from "./WhoPaid.js";
@@ -34,7 +35,6 @@ class RenderExpenseList extends Component {
 
   renderFriend() {
     const { friends } = this.props;
-    console.log(friends);
     const friendSelect = (
       <select
         multiple={false}
@@ -57,19 +57,6 @@ class RenderExpenseList extends Component {
       return <LoadingSpinner />;
     }
   }
-
-  renderFriendHeader = (props) => {
-    const { friends } = this.props;
-    const friendsList = _.map(friends, (value, key) => {
-      return <th key={key}>{value.firstName}</th>;
-    });
-
-    if (friends) {
-      return friendsList;
-    } else {
-      return <th>Loading</th>;
-    }
-  };
 
   renderFriendsInvolved() {
     const { friends } = this.props;
@@ -116,11 +103,11 @@ class RenderExpenseList extends Component {
       return expensesList;
     }
     return (
-      <tr>
-        <td className="mt-4">
+      <Tr>
+        <Td className="mt-4">
           <h4>You have no expenses logged!</h4>
-        </td>
-      </tr>
+        </Td>
+      </Tr>
     );
   }
 
@@ -155,10 +142,10 @@ class RenderExpenseList extends Component {
     const map = _.map(friends, (value, key) => {
       if (friendsObj[value.id]) {
         return (
-          <td key={value.id}>${parseFloat(friendsObj[value.id]).toFixed(2)}</td>
+          <Td key={value.id}>${parseFloat(friendsObj[value.id]).toFixed(2)}</Td>
         );
       } else {
-        return <td key={value.id}>$0</td>;
+        return <Td key={value.id}>$0</Td>;
       }
     });
     return map;
@@ -204,9 +191,9 @@ class RenderExpenseList extends Component {
 
     const map1 = _.map(friends, (value, key) => {
       if (friendsObj[value.id]) {
-        return <td key={value.id}>${friendsObj[value.id].toFixed(2)}</td>;
+        return <Td key={value.id}>${friendsObj[value.id].toFixed(2)}</Td>;
       } else {
-        return <td key={value.id}>$0</td>;
+        return <Td key={value.id}>$0</Td>;
       }
     });
     return map1;
@@ -227,7 +214,6 @@ class RenderExpenseList extends Component {
         diffAmount[value.id] += friendsObj[value.id];
       });
     }
-    console.log(diffAmount);
   }
 
   renderTotalDifferencePerPerson() {
@@ -245,67 +231,71 @@ class RenderExpenseList extends Component {
 
     const map = _.map(friends, (value, key) => {
       if (diffAmount[value.id]) {
-        return <td key={value.id}>${diffAmount[value.id].toFixed(2)}</td>;
+        return <Td key={value.id}>${diffAmount[value.id].toFixed(2)}</Td>;
       }
     });
 
     return map;
   }
 
-  render() {
-    if (this.props) {
-      console.log(this.props);
+  renderFriendHeader() {
+    const { friends } = this.props;
+    const friendsList = _.map(friends, (value, key) => {
+      console.log(key);
+      return <Th key={key}>{value.firstName}</Th>;
+    });
+    // console.log(friends);
+    if (!isEmpty(friends)) {
+      return friendsList;
     }
+  }
 
-    console.log(this.state);
+  render() {
     return (
-      <div>
-        <div>
-          <div className="mt-4">
-            <table className="table table-bordered table-dark ">
-              <thead className="thead-inverse">
-                <tr>
-                  {/* <th>Delete</th> */}
-                  <th>Expense Name</th>
-                  <th>Who Paid</th>
-                  <th>Cost Per Person</th>
-                  {/* Insert name of friend as table heading */}
-                  {this.renderFriendHeader()}
-                  <th>Expense Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.renderExpense()}
-                <tr>
-                  <th colSpan="3">Total Owed</th>
-                  {this.renderTotalPerPerson(this.totalPerPerson())}
-                  <td className="table-success" style={{ color: "black" }}>
-                    <strong>
-                      ${this.addTotalPaidExpenses(this.totalPerPerson())}
-                    </strong>
-                  </td>
-                </tr>
-                <tr>
-                  <th colSpan="3">Total Paid</th>
-                  {this.renderTotalAmountPaidPerPerson()}
-                  <td className="table-success" style={{ color: "black" }}>
-                    <strong>
-                      $
-                      {this.addTotalPaidExpenses(
-                        this.totalAmountPaidPerPerson()
-                      )}
-                    </strong>
-                  </td>
-                </tr>
-                <tr>
-                  {/* TODO: have conditional colors for cells */}
-                  <th colSpan="3">Difference</th>
-                  {this.renderTotalDifferencePerPerson()}
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div className="mt-4">
+        <Table
+          key={_.map(this.props.friends, (value, key) => {
+            return key;
+          })}
+          className={"table table-striped table-bordered"}
+        >
+          <Thead>
+            <Tr>
+              <Th>Expense Name</Th>
+              <Th>Who Paid</Th>
+              <Th>Cost Per Person</Th>
+              {/* Insert name of friend as table heading */}
+              {this.renderFriendHeader()}
+              <Th>Expense Amount</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {this.renderExpense()}
+            <Tr>
+              <Th colSpan="3">Total Owed</Th>
+              {this.renderTotalPerPerson(this.totalPerPerson())}
+              <Td className="table-success" style={{ color: "black" }}>
+                <strong>
+                  ${this.addTotalPaidExpenses(this.totalPerPerson())}
+                </strong>
+              </Td>
+            </Tr>
+            <Tr>
+              <Th colSpan="3">Total Paid</Th>
+              {this.renderTotalAmountPaidPerPerson()}
+              <Td className="table-success" style={{ color: "black" }}>
+                <strong>
+                  ${this.addTotalPaidExpenses(this.totalAmountPaidPerPerson())}
+                </strong>
+              </Td>
+            </Tr>
+            <Tr>
+              {/* TODO: have conditional colors for cells */}
+              <Th colSpan="3">Difference</Th>
+              {this.renderTotalDifferencePerPerson()}
+            </Tr>
+          </Tbody>
+        </Table>
       </div>
     );
   }

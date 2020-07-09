@@ -1,45 +1,46 @@
-import React, { Component } from "react";
-import _ from "lodash";
+// import React, { Component } from "react";
+// import _ from "lodash";
+// import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 
-export class FriendsTable extends Component {
-  renderFriendHeader = (props) => {
-    const { friend } = this.props;
+// export class FriendsTable extends Component {
+//   renderFriendHeader = (props) => {
+//     const { friend } = this.props;
 
-    const friendsHeader = _.map(friend, (value, key) => {
-      return <th key={key}>{value.firstName}</th>;
-    });
+//     const friendsHeader = _.map(friend, (value, key) => {
+//       return <Th key={key}>{value.firstName}</Th>;
+//     });
 
-    if (friend) {
-      return friendsHeader;
-    } else {
-      return <th>Loading</th>;
-    }
-  };
+//     if (friend) {
+//       return friendsHeader;
+//     } else {
+//       // return <Th>Loading</Th>;
+//     }
+//   };
 
-  render() {
-    const { expenses, friend, friendsInvolved } = this.props;
+//   render() {
+//     const { expenses, friend, friendsInvolved } = this.props;
 
-    if (expenses && friend) {
-      return (
-        <table className="table table-bordered table-dark ">
-          <thead className="thead-inverse">
-            <tr>{this.renderFriendHeader()}</tr>
-          </thead>
-          <tbody>
-            {_.map(friend, (value, key) => {
-              if (friendsInvolved.includes(key)) {
-                return <td>X</td>;
-              } else {
-                return <td>$0</td>;
-              }
-            })}
-          </tbody>
-        </table>
-      );
-    } else {
-      return null;
-    }
-  }
-}
+//     if (expenses && friend) {
+//       return (
+//         <Table>
+//           <Thead>
+//             <Tr>{this.renderFriendHeader()}</Tr>
+//           </Thead>
+//           <Tbody>
+//             {_.map(friend, (value, key) => {
+//               if (friendsInvolved.includes(key)) {
+//                 return <Td>X</Td>;
+//               } else {
+//                 return <Td>$0</Td>;
+//               }
+//             })}
+//           </Tbody>
+//         </Table>
+//       );
+//     } else {
+//       return null;
+//     }
+//   }
+// }
 
-export default FriendsTable;
+// export default FriendsTable;

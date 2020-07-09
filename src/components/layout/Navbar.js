@@ -29,7 +29,8 @@ class Navbar extends Component {
     const { isAuthenticated } = this.state;
     const { auth } = this.props;
     return (
-      <nav className="navbar navbar-expand-md navbar-dark bg-primary mb-4">
+      <div className="navbar navbar-expand-md navbar-dark bg-primary mb-4">
+        {/* <nav className="navbar navbar-expand-md navbar-dark bg-primary mb-4"> */}
         <div className="container">
           <Link to="/" className="navbar-brand">
             Client Panel
@@ -87,7 +88,8 @@ class Navbar extends Component {
             ) : null}
           </div>
         </div>
-      </nav>
+        {/* </nav> */}
+      </div>
     );
   }
 }

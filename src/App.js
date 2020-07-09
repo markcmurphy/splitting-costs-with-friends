@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import "./App.css";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { UserIsAuthenticated, UserIsNotAuthenticated } from "./helpers/auth";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useLocation,
+} from "react-router-dom";
 
 import { compose } from "redux";
 
@@ -14,15 +20,29 @@ import AllTrips from "./components/trips/AllTrips";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import LoadingSpinner from "./components/loading/LoadingSpinner";
+import Sidebar from "./components/layout/Sidebar";
 
 class App extends Component {
   render() {
     const { auth } = this.props;
+    // console.log(useLocation());
+    console.log(this.props);
 
     return (
       <div className="App">
-        <Navbar />
-        <div className="main">
+        <header>
+          <Navbar />
+        </header>
+        <nav>
+          <Route
+            render={({ match }) => (
+              <Sidebar id={match.params.id} uid={this.props.uid} />
+            )}
+          />
+
+          {/* ) : null} */}
+        </nav>
+        <main className="main">
           <Switch>
             <Route
               exact
@@ -48,7 +68,11 @@ class App extends Component {
               component={UserIsNotAuthenticated(LoadingSpinner)}
             />
           </Switch>
-        </div>
+        </main>
+        <aside>side</aside>
+        <footer>
+          <div>Footer</div>
+        </footer>
       </div>
     );
   }

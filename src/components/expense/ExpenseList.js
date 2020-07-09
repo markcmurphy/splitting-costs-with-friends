@@ -4,6 +4,7 @@ import { compose } from "redux";
 import { firestoreConnect, isEmpty } from "react-redux-firebase";
 import _ from "lodash";
 import EditExpense from "./EditExpense";
+import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 
 class ExpenseList extends Component {
   constructor(props) {
@@ -32,9 +33,9 @@ class ExpenseList extends Component {
   renderWhoPaid(whoPaid) {
     const { friendsObj } = this.props;
     if (friendsObj && friendsObj[whoPaid]) {
-      return <td>{friendsObj[whoPaid].firstName}</td>;
+      return <Td>{friendsObj[whoPaid].firstName}</Td>;
     } else {
-      return <td>''</td>;
+      return <Td>''</Td>;
     }
   }
 
@@ -148,8 +149,8 @@ class ExpenseList extends Component {
 
     if (!isEmpty(expenses)) {
       return (
-        <tr key={expenses.id}>
-          <td>
+        <Tr key={expenses.id}>
+          <Td>
             {expenses.name}
             {this.renderEditForm(expenses.id)}
             <div style={{ float: "right" }}>
@@ -183,21 +184,24 @@ class ExpenseList extends Component {
                 )}
               </span>
             </div>
-          </td>
+          </Td>
           {/* Who Paid for Expense */}
           {this.renderWhoPaid(expenses.whoPaid)}
           {/* Cost per person for expense */}
-          <td>
+          <Td>
             $
             {parseFloat(
               expenses.expenseAmount / expenses.friendsInvolved.length
             ).toFixed(2)}
-          </td>
+          </Td>
 
           {_.map(friends, (value, key) => {
             if (friendsInvolved.includes(value.id)) {
               return (
-                <td key={value.id} style={{ textAlign: "center" }}>
+                <Td
+                  key={value.id}
+                  // style={{ textAlign: "center" }}
+                >
                   {/* checkbox to signify friend is included in expense, clicking will remove friend */}
                   <svg
                     className="bi bi-check-box"
@@ -220,11 +224,14 @@ class ExpenseList extends Component {
                       clipRule="evenodd"
                     />
                   </svg>
-                </td>
+                </Td>
               );
             } else {
               return (
-                <td key={value.id} style={{ textAlign: "center" }}>
+                <Td
+                  key={value.id}
+                  // style={{ textAlign: "center" }}
+                >
                   {/* checkbox to signify friend is NOT included in expense, clicking will add friend */}
 
                   <svg
@@ -253,13 +260,13 @@ class ExpenseList extends Component {
                       clipRule="evenodd"
                     />
                   </svg>
-                </td>
+                </Td>
               );
             }
           })}
           {/* Expense Amount */}
-          <td>${parseFloat(expenses.expenseAmount).toFixed(2)}</td>
-        </tr>
+          <Td>${parseFloat(expenses.expenseAmount).toFixed(2)}</Td>
+        </Tr>
       );
     } else {
       // if no expenses loaded from Firestore yet, signify loading
