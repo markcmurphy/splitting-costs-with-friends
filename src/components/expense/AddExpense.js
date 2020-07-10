@@ -117,7 +117,7 @@ class AddExpense extends Component {
           <div className="card-body">
             <form onSubmit={this.formSubmit}>
               <div className="form-group">
-                <label>Cost</label>
+                <label>Expense Name</label>
                 <input
                   value={expense}
                   className="form-control"
