@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/splitting-costs-with-friends/static/css/main.26299cf3.chunk.css",
-    "main.js": "/splitting-costs-with-friends/static/js/main.ff076011.chunk.js",
-    "main.js.map": "/splitting-costs-with-friends/static/js/main.ff076011.chunk.js.map",
+    "main.js": "/splitting-costs-with-friends/static/js/main.e960476b.chunk.js",
+    "main.js.map": "/splitting-costs-with-friends/static/js/main.e960476b.chunk.js.map",
     "runtime-main.js": "/splitting-costs-with-friends/static/js/runtime-main.9be7406c.js",
     "runtime-main.js.map": "/splitting-costs-with-friends/static/js/runtime-main.9be7406c.js.map",
     "static/css/2.326c04ff.chunk.css": "/splitting-costs-with-friends/static/css/2.326c04ff.chunk.css",
-    "static/js/2.c5ea51b1.chunk.js": "/splitting-costs-with-friends/static/js/2.c5ea51b1.chunk.js",
-    "static/js/2.c5ea51b1.chunk.js.map": "/splitting-costs-with-friends/static/js/2.c5ea51b1.chunk.js.map",
+    "static/js/2.edd57218.chunk.js": "/splitting-costs-with-friends/static/js/2.edd57218.chunk.js",
+    "static/js/2.edd57218.chunk.js.map": "/splitting-costs-with-friends/static/js/2.edd57218.chunk.js.map",
     "index.html": "/splitting-costs-with-friends/index.html",
-    "precache-manifest.279a99f3cb1ec2a4e71559d67ab8307c.js": "/splitting-costs-with-friends/precache-manifest.279a99f3cb1ec2a4e71559d67ab8307c.js",
+    "precache-manifest.37213901937ffd5fd28f2fdc5321e84b.js": "/splitting-costs-with-friends/precache-manifest.37213901937ffd5fd28f2fdc5321e84b.js",
     "service-worker.js": "/splitting-costs-with-friends/service-worker.js",
     "static/css/2.326c04ff.chunk.css.map": "/splitting-costs-with-friends/static/css/2.326c04ff.chunk.css.map",
     "static/css/main.26299cf3.chunk.css.map": "/splitting-costs-with-friends/static/css/main.26299cf3.chunk.css.map",
-    "static/js/2.c5ea51b1.chunk.js.LICENSE.txt": "/splitting-costs-with-friends/static/js/2.c5ea51b1.chunk.js.LICENSE.txt"
+    "static/js/2.edd57218.chunk.js.LICENSE.txt": "/splitting-costs-with-friends/static/js/2.edd57218.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.9be7406c.js",
     "static/css/2.326c04ff.chunk.css",
-    "static/js/2.c5ea51b1.chunk.js",
+    "static/js/2.edd57218.chunk.js",
     "static/css/main.26299cf3.chunk.css",
-    "static/js/main.ff076011.chunk.js"
+    "static/js/main.e960476b.chunk.js"
   ]
 }
