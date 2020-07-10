@@ -7,6 +7,7 @@ import {
   Route,
   Switch,
   useLocation,
+  useParams,
 } from "react-router-dom";
 
 import { compose } from "redux";
@@ -21,8 +22,60 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import LoadingSpinner from "./components/loading/LoadingSpinner";
 import Sidebar from "./components/layout/Sidebar";
+import { queryAllByAltText } from "@testing-library/react";
 
 class App extends Component {
+  navFun = () => {
+    return (
+      <Route
+        path="/trip/:id"
+        // component={
+        //   UserIsAuthenticated(() => (
+        //   <Sidebar props={this.props} uid={auth.uid} />
+        //   ))
+        // }
+        // UserIsAuthenticated((=>))
+        render={(props) =>
+          // UserIsAuthenticated(() => (
+          this.props.auth.uid ? (
+            <Sidebar
+              {...props}
+              // title={`Props through component`}
+              // id={match.params.id}
+              uid={this.props.auth.uid}
+            />
+          ) : null
+        }
+        // ))
+      />
+    );
+  };
+
+  mainFunc = () => {
+    return (
+      <Switch>
+        <Route exact path="/login" component={UserIsNotAuthenticated(Login)} />
+        <Route
+          exact
+          path="/register"
+          component={UserIsNotAuthenticated(Register)}
+        />
+        <Route
+          exact
+          path="/"
+          component={UserIsAuthenticated(() => (
+            <AllTrips uid={this.props.auth.uid} />
+          ))}
+        />
+        <Route
+          exact
+          path="/"
+          component={UserIsNotAuthenticated(LoadingSpinner)}
+        />
+      </Switch>
+    );
+  };
+
   render() {
     const { auth } = this.props;
     // console.log(useLocation());
@@ -34,16 +87,34 @@ class App extends Component {
           <Navbar />
         </header>
         <nav>
-          <Route
-            render={({ match }) => (
-              <Sidebar id={match.params.id} uid={this.props.uid} />
-            )}
-          />
-
-          {/* ) : null} */}
+          {/* <Switch> */}
+          {/* {this.navFun()} */}
+          {/* <Route
+            path="/trip/:id"
+            // component={
+            //   UserIsAuthenticated(() => (
+            //   <Sidebar props={this.props} uid={auth.uid} />
+            //   ))
+            // }
+            // UserIsAuthenticated((=>))
+            render={(props) =>
+              // UserIsAuthenticated(() => (
+              this.props.auth.uid ? (
+                <Sidebar
+                  {...props}
+                  // title={`Props through component`}
+                  // id={match.params.id}
+                  uid={this.props.auth.uid}
+                />
+              ) : null
+            }
+            // ))
+          /> */}
+          {/* </Switch> */}
         </nav>
         <main className="main">
-          <Switch>
+          {this.mainFunc()}
+          {/* <Switch>
             <Route
               exact
               path="/login"
@@ -61,13 +132,12 @@ class App extends Component {
                 <AllTrips uid={auth.uid} />
               ))}
             />
-
             <Route
               exact
               path="/"
               component={UserIsNotAuthenticated(LoadingSpinner)}
             />
-          </Switch>
+          </Switch> */}
         </main>
         <aside>side</aside>
         <footer>
