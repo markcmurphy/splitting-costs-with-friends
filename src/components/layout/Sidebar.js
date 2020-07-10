@@ -1,18 +1,23 @@
 import React, { Component } from "react";
 import Friends from "../friends/Friends.js";
 import AddExpense from "../expense/AddExpense.js";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useParams,
+} from "react-router-dom";
 
-export class Sidebar extends Component {
-  render() {
-    return (
-      <div className="nav-wrapper pl-3 pr-2">
-        <nav id="sidebar">
-          <AddExpense id={this.props.id} uid={this.props.uid} />
-          <Friends id={this.props.id} uid={this.props.uid} />
-        </nav>
+export default function Sidebar(props) {
+  const { id } = useParams();
+  return (
+    <div>
+      <div className="nav-wrapper pl-3 pr-2" style={{}} id="sidebar">
+        <>
+          <AddExpense id={id} uid={props.uid} />
+          <Friends id={id} uid={props.uid} />
+        </>
       </div>
-    );
-  }
+    </div>
+  );
 }
-
-export default Sidebar;

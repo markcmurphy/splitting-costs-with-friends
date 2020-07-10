@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { firestoreConnect } from "react-redux-firebase";
 import _ from "lodash";
+import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 
 import FriendDetails from "./FriendDetails";
 import EditFriend from "./EditFriend";
@@ -47,7 +48,7 @@ class Friends extends Component {
     const { showForm, firstName } = this.state;
     if (showForm) {
       return (
-        <div className="card mb-4 mt-4 bg-dark">
+        <div className="card mb-4 mt-4 ">
           <div className="card-header">Add Friend</div>
           <div className="card-body">
             <form onSubmit={this.formSubmit}>
@@ -77,7 +78,6 @@ class Friends extends Component {
 
   renderFriend = (props) => {
     const { friends, uid } = this.props;
-    console.log(this.props);
     const friendsList = _.map(friends, (value, key) => {
       return (
         <FriendDetails
@@ -94,11 +94,11 @@ class Friends extends Component {
       return friendsList;
     } else {
       return (
-        <tbody>
-          <tr>
-            <td>Loading</td>
-          </tr>
-        </tbody>
+        <Tbody>
+          <Tr>
+            <Td>Loading</Td>
+          </Tr>
+        </Tbody>
       );
     }
   };
@@ -130,14 +130,14 @@ class Friends extends Component {
           </button>
         )}
         {this.renderForm()}
-        <table className="table table-responseive table-striped table-dark mt-4">
-          <thead className="thead-inverse">
-            <tr>
-              <th>Friend Name</th>
-            </tr>
-          </thead>
+        <Table className=" mt-4">
+          <Thead>
+            <Tr>
+              <Th>Friend Name</Th>
+            </Tr>
+          </Thead>
           {this.renderFriend()}
-        </table>
+        </Table>
       </div>
     );
   }

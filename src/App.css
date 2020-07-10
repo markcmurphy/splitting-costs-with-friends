@@ -1,24 +1,99 @@
 .App {
-  background-color: #282c34;
   min-height: 100vh;
-  color: white;
+  color: #282c34;
 }
 
-.App-link {
-  color: #61dafb;
-}
+/* Grid layout */
+.App {
+  display: grid;
 
-/* Sidebar Nav */
-.nav-wrapper {
-  width: 100%;
-}
+  grid-template-areas:
+    "header header header"
+    "content content content"
+    "footer footer footer";
 
-#sidebar {
-  top: 0;
-  left: 0;
-  top: 5%;
-  margin-bottom: 12.3vh;
+  grid-template-columns: 200px 1fr 200px;
+  grid-template-rows: auto 1fr auto;
+  grid-gap: 10px;
+
   height: 100vh;
-  z-index: 999;
-  color: #fff;
+}
+
+header {
+  grid-area: header;
+}
+
+.main {
+  grid-area: content;
+}
+
+footer {
+  grid-area: footer;
+}
+
+@media (max-width: 768px) {
+  .App {
+    grid-template-areas:
+      "header"
+      /* "nav" */
+      "content"
+      /* "side" */
+      "footer";
+
+    grid-template-columns: 1fr;
+    grid-template-rows:
+      auto /* Header */
+      minmax(75px, auto) /* Nav */
+      1fr /* Content */
+      minmax(75px, auto) /* Sidebar */
+      auto; /* Footer */
+  }
+
+  nav,
+  aside {
+    margin: 0;
+  }
+}
+
+.mainView {
+  display: grid;
+
+  grid-template-areas: "nav content content";
+
+  grid-template-columns: 200px 1fr 200px;
+  grid-template-rows: auto 1fr auto;
+  grid-gap: 10px;
+}
+
+nav {
+  grid-area: nav;
+  margin-left: 0.5rem;
+}
+
+.mainViewContainer {
+  grid-area: content;
+}
+
+@media (max-width: 768px) {
+  .mainView {
+    grid-template-areas:
+      "header"
+      "nav"
+      "content"
+      "side"
+      "footer";
+
+    grid-template-columns: 1fr;
+    grid-template-rows:
+      /* auto Header */
+      minmax(75px, auto) /* Nav */
+      1fr; /* Content */
+    /* minmax(75px, auto) Sidebar */
+    /* auto; Footer */
+  }
+
+  nav,
+  aside {
+    margin: 0;
+  }
 }

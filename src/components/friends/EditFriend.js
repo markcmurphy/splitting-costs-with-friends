@@ -31,7 +31,7 @@ class EditFriend extends Component {
     if (this.props) {
       return (
         <div>
-          <div className="card mb-4 mt-4 bg-dark">
+          <div className="card mb-4 mt-4 ">
             <div className="card-header">Edit Friend</div>
             <div className="card-body">
               <form onSubmit={this.formSubmit}>

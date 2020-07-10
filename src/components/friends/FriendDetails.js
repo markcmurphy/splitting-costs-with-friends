@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { firestoreConnect } from "react-redux-firebase";
 import EditFriend from "./EditFriend";
+import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 
 class FriendDetails extends Component {
   state = {
@@ -24,7 +25,7 @@ class FriendDetails extends Component {
 
   renderWhoseInvolved(id) {
     const { friend } = this.props;
-    return <td>{friend[id].firstName}</td>;
+    return <Td>{friend[id].firstName}</Td>;
   }
 
   renderEditForm(id) {
@@ -57,9 +58,9 @@ class FriendDetails extends Component {
     const { friends } = this.props;
     const { showForm } = this.state;
     return (
-      <tbody>
-        <tr key={friends.id}>
-          <td>
+      <Tbody>
+        <Tr key={friends.id}>
+          <Td>
             {friends.firstName}{" "}
             <div style={{ float: "right" }}>
               <svg
@@ -92,9 +93,9 @@ class FriendDetails extends Component {
                 )}
               </span>
             </div>
-          </td>
-        </tr>
-      </tbody>
+          </Td>
+        </Tr>
+      </Tbody>
     );
   }
 }

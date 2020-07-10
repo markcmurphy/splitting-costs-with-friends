@@ -112,7 +112,7 @@ class AddExpense extends Component {
     const { showForm, expense, amount } = this.state;
     if (showForm) {
       return (
-        <div className="card bg-dark mt-3 pl-1">
+        <div className="card  mt-3 pl-1">
           <div className="card-header">Add Expense</div>
           <div className="card-body">
             <form onSubmit={this.formSubmit}>

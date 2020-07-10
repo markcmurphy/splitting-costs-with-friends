@@ -15,6 +15,9 @@ import LoadingSpinner from "../loading/LoadingSpinner";
 import AddNewTrip from "./AddNewTrip";
 import ListTrips from "./ListTrips";
 import Trip from "./Trip.js";
+import Sidebar from "../layout/Sidebar";
+import MainViewContainer from "../layout/MainViewContainer";
+import RenderExpenseList from "../expense/RenderExpenseList";
 
 class AllTrips extends Component {
   render() {
@@ -24,22 +27,32 @@ class AllTrips extends Component {
         {!this.props.uid ? (
           <LoadingSpinner />
         ) : (
-          <div>
-            <h1>All Trips</h1>
+          <>
             <Router>
-              <ListTrips uid={this.props.uid} />
               <Switch>
-                <Route
-                  path="/trip/:id"
-                  render={({ match }) => (
-                    <Trip id={match.params.id} uid={this.props.uid} />
-                  )}
-                />
+                <div>
+                  <div className="card">
+                    <div
+                      className="card-body"
+                      style={{ marginLeft: "15%", marginRight: "15%" }}
+                    >
+                      <h1>All Trips</h1>
+                      <AddNewTrip uid={this.props.uid} />
+                      <ListTrips uid={this.props.uid} />
+                    </div>
+                  </div>
+                  <div>
+                    <Route
+                      path="/trip/:id"
+                      render={({ match }) => (
+                        <Trip id={match.params.id} uid={this.props.uid} />
+                      )}
+                    />
+                  </div>
+                </div>
               </Switch>
             </Router>
-
-            <AddNewTrip uid={this.props.uid} />
-          </div>
+          </>
         )}
       </div>
     );

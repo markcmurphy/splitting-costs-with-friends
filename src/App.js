@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
+import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { UserIsAuthenticated, UserIsNotAuthenticated } from "./helpers/auth";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
@@ -8,12 +9,12 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import { firebaseConnect } from "react-redux-firebase";
 
-import Vertbody from "./components/layout/Vertbody";
 import Navbar from "./components/layout/Navbar";
 import AllTrips from "./components/trips/AllTrips";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import LoadingSpinner from "./components/loading/LoadingSpinner";
+import { queryAllByAltText } from "@testing-library/react";
 
 class App extends Component {
   render() {
@@ -21,8 +22,10 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Navbar />
-        <div className="main">
+        <header>
+          <Navbar />
+        </header>
+        <main className="main">
           <Switch>
             <Route
               exact
@@ -41,14 +44,15 @@ class App extends Component {
                 <AllTrips uid={auth.uid} />
               ))}
             />
-
             <Route
               exact
               path="/"
               component={UserIsNotAuthenticated(LoadingSpinner)}
             />
           </Switch>
-        </div>
+        </main>
+        {/* <aside>side</aside> */}
+        <footer>{/* <div>Footer</div> */}</footer>
       </div>
     );
   }
