@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/splitting-costs-with-friends/static/css/main.26299cf3.chunk.css",
-    "main.js": "/splitting-costs-with-friends/static/js/main.044252ba.chunk.js",
-    "main.js.map": "/splitting-costs-with-friends/static/js/main.044252ba.chunk.js.map",
+    "main.js": "/splitting-costs-with-friends/static/js/main.2c2b0e95.chunk.js",
+    "main.js.map": "/splitting-costs-with-friends/static/js/main.2c2b0e95.chunk.js.map",
     "runtime-main.js": "/splitting-costs-with-friends/static/js/runtime-main.9be7406c.js",
     "runtime-main.js.map": "/splitting-costs-with-friends/static/js/runtime-main.9be7406c.js.map",
     "static/css/2.326c04ff.chunk.css": "/splitting-costs-with-friends/static/css/2.326c04ff.chunk.css",
     "static/js/2.8a3a5c75.chunk.js": "/splitting-costs-with-friends/static/js/2.8a3a5c75.chunk.js",
     "static/js/2.8a3a5c75.chunk.js.map": "/splitting-costs-with-friends/static/js/2.8a3a5c75.chunk.js.map",
     "index.html": "/splitting-costs-with-friends/index.html",
-    "precache-manifest.787287e86757fb353045f498cd214104.js": "/splitting-costs-with-friends/precache-manifest.787287e86757fb353045f498cd214104.js",
+    "precache-manifest.d7066b266cb487c0be85eb7189042c20.js": "/splitting-costs-with-friends/precache-manifest.d7066b266cb487c0be85eb7189042c20.js",
     "service-worker.js": "/splitting-costs-with-friends/service-worker.js",
     "static/css/2.326c04ff.chunk.css.map": "/splitting-costs-with-friends/static/css/2.326c04ff.chunk.css.map",
     "static/css/main.26299cf3.chunk.css.map": "/splitting-costs-with-friends/static/css/main.26299cf3.chunk.css.map",
@@ -20,6 +20,6 @@
     "static/css/2.326c04ff.chunk.css",
     "static/js/2.8a3a5c75.chunk.js",
     "static/css/main.26299cf3.chunk.css",
-    "static/js/main.044252ba.chunk.js"
+    "static/js/main.2c2b0e95.chunk.js"
   ]
 }
