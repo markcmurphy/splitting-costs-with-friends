@@ -15,10 +15,11 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import LoadingSpinner from "./components/loading/LoadingSpinner";
 import { queryAllByAltText } from "@testing-library/react";
+import Trip from "./components/trips/Trip";
 
 class App extends Component {
   render() {
-    const { auth } = this.props;
+    const { auth, ...props } = this.props;
 
     return (
       <div className="App">
@@ -26,30 +27,43 @@ class App extends Component {
           <Navbar />
         </header>
         <main className="main">
-          <Switch>
-            <Route
-              exact
-              path="/login"
-              component={UserIsNotAuthenticated(Login)}
-            />
-            <Route
-              exact
-              path="/register"
-              component={UserIsNotAuthenticated(Register)}
-            />
-            <Route
-              exact
-              path="/"
-              component={UserIsAuthenticated(() => (
-                <AllTrips uid={auth.uid} />
-              ))}
-            />
-            <Route
-              exact
-              path="/"
-              component={UserIsNotAuthenticated(LoadingSpinner)}
-            />
-          </Switch>
+          <Router>
+            <Switch>
+              <Route
+                exact
+                path="/login"
+                component={UserIsNotAuthenticated(Login)}
+              />
+              <Route
+                exact
+                path="/register"
+                component={UserIsNotAuthenticated(Register)}
+              />
+              <Route
+                {...props}
+                exact
+                path="/trip/:id"
+                render={
+                  (this.UserIsAuthenticated = ({ match, props }) =>
+                    this.props.auth.uid ? (
+                      <Trip id={match.params.id} uid={this.props.auth.uid} />
+                    ) : null)
+                }
+              />
+              <Route
+                exact
+                path="/"
+                component={UserIsAuthenticated(() => (
+                  <AllTrips uid={auth.uid} />
+                ))}
+              />
+              <Route
+                exact
+                path="/"
+                component={UserIsNotAuthenticated(LoadingSpinner)}
+              />
+            </Switch>
+          </Router>
         </main>
         {/* <aside>side</aside> */}
         <footer>{/* <div>Footer</div> */}</footer>
