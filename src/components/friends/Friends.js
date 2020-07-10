@@ -108,7 +108,6 @@ class Friends extends Component {
     return (
       <div
         style={{
-          marginLeft: "5%",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",

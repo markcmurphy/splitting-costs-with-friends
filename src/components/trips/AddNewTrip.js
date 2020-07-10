@@ -38,7 +38,7 @@ class AddNewTrip extends Component {
     const { showForm, tripName } = this.state;
     if (showForm) {
       return (
-        <div className="card  mt-3 pl-1">
+        <div className="card mt-3 pl-1">
           <div className="card-header">Add Expense</div>
           <div className="card-body">
             <form onSubmit={this.formSubmit}>
@@ -72,7 +72,6 @@ class AddNewTrip extends Component {
     return (
       <div
         style={{
-          marginLeft: "5%",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
@@ -80,14 +79,14 @@ class AddNewTrip extends Component {
       >
         {showForm ? (
           <button
-            className="btn btn-danger btn-block mt-4"
+            className="btn btn-danger"
             onClick={() => this.setState({ showForm: !showForm })}
           >
             Close
           </button>
         ) : (
           <button
-            className="btn btn-secondary btn-block mt-4"
+            className="btn btn-secondary"
             onClick={() => this.setState({ showForm: !showForm })}
           >
             Add Trip{" "}

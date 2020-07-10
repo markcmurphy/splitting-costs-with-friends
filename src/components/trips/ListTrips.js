@@ -14,31 +14,74 @@ import {
 import LoadingSpinner from "../loading/LoadingSpinner";
 
 class ListTrips extends Component {
+  state = {
+    showForm: false,
+  };
+
+  renderForm = () => {
+    const { showForm } = this.state;
+    const { trips, uid } = this.props;
+
+    if (!showForm) {
+      return (
+        <ul className="list-group mt-4">
+          <li className="list-group-item active">All Trips</li>
+          {trips ? (
+            trips.map((item) => {
+              return (
+                <li className="list-group-item" key={item.id}>
+                  <Link
+                    to={{
+                      pathname: `/trip/${item.id}`,
+                      tripProps: { uid: "uid" },
+                    }}
+                  >
+                    {item.tripName}
+                  </Link>
+                </li>
+              );
+            })
+          ) : (
+            <LoadingSpinner />
+          )}
+        </ul>
+      );
+    }
+  };
+
   render() {
+    const { showForm } = this.state;
+
     console.log(this.props);
     const { trips, uid } = this.props;
 
     return (
-      <ul>
-        {trips ? (
-          trips.map((item) => {
-            return (
-              <li key={item.id}>
-                <Link
-                  to={{
-                    pathname: `/trip/${item.id}`,
-                    tripProps: { uid: "uid" },
-                  }}
-                >
-                  {item.tripName}
-                </Link>
-              </li>
-            );
-          })
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
+        {showForm ? (
+          <button
+            className="btn btn-secondary mt-2"
+            onClick={() => this.setState({ showForm: !showForm })}
+          >
+            Display All Trips
+          </button>
         ) : (
-          <LoadingSpinner />
+          <button
+            className="btn btn-danger mt-2"
+            onClick={() => this.setState({ showForm: !showForm })}
+          >
+            Close Trip List
+          </button>
         )}
-      </ul>
+        <div>
+          <div className="">{this.renderForm()}</div>
+        </div>
+      </div>
     );
   }
 }

@@ -31,12 +31,20 @@ class AllTrips extends Component {
             <Router>
               <Switch>
                 <div>
-                  <div className="card">
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
                     <div
-                      className="card-body"
-                      style={{ marginLeft: "15%", marginRight: "15%" }}
+                      // className="card"
+                      style={{
+                        // padding: "3%",
+                        width: "45rem",
+                      }}
                     >
-                      <h1>All Trips</h1>
+                      {/* <h4>All Trips</h4> */}
                       <AddNewTrip uid={this.props.uid} />
                       <ListTrips uid={this.props.uid} />
                     </div>
