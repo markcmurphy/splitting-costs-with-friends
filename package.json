@@ -1,6 +1,6 @@
 {
-  "homepage": "http://markcmurphy.github.io/Splitting-Costs-with-Friends",
-  "name": "Splitting-Costs-with-Friends",
+  "homepage": "http://markcmurphy.github.io/splitting-costs-with-friends",
+  "name": "splitting-costs-with-friends",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
