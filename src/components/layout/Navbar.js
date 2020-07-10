@@ -30,10 +30,9 @@ class Navbar extends Component {
     const { auth } = this.props;
     return (
       <div className="navbar navbar-expand-md navbar-dark bg-primary mb-4">
-        {/* <nav className="navbar navbar-expand-md navbar-dark bg-primary mb-4"> */}
         <div className="container">
           <Link to="/" className="navbar-brand">
-            Client Panel
+            Splitting Costs with Friends!
           </Link>
           <button
             className="navbar-toggler"
@@ -88,7 +87,6 @@ class Navbar extends Component {
             ) : null}
           </div>
         </div>
-        {/* </nav> */}
       </div>
     );
   }

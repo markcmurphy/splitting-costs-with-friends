@@ -28,55 +28,30 @@ class AllTrips extends Component {
           <LoadingSpinner />
         ) : (
           <>
-            {/* <Router> */}
-            {/* <Switch> */}
-            {/* <nav
-                className="col-2"
-                style={{
-                  padding: "0",
-                  // backgroundColor: "#050405",
-                  margin: "0",
-                }}
-              >
-                <Sidebar id={this.props.id} uid={this.props.uid} />
-              </nav> */}
-            <div>
-              <div
-                className="card"
-                style={
-                  {
-                    // marginLeft: "35%",
-                    // marginRight: "35%",
-                  }
-                }
-              >
-                <div className="card-body">
-                  <h1>All Trips</h1>
-                  <AddNewTrip uid={this.props.uid} />
-                  <ListTrips uid={this.props.uid} />
-                </div>
-              </div>
-              <div>
-                <Route
-                  path="/trip/:id"
-                  render={({ match }) => (
-                    // <Trip id={match.params.id} uid={this.props.uid} />
-
-                    <RenderExpenseList
-                      tripId={match.params.id}
-                      uid={this.props.uid}
+            <Router>
+              <Switch>
+                <div>
+                  <div className="card">
+                    <div
+                      className="card-body"
+                      style={{ marginLeft: "15%", marginRight: "15%" }}
+                    >
+                      <h1>All Trips</h1>
+                      <AddNewTrip uid={this.props.uid} />
+                      <ListTrips uid={this.props.uid} />
+                    </div>
+                  </div>
+                  <div>
+                    <Route
+                      path="/trip/:id"
+                      render={({ match }) => (
+                        <Trip id={match.params.id} uid={this.props.uid} />
+                      )}
                     />
-
-                    // <MainViewContainer
-                    //   id={match.params.id}
-                    //   uid={this.props.uid}
-                    // />
-                  )}
-                />
-              </div>
-            </div>
-            {/* </Switch> */}
-            {/* </Router> */}
+                  </div>
+                </div>
+              </Switch>
+            </Router>
           </>
         )}
       </div>

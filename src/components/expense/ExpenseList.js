@@ -198,10 +198,7 @@ class ExpenseList extends Component {
           {_.map(friends, (value, key) => {
             if (friendsInvolved.includes(value.id)) {
               return (
-                <Td
-                  key={value.id}
-                  // style={{ textAlign: "center" }}
-                >
+                <Td key={value.id}>
                   {/* checkbox to signify friend is included in expense, clicking will remove friend */}
                   <svg
                     className="bi bi-check-box"
@@ -228,10 +225,7 @@ class ExpenseList extends Component {
               );
             } else {
               return (
-                <Td
-                  key={value.id}
-                  // style={{ textAlign: "center" }}
-                >
+                <Td key={value.id}>
                   {/* checkbox to signify friend is NOT included in expense, clicking will add friend */}
 
                   <svg

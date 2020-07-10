@@ -13,30 +13,15 @@ import Sidebar from "../layout/Sidebar";
 
 export class Trip extends Component {
   render() {
-    console.log(this.props);
-
     return (
-      <>
-        {/* <nav
-          className="col-2"
-          style={{
-            padding: "0",
-            // backgroundColor: "#050405",
-            margin: "0",
-          }}
-        >
+      <div className="mainView">
+        <nav>
           <Sidebar id={this.props.id} uid={this.props.uid} />
-        </nav> */}
-        <div
-          className="col-10"
-          style={{
-            padding: "0",
-            // backgroundColor: "#121212",
-          }}
-        >
+        </nav>
+        <div className="mainViewContainer">
           <MainViewContainer id={this.props.id} uid={this.props.uid} />
         </div>
-      </>
+      </div>
     );
   }
 }

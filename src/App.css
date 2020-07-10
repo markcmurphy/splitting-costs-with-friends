@@ -1,5 +1,5 @@
 .App {
-  /* min-height: 100vh; */
+  min-height: 100vh;
   color: #282c34;
 }
 
@@ -9,7 +9,7 @@
 
   grid-template-areas:
     "header header header"
-    "nav content side"
+    "content content content"
     "footer footer footer";
 
   grid-template-columns: 200px 1fr 200px;
@@ -23,18 +23,8 @@ header {
   grid-area: header;
 }
 
-nav {
-  grid-area: nav;
-  margin-left: 0.5rem;
-}
-
-main {
+.main {
   grid-area: content;
-}
-
-aside {
-  grid-area: side;
-  margin-right: 0.5rem;
 }
 
 footer {
@@ -45,9 +35,9 @@ footer {
   .App {
     grid-template-areas:
       "header"
-      "nav"
+      /* "nav" */
       "content"
-      "side"
+      /* "side" */
       "footer";
 
     grid-template-columns: 1fr;
@@ -65,21 +55,45 @@ footer {
   }
 }
 
-.App-link {
-  color: #61dafb;
+.mainView {
+  display: grid;
+
+  grid-template-areas: "nav content content";
+
+  grid-template-columns: 200px 1fr 200px;
+  grid-template-rows: auto 1fr auto;
+  grid-gap: 10px;
 }
 
-/* Sidebar Nav */
-/* .nav-wrapper {
-  width: 100%;
+nav {
+  grid-area: nav;
+  margin-left: 0.5rem;
 }
 
-#sidebar {
-  top: 0;
-  left: 0;
-  top: 5%;
-  margin-bottom: 12.3vh;
-  height: 100vh;
-  z-index: 999;
-  color: #282c34;
-} */
+.mainViewContainer {
+  grid-area: content;
+}
+
+@media (max-width: 768px) {
+  .mainView {
+    grid-template-areas:
+      "header"
+      "nav"
+      "content"
+      "side"
+      "footer";
+
+    grid-template-columns: 1fr;
+    grid-template-rows:
+      /* auto Header */
+      minmax(75px, auto) /* Nav */
+      1fr; /* Content */
+    /* minmax(75px, auto) Sidebar */
+    /* auto; Footer */
+  }
+
+  nav,
+  aside {
+    margin: 0;
+  }
+}
