@@ -43,7 +43,7 @@ class Navbar extends Component {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarMain">
-            <ul className="navbar-nav mr-auto">
+            {/* <ul className="navbar-nav mr-auto">
               {isAuthenticated ? (
                 <li className="nav-item">
                   <Link to="/" className="nav-link">
@@ -51,7 +51,7 @@ class Navbar extends Component {
                   </Link>
                 </li>
               ) : null}
-            </ul>
+            </ul> */}
             {isAuthenticated ? (
               <ul className="navbar-nav ml-auto">
                 <li className="nav-item">
