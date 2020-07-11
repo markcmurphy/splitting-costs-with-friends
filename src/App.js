@@ -31,7 +31,7 @@ class App extends Component {
     const { auth, ...props } = this.props;
     console.log(this.props);
     return (
-      <Router>
+      <Router basename={process.env.PUBLIC_URL}>
         <div className="App">
           <header>
             <Navbar />
