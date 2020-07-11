@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/splitting-costs-with-friends/precache-manifest.1443d3e02d751110dc3283353f93b5d1.js"
+  "/splitting-costs-with-friends/precache-manifest.733a43242e02c9afc6f7953523f092dc.js"
 );
 
 self.addEventListener('message', (event) => {
