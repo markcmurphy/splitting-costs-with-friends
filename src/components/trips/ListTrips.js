@@ -35,7 +35,6 @@ class ListTrips extends Component {
                     to={{
                       pathname: `/trip/${item.id}`,
                       // tripProps: {
-                      //   id: "TripID",
                       //   uid: "uid",
                       // },
                     }}

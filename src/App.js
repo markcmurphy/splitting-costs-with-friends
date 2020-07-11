@@ -27,67 +27,39 @@ import AddNewTrip from "./components/trips/AddNewTrip";
 import ListTrips from "./components/trips/ListTrips";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      state: "i",
-    };
-  }
   render() {
     const { auth, ...props } = this.props;
     console.log(this.props);
     return (
-      <div className="App">
-        <header>
-          <Navbar />
-        </header>
-        <Router>
+      <Router>
+        <div className="App">
+          <header>
+            <Navbar />
+          </header>
           <nav>
             <Switch>
               <Route
                 {...props}
                 exact
-                path="/trip/:id"
-                render={
-                  (this.UserIsAuthenticated = (
-                    // console.log('hi')
-                    { match, props }
-                  ) =>
-                    this.props.auth.uid
-                      ? (console.log(match.params.id),
-                        (
-                          <Sidebar
-                            id={match.params.id}
-                            uid={this.props.auth.uid}
-                          />
-                        ))
-                      : null)
+                path="/"
+                component={
+                  (this.UserIsAuthenticated = () =>
+                    auth.uid ? <Sidebar uid={auth.uid} /> : null)
                 }
               />
               <Route
-                // exact
-                path="/"
-                render={
-                  (this.UserIsAuthenticated = ({ match, props }) =>
-                    this.props.auth.uid ? (
-                      <div className="nav-wrapper mt-3" style={{}} id="sidebar">
-                        <>
-                          <div class="alert alert-info mt-4" role="alert">
-                            Add friend or friends prior to adding expense!
-                          </div>
-                          {/* <AddNewTrip uid={this.props.uid} />
-                          <ListTrips uid={this.props.uid} /> */}
-                        </>
-                      </div>
+                {...props}
+                path="/trip/:id"
+                component={
+                  (this.UserIsAuthenticated = ({ match }) =>
+                    auth.uid ? (
+                      <Sidebar id={match.params.id} uid={auth.uid} />
                     ) : null)
                 }
               />
-              />
             </Switch>
-            {/* </Router> */}
           </nav>
           <main>
-            {/* <Router forceRefresh={true}> */}
             <Switch>
               <Route
                 exact
@@ -101,12 +73,11 @@ class App extends Component {
               />
 
               <Route
-                {...props}
+                // {...props}
                 exact
                 path="/trip/:id"
-                component={
-                  (this.UserIsAuthenticated = ({ match, props }) =>
-                    // console.log(match.params.id);
+                render={
+                  (this.UserIsAuthenticated = ({ match }) =>
                     this.props.auth.uid ? (
                       <RenderExpenseList
                         tripId={match.params.id}
@@ -142,10 +113,8 @@ class App extends Component {
               />
             </Switch>
           </main>
-        </Router>
-        {/* <aside>side</aside> */}
-        <footer>{/* <div>Footer</div> */}</footer>
-      </div>
+        </div>
+      </Router>
     );
   }
 }
