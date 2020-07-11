@@ -29,36 +29,34 @@ class AllTrips extends Component {
         ) : (
           <>
             <Router>
-              <Switch>
-                <div>
+              {/* <Switch> */}
+              <div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
                   <div
                     style={{
-                      display: "flex",
-                      justifyContent: "center",
+                      // padding: "3%",
+                      width: "45rem",
                     }}
                   >
-                    <div
-                      // className="card"
-                      style={{
-                        // padding: "3%",
-                        width: "45rem",
-                      }}
-                    >
-                      {/* <h4>All Trips</h4> */}
-                      <AddNewTrip uid={this.props.uid} />
-                      <ListTrips uid={this.props.uid} />
-                    </div>
-                  </div>
-                  <div>
-                    <Route
-                      path="/trip/:id"
-                      render={({ match }) => (
-                        <Trip id={match.params.id} uid={this.props.uid} />
-                      )}
-                    />
+                    <AddNewTrip uid={this.props.uid} />
+                    <ListTrips uid={this.props.uid} />
                   </div>
                 </div>
-              </Switch>
+                <div>
+                  <Route
+                    path="/trip/:id"
+                    render={({ match }) => (
+                      <Trip id={match.params.id} uid={this.props.uid} />
+                    )}
+                  />
+                </div>
+              </div>
+              {/* </Switch> */}
             </Router>
           </>
         )}

@@ -16,9 +16,9 @@ export class Trip extends Component {
     console.log(this.props);
     return (
       <div className="mainView">
-        <nav>
+        {/* <nav>
           <Sidebar id={this.props.id} uid={this.props.uid} />
-        </nav>
+        </nav> */}
         <div className="mainViewContainer">
           <MainViewContainer id={this.props.id} uid={this.props.uid} />
         </div>

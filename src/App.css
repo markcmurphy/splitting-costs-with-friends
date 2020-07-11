@@ -9,7 +9,7 @@
 
   grid-template-areas:
     "header header header"
-    "content content content"
+    "nav content content"
     "footer footer footer";
 
   grid-template-columns: 200px 1fr 200px;
@@ -23,8 +23,13 @@ header {
   grid-area: header;
 }
 
-.main {
+main {
   grid-area: content;
+}
+
+nav {
+  grid-area: nav;
+  margin-left: 0.5rem;
 }
 
 footer {
@@ -35,9 +40,9 @@ footer {
   .App {
     grid-template-areas:
       "header"
-      /* "nav" */
+      "nav"
       "content"
-      /* "side" */
+      "side"
       "footer";
 
     grid-template-columns: 1fr;
@@ -47,49 +52,6 @@ footer {
       1fr /* Content */
       minmax(75px, auto) /* Sidebar */
       auto; /* Footer */
-  }
-
-  nav,
-  aside {
-    margin: 0;
-  }
-}
-
-.mainView {
-  display: grid;
-
-  grid-template-areas: "nav content content";
-
-  grid-template-columns: 200px 1fr 200px;
-  grid-template-rows: auto 1fr auto;
-  grid-gap: 10px;
-}
-
-nav {
-  grid-area: nav;
-  margin-left: 0.5rem;
-}
-
-.mainViewContainer {
-  grid-area: content;
-}
-
-@media (max-width: 768px) {
-  .mainView {
-    grid-template-areas:
-      "header"
-      "nav"
-      "content"
-      "side"
-      "footer";
-
-    grid-template-columns: 1fr;
-    grid-template-rows:
-      /* auto Header */
-      minmax(75px, auto) /* Nav */
-      1fr; /* Content */
-    /* minmax(75px, auto) Sidebar */
-    /* auto; Footer */
   }
 
   nav,

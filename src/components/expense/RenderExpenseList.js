@@ -12,6 +12,7 @@ import LoadingSpinner from "../loading/LoadingSpinner";
 
 class RenderExpenseList extends Component {
   constructor(props) {
+    // console.log(props);
     super(props);
     this.state = {
       showForm: false,
@@ -24,6 +25,12 @@ class RenderExpenseList extends Component {
     };
   }
 
+  // componentDidUpdate() {
+  //   console.log("Updated!");
+  // }
+  // componentDidMount() {
+  //   console.log("Mounted!");
+  // }
   addTotalExpenses = () => {
     const { expenses } = this.props;
     let newTotal = 0;
@@ -221,7 +228,6 @@ class RenderExpenseList extends Component {
     let friendsObj = this.totalAmountPaidPerPerson();
     let friendsObj1 = this.totalPerPerson();
     const diffAmount = {};
-    // const friendsObj = {};
     if (!isEmpty(expenses) && !isEmpty(friends)) {
       _.map(friends, (value, key) => {
         diffAmount[value.id] = 0;
@@ -241,16 +247,15 @@ class RenderExpenseList extends Component {
   renderFriendHeader() {
     const { friends } = this.props;
     const friendsList = _.map(friends, (value, key) => {
-      console.log(key);
       return <Th key={key}>{value.firstName}</Th>;
     });
-    // console.log(friends);
     if (!isEmpty(friends)) {
       return friendsList;
     }
   }
 
   render() {
+    console.log(this.state);
     return (
       <div className="mt-4">
         <Table

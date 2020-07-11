@@ -16,6 +16,7 @@ import LoadingSpinner from "../loading/LoadingSpinner";
 class ListTrips extends Component {
   state = {
     showForm: false,
+    tripID: "",
   };
 
   renderForm = () => {
@@ -33,7 +34,10 @@ class ListTrips extends Component {
                   <Link
                     to={{
                       pathname: `/trip/${item.id}`,
-                      tripProps: { uid: "uid" },
+                      // tripProps: {
+                      //   id: "TripID",
+                      //   uid: "uid",
+                      // },
                     }}
                   >
                     {item.tripName}
