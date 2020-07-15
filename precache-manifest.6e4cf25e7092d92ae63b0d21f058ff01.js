@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "92ba449aa5e8a319da0cd836a87716f6",
+    "revision": "f38e984e49290b1b9ce6bc6227dc634f",
     "url": "/splitting-costs-with-friends/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/splitting-costs-with-friends/static/css/2.326c04ff.chunk.css"
   },
   {
-    "revision": "070a242f179f9027bd8a",
-    "url": "/splitting-costs-with-friends/static/css/main.fe437cd1.chunk.css"
+    "revision": "ec024bee0acc109e3e55",
+    "url": "/splitting-costs-with-friends/static/css/main.cf3d381c.chunk.css"
   },
   {
     "revision": "343df13bef5ee8294c41",
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/splitting-costs-with-friends/static/js/2.31c5f4f9.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "070a242f179f9027bd8a",
-    "url": "/splitting-costs-with-friends/static/js/main.d6b273dc.chunk.js"
+    "revision": "ec024bee0acc109e3e55",
+    "url": "/splitting-costs-with-friends/static/js/main.17d7dd23.chunk.js"
   },
   {
     "revision": "394e2e3d238f3bafc4df",
