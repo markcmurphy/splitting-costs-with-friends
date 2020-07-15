@@ -12,7 +12,9 @@
     "nav content content"
     "footer footer footer";
 
-  grid-template-columns: 200px 1fr 200px;
+  /* grid-template-columns: 200px 1fr 200px;
+  grid-template-rows: auto 1fr auto; */
+  grid-template-columns: 200px 2fr;
   grid-template-rows: auto 1fr auto;
   grid-gap: 10px;
 
@@ -42,20 +44,22 @@ footer {
       "header"
       "nav"
       "content"
-      "side"
       "footer";
 
     grid-template-columns: 1fr;
     grid-template-rows:
       auto /* Header */
-      minmax(75px, auto) /* Nav */
-      1fr /* Content */
-      minmax(75px, auto) /* Sidebar */
-      auto; /* Footer */
+      minmax(auto) /* Nav */
+      1fr; /* Content */
   }
 
   nav,
   aside {
     margin: 0;
+    /* min-width: 0; */
   }
+}
+
+.responsiveTable {
+  padding: 5%;
 }

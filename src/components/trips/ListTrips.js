@@ -60,22 +60,22 @@ class ListTrips extends Component {
 
     return (
       <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
+      // style={{
+      //   display: "flex",
+      //   flexDirection: "column",
+      //   justifyContent: "center",
+      // }}
       >
         {showForm ? (
           <button
-            className="btn btn-secondary mt-2"
+            className="btn btn-secondary mt-4 btn-block"
             onClick={() => this.setState({ showForm: !showForm })}
           >
             Display All Trips
           </button>
         ) : (
           <button
-            className="btn btn-danger mt-2"
+            className="btn btn-danger mt-4 btn-block"
             onClick={() => this.setState({ showForm: !showForm })}
           >
             Close Trip List

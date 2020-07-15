@@ -29,7 +29,6 @@ import ListTrips from "./components/trips/ListTrips";
 class App extends Component {
   render() {
     const { auth, ...props } = this.props;
-    console.log(this.props);
     return (
       <Router basename={process.env.PUBLIC_URL}>
         <div className="App">
@@ -49,6 +48,7 @@ class App extends Component {
               />
               <Route
                 {...props}
+                exact
                 path="/trip/:id"
                 component={
                   (this.UserIsAuthenticated = ({ match }) =>
@@ -71,7 +71,14 @@ class App extends Component {
                 path="/register"
                 component={UserIsNotAuthenticated(Register)}
               />
-
+              <Route
+                exact
+                path="/"
+                component={UserIsAuthenticated(() => (
+                  // <AllTrips uid={auth.uid} />
+                  <h1>Select trip from left sidebar</h1>
+                ))}
+              />
               <Route
                 // {...props}
                 exact
@@ -99,20 +106,10 @@ class App extends Component {
                 }
               /> */}
 
-              {/* <Route
-                exact
-                path="/"
-                component={UserIsAuthenticated(() => (
-                  <AllTrips uid={auth.uid} />
-                ))}
-              /> */}
-              <Route
-                exact
-                path="/"
-                component={UserIsNotAuthenticated(LoadingSpinner)}
-              />
+              <Route exact path="/" component={UserIsNotAuthenticated(Login)} />
             </Switch>
           </main>
+          <footer style={{ backgroundColor: "lightGrey" }}>Mark Murphy</footer>
         </div>
       </Router>
     );

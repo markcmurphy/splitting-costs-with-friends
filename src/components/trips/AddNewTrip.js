@@ -71,22 +71,22 @@ class AddNewTrip extends Component {
 
     return (
       <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
+      // style={{
+      //   display: "flex",
+      //   flexDirection: "column",
+      //   justifyContent: "center",
+      // }}
       >
         {showForm ? (
           <button
-            className="btn btn-danger"
+            className="btn btn-danger btn-block"
             onClick={() => this.setState({ showForm: !showForm })}
           >
             Close
           </button>
         ) : (
           <button
-            className="btn btn-secondary"
+            className="btn btn-secondary btn-block"
             onClick={() => this.setState({ showForm: !showForm })}
           >
             Add Trip{" "}

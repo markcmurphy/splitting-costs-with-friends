@@ -15,27 +15,27 @@ import ListTrips from "../trips/ListTrips";
 export default function Sidebar(props) {
   const { id } = useParams();
   return (
-    <div className="nav-wrapper mt-3" style={{}} id="sidebar">
+    <div>
+      <div class="alert alert-info mt-4" role="alert">
+        Add friend or friends prior to adding expense!
+      </div>
       <>
-        <div class="alert alert-info mt-4" role="alert">
-          Add friend or friends prior to adding expense!
-        </div>
         {props ? (
           <>
             <AddNewTrip uid={props.uid} />
             <ListTrips uid={props.uid} />
           </>
         ) : null}
-        <Route
-          path="/trip/:id"
-          render={() => (
-            <div>
-              <AddExpense id={id} uid={props.uid} />
-              <Friends id={id} uid={props.uid} />
-            </div>
-          )}
-        />
       </>
+      <Route
+        path="/trip/:id"
+        render={() => (
+          <div>
+            <AddExpense id={id} uid={props.uid} />
+            <Friends id={id} uid={props.uid} />
+          </div>
+        )}
+      />
     </div>
   );
 }

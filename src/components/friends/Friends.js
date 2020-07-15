@@ -107,11 +107,11 @@ class Friends extends Component {
     const { showForm } = this.state;
     return (
       <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
+      // style={{
+      //   display: "flex",
+      //   flexDirection: "column",
+      //   justifyContent: "center",
+      // }}
       >
         {showForm ? (
           <button

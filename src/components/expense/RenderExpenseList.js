@@ -257,51 +257,51 @@ class RenderExpenseList extends Component {
   render() {
     console.log(this.state);
     return (
-      <div className="mt-4">
-        <Table
-          key={_.map(this.props.friends, (value, key) => {
-            return key;
-          })}
-          className={"table table-striped table-bordered"}
-        >
-          <Thead>
-            <Tr>
-              <Th>Expense Name</Th>
-              <Th>Who Paid</Th>
-              <Th>Cost Per Person</Th>
-              {/* Insert name of friend as table heading */}
-              {this.renderFriendHeader()}
-              <Th>Expense Amount</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {this.renderExpense()}
-            <Tr>
-              <Th colSpan="3">Total Owed</Th>
-              {this.renderTotalPerPerson(this.totalPerPerson())}
-              <Td className="table-success" style={{ color: "black" }}>
-                <strong>
-                  ${this.addTotalPaidExpenses(this.totalPerPerson())}
-                </strong>
-              </Td>
-            </Tr>
-            <Tr>
-              <Th colSpan="3">Total Paid</Th>
-              {this.renderTotalAmountPaidPerPerson()}
-              <Td className="table-success" style={{ color: "black" }}>
-                <strong>
-                  ${this.addTotalPaidExpenses(this.totalAmountPaidPerPerson())}
-                </strong>
-              </Td>
-            </Tr>
-            <Tr>
-              {/* TODO: have conditional colors for cells */}
-              <Th colSpan="3">Difference</Th>
-              {this.renderTotalDifferencePerPerson()}
-            </Tr>
-          </Tbody>
-        </Table>
-      </div>
+      // <div className="mt-4">
+      <Table
+        key={_.map(this.props.friends, (value, key) => {
+          return key;
+        })}
+        className={"table table-striped table-bordered"}
+      >
+        <Thead>
+          <Tr>
+            <Th>Expense Name</Th>
+            <Th>Who Paid</Th>
+            <Th>Cost Per Person</Th>
+            {/* Insert name of friend as table heading */}
+            {this.renderFriendHeader()}
+            <Th>Expense Amount</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {this.renderExpense()}
+          <Tr>
+            <Th colSpan="3">Total Owed</Th>
+            {this.renderTotalPerPerson(this.totalPerPerson())}
+            <Td className="table-success" style={{ color: "black" }}>
+              <strong>
+                ${this.addTotalPaidExpenses(this.totalPerPerson())}
+              </strong>
+            </Td>
+          </Tr>
+          <Tr>
+            <Th colSpan="3">Total Paid</Th>
+            {this.renderTotalAmountPaidPerPerson()}
+            <Td className="table-success" style={{ color: "black" }}>
+              <strong>
+                ${this.addTotalPaidExpenses(this.totalAmountPaidPerPerson())}
+              </strong>
+            </Td>
+          </Tr>
+          <Tr>
+            {/* TODO: have conditional colors for cells */}
+            <Th colSpan="3">Difference</Th>
+            {this.renderTotalDifferencePerPerson()}
+          </Tr>
+        </Tbody>
+      </Table>
+      // </div>
     );
   }
 }
