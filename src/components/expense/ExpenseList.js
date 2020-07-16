@@ -12,6 +12,7 @@ class ExpenseList extends Component {
     this.state = {
       isIncluded: false,
       showForm: false,
+      toggleChecked: false,
     };
   }
 
@@ -200,7 +201,15 @@ class ExpenseList extends Component {
               return (
                 <Td key={value.id}>
                   {/* checkbox to signify friend is included in expense, clicking will remove friend */}
-                  <svg
+
+                  <label
+                    className="switch"
+                    onClick={() => this.removeIncluded(expenses, value.id)}
+                  >
+                    <input type="checkbox" checked />
+                    <span className="slider round"></span>
+                  </label>
+                  {/* <svg
                     className="bi bi-check-box"
                     width="1em"
                     height="1em"
@@ -220,7 +229,7 @@ class ExpenseList extends Component {
                       d="M1.5 13A1.5 1.5 0 003 14.5h10a1.5 1.5 0 001.5-1.5V8a.5.5 0 00-1 0v5a.5.5 0 01-.5.5H3a.5.5 0 01-.5-.5V3a.5.5 0 01.5-.5h8a.5.5 0 000-1H3A1.5 1.5 0 001.5 3v10z"
                       clipRule="evenodd"
                     />
-                  </svg>
+                  </svg> */}
                 </Td>
               );
             } else {
@@ -228,7 +237,14 @@ class ExpenseList extends Component {
                 <Td key={value.id}>
                   {/* checkbox to signify friend is NOT included in expense, clicking will add friend */}
 
-                  <svg
+                  <label
+                    className="switch"
+                    onClick={() => this.addIncluded(expenses, value.id)}
+                  >
+                    <input type="checkbox" />
+                    <span className="slider round"></span>
+                  </label>
+                  {/* <svg
                     className="bi bi-x-square"
                     width="1em"
                     height="1em"
@@ -253,7 +269,7 @@ class ExpenseList extends Component {
                       d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z"
                       clipRule="evenodd"
                     />
-                  </svg>
+                  </svg> */}
                 </Td>
               );
             }

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./App.css";
 import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { UserIsAuthenticated, UserIsNotAuthenticated } from "./helpers/auth";
 import {

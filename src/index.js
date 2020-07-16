@@ -8,6 +8,7 @@ import store, { rrfProps } from "./store";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import "./index.css";
+import "./App.css";
 
 ReactDOM.render(
   <Provider store={store}>
