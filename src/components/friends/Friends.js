@@ -6,7 +6,7 @@ import _ from "lodash";
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 
 import FriendDetails from "./FriendDetails";
-import EditFriend from "./EditFriend";
+import Button from "@material-ui/core/Button";
 
 class Friends extends Component {
   constructor(props) {
@@ -106,30 +106,41 @@ class Friends extends Component {
   render() {
     const { showForm } = this.state;
     return (
-      <div
-      // style={{
-      //   display: "flex",
-      //   flexDirection: "column",
-      //   justifyContent: "center",
-      // }}
-      >
+      <div>
         {showForm ? (
-          <button
-            className="btn btn-danger btn-block mt-4"
+          <Button
+            variant="contained"
+            color="secondary"
             onClick={() => this.setState({ showForm: !showForm })}
+            style={{ marginTop: "5px" }}
           >
             Close
-          </button>
+          </Button>
         ) : (
-          <button
-            className="btn btn-secondary btn-block mt-4"
+          // <button
+          //   className="btn btn-danger btn-block mt-4"
+          //   onClick={() => this.setState({ showForm: !showForm })}
+          // >
+          //   Close
+          // </button>
+
+          <Button
+            variant="contained"
+            color="primary"
             onClick={() => this.setState({ showForm: !showForm })}
+            style={{ marginTop: "5px" }}
           >
             Add Friend
-          </button>
+          </Button>
+          // <button
+          //   className="btn btn-secondary btn-block mt-4"
+          //   onClick={() => this.setState({ showForm: !showForm })}
+          // >
+          //   Add Friend
+          // </button>
         )}
         {this.renderForm()}
-        <Table className=" mt-4">
+        <Table className="mt-4">
           <Thead>
             <Tr>
               <Th>Friend Name</Th>

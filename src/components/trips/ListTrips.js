@@ -2,16 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
 import { compose } from "redux";
-import { firestoreConnect, isLoaded, isEmpty } from "react-redux-firebase";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams,
-} from "react-router-dom";
+import { firestoreConnect } from "react-redux-firebase";
+import { Link } from "react-router-dom";
 import LoadingSpinner from "../loading/LoadingSpinner";
+import Button from "@material-ui/core/Button";
 
 class ListTrips extends Component {
   state = {
@@ -54,32 +48,38 @@ class ListTrips extends Component {
 
   render() {
     const { showForm } = this.state;
-
-    console.log(this.props);
-    const { trips, uid } = this.props;
+    // const { trips, uid } = this.props;
 
     return (
-      <div
-      // style={{
-      //   display: "flex",
-      //   flexDirection: "column",
-      //   justifyContent: "center",
-      // }}
-      >
+      <div>
         {showForm ? (
-          <button
-            className="btn btn-secondary mt-4 btn-block"
+          <Button
+            variant="contained"
+            color="primary"
             onClick={() => this.setState({ showForm: !showForm })}
           >
             Display All Trips
-          </button>
+          </Button>
         ) : (
-          <button
-            className="btn btn-danger mt-4 btn-block"
+          // <button
+          //   className="btn btn-secondary mt-4 btn-block"
+          //   onClick={() => this.setState({ showForm: !showForm })}
+          // >
+          //   Display All Trips
+          // </button>
+          <Button
+            variant="contained"
+            color="secondary"
             onClick={() => this.setState({ showForm: !showForm })}
           >
             Close Trip List
-          </button>
+          </Button>
+          // <button
+          //   className="btn btn-danger mt-4 btn-block"
+          //   onClick={() => this.setState({ showForm: !showForm })}
+          // >
+          //   Close Trip List
+          // </button>
         )}
         <div>
           <div className="">{this.renderForm()}</div>

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import { compose } from "redux";
 import { firestoreConnect } from "react-redux-firebase";
+import Button from "@material-ui/core/Button";
 
 class AddNewTrip extends Component {
   state = {
@@ -70,27 +71,35 @@ class AddNewTrip extends Component {
     const { showForm } = this.state;
 
     return (
-      <div
-      // style={{
-      //   display: "flex",
-      //   flexDirection: "column",
-      //   justifyContent: "center",
-      // }}
-      >
+      <div>
         {showForm ? (
-          <button
-            className="btn btn-danger btn-block"
+          <Button
+            variant="contained"
+            color="secondary"
             onClick={() => this.setState({ showForm: !showForm })}
           >
             Close
-          </button>
+          </Button>
         ) : (
-          <button
-            className="btn btn-secondary btn-block"
+          // <button
+          //   className="btn btn-danger btn-block"
+          //   onClick={() => this.setState({ showForm: !showForm })}
+          // >
+          //   Close
+          // </button>
+          <Button
+            variant="contained"
+            color="primary"
             onClick={() => this.setState({ showForm: !showForm })}
           >
-            Add Trip{" "}
-          </button>
+            Add Trip
+          </Button>
+          // <button
+          //   className="btn btn-secondary btn-block"
+          //   onClick={() => this.setState({ showForm: !showForm })}
+          // >
+          //   Add Trip{" "}
+          // </button>
         )}
         <div>
           <div className="">{this.renderForm()}</div>

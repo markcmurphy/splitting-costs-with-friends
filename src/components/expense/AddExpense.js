@@ -6,6 +6,14 @@ import { firestoreConnect } from "react-redux-firebase";
 
 import FriendsInvolved from "./FriendsInvolved";
 
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+
 class AddExpense extends Component {
   state = {
     showForm: false,
@@ -108,88 +116,172 @@ class AddExpense extends Component {
     });
   };
 
+  closeForm = () => {
+    const { showForm } = this.state;
+
+    this.setState({
+      showForm: false,
+    });
+  };
+
   renderForm = () => {
     const { showForm, expense, amount } = this.state;
-    if (showForm) {
-      return (
-        <div className="card mt-3 pl-1">
-          <div className="card-header">Add Expense</div>
-          <div className="card-body">
-            <form onSubmit={this.formSubmit}>
-              <div className="form-group">
-                <label>Expense Name</label>
-                <input
-                  value={expense}
-                  className="form-control"
-                  onChange={this.inputChange}
-                  id="friendNext"
-                  type="text"
-                  name="expense"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Amount</label>
-                <input
-                  value={amount}
-                  onChange={this.inputChange}
-                  className="form-control"
-                  type="number"
-                  id="amount"
-                  name="amount"
-                />
-              </div>
-              {/* Friends involved */}
-              <div className="form-group">
-                <label>Friends Involved {""}</label>
-                {this.renderFriendsInvolved()}
-              </div>
-              {/* Who Paid */}
-              <div className="form-group">
-                <label>Who Paid</label>
-                {this.renderFriend()}
-              </div>
-
-              <input
-                type="submit"
-                value="Submit"
-                className="btn btn-success btn-block"
+    // if (showForm) {
+    return (
+      <Dialog
+        open={showForm}
+        onClose={!showForm}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            To subscribe to this website, please enter your email address here.
+            We will send updates occasionally.
+          </DialogContentText>
+          <form onSubmit={this.formSubmit}>
+            <div className="form-group">
+              <TextField
+                autoFocus
+                margin="dense"
+                id="friendNext"
+                label="Expense Name"
+                type="text"
+                name="expense"
+                value={expense}
+                // className="form-control"
+                onChange={this.inputChange}
+                fullWidth
               />
-            </form>
-          </div>
-        </div>
-      );
-    }
+              {/* <label>Expense Name</label> */}
+              {/* <input
+                value={expense}
+                className="form-control"
+                onChange={this.inputChange}
+                id="friendNext"
+                type="text"
+                name="expense"
+              /> */}
+            </div>
+
+            <div className="form-group">
+              <label>Amount</label>
+              <input
+                value={amount}
+                onChange={this.inputChange}
+                className="form-control"
+                type="number"
+                id="amount"
+                name="amount"
+              />
+            </div>
+            {/* Friends involved */}
+            <div className="form-group">
+              <label>Friends Involved {""}</label>
+              {this.renderFriendsInvolved()}
+            </div>
+            {/* Who Paid */}
+            <div className="form-group">
+              <label>Who Paid</label>
+              {this.renderFriend()}
+            </div>
+
+            <input
+              type="submit"
+              value="Submit"
+              className="btn btn-success btn-block"
+            />
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => this.closeForm()} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+      // <div className="card mt-3 pl-1">
+      //   <div className="card-header">Add Expense</div>
+      //   <div className="card-body">
+      //     <form onSubmit={this.formSubmit}>
+      //       <div className="form-group">
+      //         <label>Expense Name</label>
+      //         <input
+      //           value={expense}
+      //           className="form-control"
+      //           onChange={this.inputChange}
+      //           id="friendNext"
+      //           type="text"
+      //           name="expense"
+      //         />
+      //       </div>
+
+      //       <div className="form-group">
+      //         <label>Amount</label>
+      //         <input
+      //           value={amount}
+      //           onChange={this.inputChange}
+      //           className="form-control"
+      //           type="number"
+      //           id="amount"
+      //           name="amount"
+      //         />
+      //       </div>
+      //       {/* Friends involved */}
+      //       <div className="form-group">
+      //         <label>Friends Involved {""}</label>
+      //         {this.renderFriendsInvolved()}
+      //       </div>
+      //       {/* Who Paid */}
+      //       <div className="form-group">
+      //         <label>Who Paid</label>
+      //         {this.renderFriend()}
+      //       </div>
+
+      //       <input
+      //         type="submit"
+      //         value="Submit"
+      //         className="btn btn-success btn-block"
+      //       />
+      //     </form>
+      //   </div>
+      // </div>
+    );
+    // }
   };
 
   render() {
     const { showForm } = this.state;
 
     return (
-      <div
-        style={
-          {
-            // marginLeft: "5%",
-            // display: "flex",
-            // flexDirection: "column",
-            // justifyContent: "center",
-          }
-        }
-      >
+      <div>
         {showForm ? (
-          <button
-            className="btn btn-danger btn-block mt-4"
+          <Button
+            variant="contained"
+            color="secondary"
             onClick={() => this.setState({ showForm: !showForm })}
           >
             Close
-          </button>
+          </Button>
         ) : (
-          <button
-            className="btn btn-secondary btn-block mt-4"
+          // <button
+          //   className="btn btn-danger btn-block mt-4"
+          //   onClick={() => this.setState({ showForm: !showForm })}
+          // >
+          //   Close
+          // </button>
+          <Button
+            variant="contained"
+            color="primary"
             onClick={() => this.setState({ showForm: !showForm })}
           >
             Add Expense{" "}
-          </button>
+          </Button>
+          // <button
+          //   className="btn btn-secondary btn-block mt-4"
+          //   onClick={() => this.setState({ showForm: !showForm })}
+          // >
+          //   Add Expense{" "}
+          // </button>
         )}
         <div>
           <div className="">{this.renderForm()}</div>
