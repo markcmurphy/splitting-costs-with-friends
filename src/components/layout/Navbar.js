@@ -29,7 +29,8 @@ class Navbar extends Component {
     const { isAuthenticated } = this.state;
     const { auth } = this.props;
     return (
-      <div className="navbar navbar-expand-md navbar-dark bg-primary mb-4">
+      <div className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+        {/* <div className="navbar navbar-dark bg-primary mb-4"> */}
         <div className="container">
           <Link to="/" className="navbar-brand">
             Splitting Costs with Friends!

@@ -97,8 +97,8 @@ class RenderExpenseList extends Component {
     const expensesList = _.map(expenses, (value, key) => {
       return (
         <ExpenseList
-          key={value.id}
-          expenses={value}
+          key={key}
+          expense={value}
           friends={friends}
           firestore={firestore}
           tripId={tripId}
@@ -255,7 +255,7 @@ class RenderExpenseList extends Component {
   }
 
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     return (
       // <div className="mt-4">
       <Table
