@@ -24,6 +24,7 @@ import Sidebar from "./components/layout/Sidebar";
 import RenderExpenseList from "./components/expense/RenderExpenseList";
 import AddNewTrip from "./components/trips/AddNewTrip";
 import ListTrips from "./components/trips/ListTrips";
+import RenderMaterialTable from "./components/expense/RenderMaterialTable";
 
 class App extends Component {
   render() {
@@ -85,11 +86,15 @@ class App extends Component {
                 render={
                   (this.UserIsAuthenticated = ({ match }) =>
                     this.props.auth.uid ? (
-                      <RenderExpenseList
+                      <RenderMaterialTable
                         tripId={match.params.id}
                         uid={this.props.auth.uid}
                       />
-                    ) : //  <Trip id={match.params.id} uid={this.props.auth.uid} />
+                    ) : // <RenderExpenseList
+                    //   tripId={match.params.id}
+                    //   uid={this.props.auth.uid}
+                    // />
+                    //  <Trip id={match.params.id} uid={this.props.auth.uid} />
                     null)
                 }
               />
