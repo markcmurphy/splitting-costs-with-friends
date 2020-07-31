@@ -158,11 +158,10 @@ class AddExpense extends Component {
         onClose={() => this.closeForm()}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+        <DialogTitle id="form-dialog-title">Add New Expense</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To subscribe to this website, please enter your email address here.
-            We will send updates occasionally.
+            Enter your expense details here to split costs with friends!
           </DialogContentText>
           <form onSubmit={this.formSubmit}>
             <div className="form-group">
@@ -230,6 +229,7 @@ class AddExpense extends Component {
               type="submit"
               value="Submit"
               className="btn btn-success btn-block"
+              onClick={() => this.closeForm()}
             />
           </form>
         </DialogContent>
