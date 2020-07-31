@@ -7,11 +7,19 @@ import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import MaterialTable from "material-table";
 
 import MUIDataTable from "mui-datatables";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 
 import ExpenseList from "./ExpenseList";
 import WhoPaid from "./WhoPaid.js";
 import FriendsInvolved from "./FriendsInvolved";
 import LoadingSpinner from "../loading/LoadingSpinner";
+import MaterialExpenseList from "./MaterialExpenseList";
+// import { RenderExpenseTable } from "./MaterialExpenseList";
 
 class RenderMaterialTable extends Component {
   constructor(props) {
@@ -261,12 +269,15 @@ class RenderMaterialTable extends Component {
   //   }
 
   renderFriendHeader() {
-    const { friends } = this.props;
-    console.log(friends);
+    const { friends, expenses } = this.props;
+
     const columns = [
       {
         name: "expenseName",
         label: "Expense Name",
+        options: {
+          filter: true,
+        },
       },
       {
         name: "whoPaid",
@@ -299,78 +310,78 @@ class RenderMaterialTable extends Component {
           label: value.firstName,
         });
       });
-      console.log(columns);
+      //   console.log(columns);
       return columns;
     }
   }
 
-  render() {
-    const columns = this.renderFriendHeader();
+  renderMaterialExpense() {
+    const { expenses, friends, firestore, tripId } = this.props;
+    console.log(expenses);
 
-    const data = [
-      ["Joe James", "Test Corp", "Yonkers", "NY"],
-      ["John Walsh", "Test Corp", "Hartford", "CT"],
-      ["Bob Herm", "Test Corp", "Tampa", "FL"],
-      ["James Houston", "Test Corp", "Dallas", "TX"],
-    ];
-    this.renderFriendHeader();
-    return (
-      <>
-        {/* material-ui-datatables */}
-
-        <MUIDataTable
-          title={"Employee List"}
-          data={data}
-          columns={columns}
-          //   options={options}
+    const expensesList = _.map(expenses, (value, key) => {
+      return (
+        <ExpenseList
+          key={key}
+          expense={value}
+          friends={friends}
+          firestore={firestore}
+          tripId={tripId}
+          uid={this.props.uid}
         />
-        {/* // Old Table */}
+      );
+    });
 
-        <Table
-          key={_.map(this.props.friends, (value, key) => {
-            return key;
-          })}
-          className={"table table-striped table-bordered"}
-        >
-          <Thead>
-            <Tr>
-              <Th>Expense Name</Th>
-              <Th>Who Paid</Th>
-              <Th>Cost Per Person</Th>
-              {/* Insert name of friend as table heading */}
-              {/* {this.renderFriendHeader()} */}
-              <Th>Expense Amount</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {this.renderExpense()}
-            <Tr>
-              <Th colSpan="3">Total Owed</Th>
-              {this.renderTotalPerPerson(this.totalPerPerson())}
-              <Td className="table-success" style={{ color: "black" }}>
-                <strong>
-                  ${this.addTotalPaidExpenses(this.totalPerPerson())}
-                </strong>
-              </Td>
-            </Tr>
-            <Tr>
-              <Th colSpan="3">Total Paid</Th>
-              {this.renderTotalAmountPaidPerPerson()}
-              <Td className="table-success" style={{ color: "black" }}>
-                <strong>
-                  ${this.addTotalPaidExpenses(this.totalAmountPaidPerPerson())}
-                </strong>
-              </Td>
-            </Tr>
-            <Tr>
-              {/* TODO: have conditional colors for cells */}
-              <Th colSpan="3">Difference</Th>
-              {this.renderTotalDifferencePerPerson()}
-            </Tr>
-          </Tbody>
-        </Table>
-        {/* // </div> */}
-      </>
+    const expenseArr = [];
+    if (!isEmpty(expenses) && !isEmpty(friends)) {
+      //   console.log("expense: " + key, expense);
+      _.map(expenses, (value, key) => {
+        return expenseArr.push([
+          value.name,
+          null,
+          // this.renderWhoPaid(expenses.whoPaid),
+          parseFloat(
+            value.expenseAmount / value.friendsInvolved.length
+          ).toFixed(2),
+          null,
+          //    _.map(friends, (val, key) => {
+          //      return (
+          //        <Td key={key}>
+          //          <Toggle
+          //            checked={expenses.friendsInvolved.includes(val.id)}
+          //            value={val.id}
+          //            name="isIncluded"
+          //            onChange={() => {
+          //              expenses.friendsInvolved.includes(val.id)
+          //                ? this.removeIncluded(expenses, val.id)
+          //                : this.addIncluded(expenses, val.id);
+          //            }}
+          //          />
+          //        </Td>
+          //      );
+          //    }),
+          parseFloat(value.expenseAmount).toFixed(2),
+        ]);
+      });
+
+      //   console.log(expenseArr);
+      return expenseArr;
+    }
+  }
+
+  render() {
+    const columns1 = this.renderFriendHeader();
+
+    const data1 = this.renderMaterialExpense();
+    console.log(data1);
+
+    return (
+      <MUIDataTable
+        title={"Expenses"}
+        data={data1}
+        columns={columns1}
+        // options={options}
+      />
     );
   }
 }
@@ -398,8 +409,10 @@ export default compose(
     },
   ]),
 
-  connect(({ firestore: { ordered } }, props) => ({
+  connect(({ firestore: { ordered, data } }, props) => ({
     expenses: ordered[`${props.tripId}-expenses`],
     friends: ordered[`${props.tripId}-friends`],
+    expensesObj: data[`${props.tripId}-expenses`],
+    friendsObj: data[`${props.tripId}-friends`],
   }))
 )(RenderMaterialTable);
