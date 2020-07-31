@@ -6,6 +6,7 @@ import { firestoreConnect } from "react-redux-firebase";
 
 import FriendsInvolved from "./FriendsInvolved";
 
+// Material-UI components
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -13,6 +14,17 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import { makeStyles } from "@material-ui/core/styles";
+// import InputLabel from "@material-ui/core/InputLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+// import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import NativeSelect from "@material-ui/core/NativeSelect";
 
 class AddExpense extends Component {
   state = {
@@ -53,7 +65,11 @@ class AddExpense extends Component {
       >
         <option value="">Select Option</option>
         {_.map(friends, (value, key) => {
-          return <option value={value.id}>{value.firstName}</option>;
+          return (
+            <option key={key} value={value.id}>
+              {value.firstName}
+            </option>
+          );
         })}
       </select>
     );
@@ -64,6 +80,7 @@ class AddExpense extends Component {
   renderFriendsInvolved() {
     const { friends } = this.props;
     const { friendsInvolved } = this.state;
+
     const friendSelectMultiple = (
       <select
         multiple={true}
@@ -124,13 +141,21 @@ class AddExpense extends Component {
     });
   };
 
+  openForm = () => {
+    const { showForm } = this.state;
+
+    this.setState({
+      showForm: true,
+    });
+  };
+
   renderForm = () => {
     const { showForm, expense, amount } = this.state;
     // if (showForm) {
     return (
       <Dialog
         open={showForm}
-        onClose={!showForm}
+        onClose={() => this.closeForm()}
         aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
@@ -165,7 +190,22 @@ class AddExpense extends Component {
             </div>
 
             <div className="form-group">
-              <label>Amount</label>
+              <Input
+                // autoFocus
+                margin="dense"
+                id="amount"
+                label="Expense Amount"
+                type="number"
+                name="amount"
+                value={amount}
+                // className="form-control"
+                onChange={this.inputChange}
+                startAdornment={
+                  <InputAdornment position="start">$</InputAdornment>
+                }
+                fullWidth
+              />
+              {/* <label>Amount</label>
               <input
                 value={amount}
                 onChange={this.inputChange}
@@ -173,7 +213,7 @@ class AddExpense extends Component {
                 type="number"
                 id="amount"
                 name="amount"
-              />
+              /> */}
             </div>
             {/* Friends involved */}
             <div className="form-group">
