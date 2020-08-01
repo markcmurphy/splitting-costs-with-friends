@@ -443,23 +443,40 @@ class RenderMaterialTable extends Component {
     onRowsDelete: (rowsDeleted, data, newTableData) => {
       const expenseArr = this.renderMaterialExpense();
       //   console.log(expenseArr[rowsDeleted.data[0]]);
-      console.log(rowsDeleted.data[0].dataIndex);
-      console.log(
-        expenseArr[rowsDeleted.data[0].dataIndex][
-          expenseArr[rowsDeleted.data[0].dataIndex].length - 1
-        ]
-      );
+      //   console.log(rowsDeleted.data[0].dataIndex);
+      //   console.log(
+      //     expenseArr[rowsDeleted.data[0].dataIndex][
+      //       expenseArr[rowsDeleted.data[0].dataIndex].length - 1
+      //     ]
+      //   );
 
-      this.handleDelete(
-        expenseArr[rowsDeleted.data[0].dataIndex][
-          expenseArr[rowsDeleted.data[0].dataIndex].length - 1
-        ]
-      );
-      //   console.log(expenseArr[rowsDeleted.data[0].dataIndex].length - 1);
+      for (const i of rowsDeleted.data) {
+        this.handleDelete(
+          expenseArr[i.dataIndex][expenseArr[i.dataIndex].length - 1]
+        );
 
-      console.log(rowsDeleted);
-      console.log(data);
-      console.log(newTableData);
+        // this.handleDelete(
+        // console.log(
+
+        //     expenseArr[rowsDeleted.data[i.dataIndex].dataIndex][
+        //         expenseArr[rowsDeleted.data[i.dataIndex].dataIndex].length - 1
+        //     ]
+        //     )
+        // );
+      }
+
+      //   console.log(rowsDeleted.data.length);
+
+      // works
+      //   this.handleDelete(
+      //     expenseArr[rowsDeleted.data[0].dataIndex][
+      //       expenseArr[rowsDeleted.data[0].dataIndex].length - 1
+      //     ]
+      //   );
+
+      //   console.log(rowsDeleted);
+      //   console.log(data);
+      //   console.log(newTableData);
     },
   };
 
