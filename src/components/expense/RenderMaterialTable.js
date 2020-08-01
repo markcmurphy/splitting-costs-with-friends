@@ -299,7 +299,7 @@ class RenderMaterialTable extends Component {
       storeAs: `${tripId.id}-expenses`,
       subcollections: [
         { collection: "trips", doc: tripId },
-        { collection: "expenses", doc: expense.id },
+        { collection: "expenses", doc: expense },
       ],
     });
   };
@@ -414,6 +414,7 @@ class RenderMaterialTable extends Component {
         //   return value.friendsInvolved.includes(val.id);
         // }),
         parseFloat(value.expenseAmount).toFixed(2),
+        value.id,
       ]);
     });
 
@@ -438,7 +439,28 @@ class RenderMaterialTable extends Component {
     responsive: "vertical",
     tableBodyHeight: "500px",
     rowsPerPage: 15,
-    // resizableColumns: resizableColumns
+    resizableColumns: "resizableColumns",
+    onRowsDelete: (rowsDeleted, data, newTableData) => {
+      const expenseArr = this.renderMaterialExpense();
+      //   console.log(expenseArr[rowsDeleted.data[0]]);
+      console.log(rowsDeleted.data[0].dataIndex);
+      console.log(
+        expenseArr[rowsDeleted.data[0].dataIndex][
+          expenseArr[rowsDeleted.data[0].dataIndex].length - 1
+        ]
+      );
+
+      this.handleDelete(
+        expenseArr[rowsDeleted.data[0].dataIndex][
+          expenseArr[rowsDeleted.data[0].dataIndex].length - 1
+        ]
+      );
+      //   console.log(expenseArr[rowsDeleted.data[0].dataIndex].length - 1);
+
+      console.log(rowsDeleted);
+      console.log(data);
+      console.log(newTableData);
+    },
   };
 
   render() {
