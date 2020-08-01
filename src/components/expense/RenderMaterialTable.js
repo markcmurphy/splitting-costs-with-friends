@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Suspense } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
 import { compose } from "redux";
@@ -38,6 +38,7 @@ class RenderMaterialTable extends Component {
       total: 0,
       totals: {},
       data: [""],
+      switchA: true,
     };
   }
 
@@ -254,16 +255,84 @@ class RenderMaterialTable extends Component {
     return map;
   }
 
-  //   renderFriendHeader() {
-  //     const { friends } = this.props;
-  //     console.log(friends);
-  //     const friendsList = _.map(friends, (value, key) => {
-  //       return <Th key={key}>{value.firstName}</Th>;
-  //     });
-  //     if (!isEmpty(friends)) {
-  //       return friendsList;
-  //     }
-  //   }
+  // handles input from form
+  handleInputChange = (e) => {
+    const target = e.target;
+    const value = target.name === "isIncluded" ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value,
+    });
+  };
+
+  // upon checkbox click, adds friend to friendsIncluded array on expense and updates Firestore
+  addIncluded = (expense, id) => {
+    const { firestore, tripId, uid } = this.props;
+    // Update expense
+    const updExpense = {
+      friendsInvolved: expense.friendsInvolved.concat(id),
+    };
+    console.log("Added: " + expense.id, id);
+
+    // update expense in firestore
+    firestore.update(
+      {
+        collection: "users",
+        doc: uid,
+        storeAs: `${tripId}-expenses`,
+        subcollections: [
+          { collection: "trips", doc: tripId },
+          { collection: "expenses", doc: expense.id },
+        ],
+      },
+      updExpense
+    );
+  };
+
+  // handles deletion of expense from Firestore
+  handleDelete = (expense) => {
+    const { expenses, firestore, tripId, uid } = this.props;
+    firestore.delete({
+      collection: "users",
+      doc: uid,
+      storeAs: `${tripId.id}-expenses`,
+      subcollections: [
+        { collection: "trips", doc: tripId },
+        { collection: "expenses", doc: expense.id },
+      ],
+    });
+  };
+
+  // upon checkbox click, removes friend from friendsIncluded array on expense and updates Firestore
+  removeIncluded = (expense, id) => {
+    const { firestore, tripId, uid } = this.props;
+    // console.log(this.props);
+    console.log("Removed: " + expense.id, id);
+
+    // Update expense
+    const updExpense = {
+      friendsInvolved: expense.friendsInvolved.filter(
+        (item) => !id.includes(item)
+      ),
+    };
+
+    console.log(updExpense);
+
+    // update expense in firestore
+    firestore.update(
+      {
+        collection: "users",
+        doc: uid,
+        storeAs: `${tripId}-expenses`,
+        subcollections: [
+          { collection: "trips", doc: tripId },
+          { collection: "expenses", doc: expense.id },
+        ],
+      },
+      updExpense
+    );
+  };
 
   renderFriendHeader() {
     const { friends, expenses } = this.props;
@@ -290,17 +359,7 @@ class RenderMaterialTable extends Component {
         label: "Expense Amount",
       },
     ];
-    // const friendsList = _.map(friends, (value, key) => {
-    //   columns.push({
-    //       title: value.firstName,
-    //       label: value.firstName
-    //   })
-    //   return <Th key={key}>{value.firstName}</Th>;
-    // });
 
-    //   return <Th key={key}>{value.firstName}</Th>;
-
-    // if (!isEmpty(friends)) {
     _.map(friends, (val, key) => {
       columns.splice(3, 0, {
         name: val.firstName,
@@ -308,17 +367,16 @@ class RenderMaterialTable extends Component {
         options: {
           customBodyRender: (value, tableMeta, updateValue) => {
             return (
-              <Toggle
-                //   checked={expenses.friendsInvolved.includes(val.id)}
+              <Switch
                 checked={value}
-                // index={tableMeta.columnIndex - 3}
-                value={val.id}
-                name="isIncluded"
-                //   onChange={() => {
-                //     expense.friendsInvolved.includes(val.id)
-                //       ? this.removeIncluded(expense, val.id)
-                //       : this.addIncluded(expense, val.id);
-                //   }}
+                value={value}
+                name={"switchA"}
+                color="primary"
+                onChange={() => {
+                  value
+                    ? this.removeIncluded(expenses[tableMeta.rowIndex], val.id)
+                    : this.addIncluded(expenses[tableMeta.rowIndex], val.id);
+                }}
               />
             );
           },
@@ -333,7 +391,7 @@ class RenderMaterialTable extends Component {
     const expenseArr = [];
     const expenseArr2 = [];
 
-    _.flatMap(expenses, (value, key) => {
+    _.map(expenses, (value, key) => {
       return expenseArr.push([
         //   expense name
         value.name,
@@ -346,9 +404,15 @@ class RenderMaterialTable extends Component {
         ),
 
         // null,
-        _.map(friends, (val, key) => {
-          return value.friendsInvolved.includes(val.id);
-        }),
+        friends
+          .slice(0)
+          .reverse()
+          .map((val, key) => {
+            return value.friendsInvolved.includes(val.id);
+          }),
+        // _.map(friends, (val, key) => {
+        //   return value.friendsInvolved.includes(val.id);
+        // }),
         parseFloat(value.expenseAmount).toFixed(2),
       ]);
     });
@@ -356,43 +420,44 @@ class RenderMaterialTable extends Component {
     for (const expense of expenseArr) {
       expenseArr2.push(expense.flat());
     }
-    console.log(expenseArr2);
+
     return expenseArr2;
   }
 
   //   lifecycle tests
-  componentDidMount() {
-    // console.log("Mounted!");
-    // this.renderMaterialExpense();
-  }
-
+  componentDidMount() {}
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.data !== this.state.data) {
-      //   console.log("Updated!");
-      //   this.renderFriendHeader();
+    if (prevProps.expenses !== this.props.expenses) {
+      console.log("Updated!");
     }
   }
+
+  options = {
+    filter: true,
+    filterType: "dropdown",
+    responsive: "vertical",
+    tableBodyHeight: "500px",
+    rowsPerPage: 15,
+    // resizableColumns: resizableColumns
+  };
 
   render() {
-    const columns1 = this.renderFriendHeader();
-
-    const data1 = this.renderMaterialExpense();
-
-    if (!isEmpty(this.state.data)) {
-      return (
+    console.log(this.options);
+    return (
+      <Suspense fallback={<LoadingSpinner />}>
         <MUIDataTable
           title={"Expenses"}
-          data={data1}
-          columns={columns1}
-          // options={options}
+          data={this.props.friends ? this.renderMaterialExpense() : [""]}
+          columns={this.props.friends ? this.renderFriendHeader() : [""]}
+          options={this.options}
         />
-      );
-    }
+      </Suspense>
+    );
   }
 }
 
+// gets clients from firestore and puts them in the clients prop
 export default compose(
-  // gets clients from firestore and puts them in the clients prop
   firestoreConnect((props) => [
     {
       collection: "users",
@@ -414,10 +479,8 @@ export default compose(
     },
   ]),
 
-  connect(({ firestore: { ordered, data } }, props) => ({
+  connect(({ firestore: { ordered } }, props) => ({
     expenses: ordered[`${props.tripId}-expenses`],
     friends: ordered[`${props.tripId}-friends`],
-    expensesObj: data[`${props.tripId}-expenses`],
-    friendsObj: data[`${props.tripId}-friends`],
   }))
 )(RenderMaterialTable);
