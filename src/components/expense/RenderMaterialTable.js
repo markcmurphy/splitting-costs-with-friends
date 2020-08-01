@@ -13,6 +13,10 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import Switch from "@material-ui/core/Switch";
+
+import Toggle from "react-toggle";
+import "react-toggle/style.css";
 
 import ExpenseList from "./ExpenseList";
 import WhoPaid from "./WhoPaid.js";
@@ -33,15 +37,8 @@ class RenderMaterialTable extends Component {
       whoPaid: "",
       total: 0,
       totals: {},
+      data: [""],
     };
-  }
-
-  //   lifecycle tests
-  componentDidUpdate() {
-    console.log("Updated!");
-  }
-  componentDidMount() {
-    console.log("Mounted!");
   }
 
   addTotalExpenses = () => {
@@ -303,69 +300,76 @@ class RenderMaterialTable extends Component {
 
     //   return <Th key={key}>{value.firstName}</Th>;
 
-    if (!isEmpty(friends)) {
-      friends.forEach((value) => {
-        columns.splice(3, 0, {
-          name: value.firstName,
-          label: value.firstName,
-        });
+    // if (!isEmpty(friends)) {
+    _.map(friends, (val, key) => {
+      columns.splice(3, 0, {
+        name: val.firstName,
+        label: val.firstName,
+        options: {
+          customBodyRender: (value, tableMeta, updateValue) => {
+            return (
+              <Toggle
+                //   checked={expenses.friendsInvolved.includes(val.id)}
+                checked={value}
+                // index={tableMeta.columnIndex - 3}
+                value={val.id}
+                name="isIncluded"
+                //   onChange={() => {
+                //     expense.friendsInvolved.includes(val.id)
+                //       ? this.removeIncluded(expense, val.id)
+                //       : this.addIncluded(expense, val.id);
+                //   }}
+              />
+            );
+          },
+        },
       });
-      //   console.log(columns);
-      return columns;
-    }
+    });
+    return columns;
   }
 
   renderMaterialExpense() {
     const { expenses, friends, firestore, tripId } = this.props;
-    console.log(expenses);
+    const expenseArr = [];
+    const expenseArr2 = [];
 
-    const expensesList = _.map(expenses, (value, key) => {
-      return (
-        <ExpenseList
-          key={key}
-          expense={value}
-          friends={friends}
-          firestore={firestore}
-          tripId={tripId}
-          uid={this.props.uid}
-        />
-      );
+    _.flatMap(expenses, (value, key) => {
+      return expenseArr.push([
+        //   expense name
+        value.name,
+        // who paid
+        null,
+        // this.renderWhoPaid(expenses.whoPaid),
+        // cost per person
+        parseFloat(value.expenseAmount / value.friendsInvolved.length).toFixed(
+          2
+        ),
+
+        // null,
+        _.map(friends, (val, key) => {
+          return value.friendsInvolved.includes(val.id);
+        }),
+        parseFloat(value.expenseAmount).toFixed(2),
+      ]);
     });
 
-    const expenseArr = [];
-    if (!isEmpty(expenses) && !isEmpty(friends)) {
-      //   console.log("expense: " + key, expense);
-      _.map(expenses, (value, key) => {
-        return expenseArr.push([
-          value.name,
-          null,
-          // this.renderWhoPaid(expenses.whoPaid),
-          parseFloat(
-            value.expenseAmount / value.friendsInvolved.length
-          ).toFixed(2),
-          null,
-          //    _.map(friends, (val, key) => {
-          //      return (
-          //        <Td key={key}>
-          //          <Toggle
-          //            checked={expenses.friendsInvolved.includes(val.id)}
-          //            value={val.id}
-          //            name="isIncluded"
-          //            onChange={() => {
-          //              expenses.friendsInvolved.includes(val.id)
-          //                ? this.removeIncluded(expenses, val.id)
-          //                : this.addIncluded(expenses, val.id);
-          //            }}
-          //          />
-          //        </Td>
-          //      );
-          //    }),
-          parseFloat(value.expenseAmount).toFixed(2),
-        ]);
-      });
+    for (const expense of expenseArr) {
+      expenseArr2.push(expense.flat());
+    }
+    console.log(expenseArr2);
+    return expenseArr2;
+  }
 
-      //   console.log(expenseArr);
-      return expenseArr;
+  //   lifecycle tests
+  componentDidMount() {
+    // console.log("Mounted!");
+    // this.renderMaterialExpense();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.data !== this.state.data) {
+      //   console.log("Updated!");
+      //   this.renderFriendHeader();
     }
   }
 
@@ -373,16 +377,17 @@ class RenderMaterialTable extends Component {
     const columns1 = this.renderFriendHeader();
 
     const data1 = this.renderMaterialExpense();
-    console.log(data1);
 
-    return (
-      <MUIDataTable
-        title={"Expenses"}
-        data={data1}
-        columns={columns1}
-        // options={options}
-      />
-    );
+    if (!isEmpty(this.state.data)) {
+      return (
+        <MUIDataTable
+          title={"Expenses"}
+          data={data1}
+          columns={columns1}
+          // options={options}
+        />
+      );
+    }
   }
 }
 
