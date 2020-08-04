@@ -304,6 +304,23 @@ class RenderMaterialTable extends Component {
     });
   };
 
+  // renders name of friend who paid for expense
+  renderWhoPaid(whoPaid) {
+    // console.log(whoPaid);
+    const { friends } = this.props;
+    // console.log(friends);
+    for (const friend of friends) {
+      if (friend.id === whoPaid) {
+        return friend.firstName;
+      }
+    }
+    // if (friendsObj && friendsObj[whoPaid]) {
+    //   return friendsObj[whoPaid].firstName;
+    // } else {
+    //   return null;
+    // }
+  }
+
   // upon checkbox click, removes friend from friendsIncluded array on expense and updates Firestore
   removeIncluded = (expense, id) => {
     const { firestore, tripId, uid } = this.props;
@@ -396,8 +413,8 @@ class RenderMaterialTable extends Component {
         //   expense name
         value.name,
         // who paid
-        null,
-        // this.renderWhoPaid(expenses.whoPaid),
+        // null,
+        this.renderWhoPaid(value.whoPaid),
         // cost per person
         parseFloat(value.expenseAmount / value.friendsInvolved.length).toFixed(
           2
