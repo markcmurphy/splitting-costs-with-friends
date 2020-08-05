@@ -5,16 +5,16 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 import store, { rrfProps } from "./store";
 
-import App from "./App";
+import App2 from "./App2";
 import * as serviceWorker from "./serviceWorker";
-import "./index.css";
-import "./App.css";
+// import "./index.css";
+// import "./App.css";
 
 ReactDOM.render(
   <Provider store={store}>
     <ReactReduxFirebaseProvider {...rrfProps}>
       <Router>
-        <App />
+        <App2 />
       </Router>
     </ReactReduxFirebaseProvider>
   </Provider>,

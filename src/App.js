@@ -25,6 +25,7 @@ import RenderExpenseList from "./components/expense/RenderExpenseList";
 import AddNewTrip from "./components/trips/AddNewTrip";
 import ListTrips from "./components/trips/ListTrips";
 import RenderMaterialTable from "./components/expense/RenderMaterialTable";
+import MaterialSideBar from "./components/layout/MaterialSidebar";
 
 class App extends Component {
   render() {
@@ -35,6 +36,7 @@ class App extends Component {
           <header>
             <Navbar />
           </header>
+          {/* <MaterialSideBar /> */}
           <nav>
             <Switch>
               <Route

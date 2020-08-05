@@ -498,7 +498,7 @@ class RenderMaterialTable extends Component {
   };
 
   render() {
-    console.log(this.options);
+    // console.log(this.options);
     return (
       <Suspense fallback={<LoadingSpinner />}>
         <MUIDataTable
