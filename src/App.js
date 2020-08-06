@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "react-super-responsive-table/dist/SuperResponsiveTableStyle.css";
 import { UserIsAuthenticated, UserIsNotAuthenticated } from "./helpers/auth";
 import {
   BrowserRouter as Router,
@@ -27,41 +26,231 @@ import ListTrips from "./components/trips/ListTrips";
 import RenderMaterialTable from "./components/expense/RenderMaterialTable";
 import MaterialSideBar from "./components/layout/MaterialSidebar";
 
+import AppBar from "@material-ui/core/AppBar";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Divider from "@material-ui/core/Divider";
+import Drawer from "@material-ui/core/Drawer";
+import Hidden from "@material-ui/core/Hidden";
+import IconButton from "@material-ui/core/IconButton";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import MailIcon from "@material-ui/icons/Mail";
+import MenuIcon from "@material-ui/icons/Menu";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import { Theme } from "@material-ui/core/styles/createMuiTheme";
+import Menu from "@material-ui/core/Menu";
+
+import MenuItem from "@material-ui/core/MenuItem";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import {
+  makeStyles,
+  useTheme,
+  withTheme,
+  withStyles,
+} from "@material-ui/core/styles";
+import MenuAppBar from "./components/layout/MenuAppBar";
+import MatNavBar from "./components/layout/MatNavBar";
+
+const drawerWidth = 200;
+
+const useStyles = (theme) => ({
+  root: {
+    display: "flex",
+  },
+  drawer: {
+    [theme.breakpoints.up("sm")]: {
+      width: drawerWidth,
+      flexShrink: 0,
+
+      // backgroundColor: "red",
+    },
+  },
+  appBar: {
+    [theme.breakpoints.up("sm")]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up("sm")]: {
+      display: "none",
+    },
+  },
+  // necessary for content to be below app bar
+  toolbar: theme.mixins.toolbar,
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+});
+
+const classes = useStyles;
+
 class App extends Component {
+  state = {
+    mobileOpen: false,
+    anchorEl: null,
+  };
+
+  handleMenu = (event) => {
+    this.setState({
+      anchorEl: event.currentTarget,
+    });
+  };
+
+  handleClose = () => {
+    this.setState({
+      anchorEl: null,
+    });
+  };
+  handleDrawerToggle = () => {
+    this.setState({
+      mobileOpen: !this.state.mobileOpen,
+    });
+  };
+  container = window !== undefined ? () => window().document.body : undefined;
   render() {
-    const { auth, ...props } = this.props;
+    // const handleOpen = () => {
+    //   this.setState({
+    //     anchorEl: Boolean(this.state.anchorEl),
+    //   });
+    // };
+
+    const { window } = this.props;
+
+    const { classes, auth, ...props } = this.props;
+
+    const drawer = (
+      <div>
+        <div className={classes.toolbar} />
+        <Switch>
+          <Route
+            {...props}
+            exact
+            path="/"
+            component={
+              (this.UserIsAuthenticated = () =>
+                auth.uid ? <Sidebar uid={auth.uid} /> : null)
+            }
+          />
+          <Route
+            {...props}
+            exact
+            path="/trip/:id"
+            component={
+              (this.UserIsAuthenticated = ({ match }) =>
+                auth.uid ? (
+                  <Sidebar id={match.params.id} uid={auth.uid} />
+                ) : null)
+            }
+          />
+        </Switch>
+      </div>
+    );
+
     return (
       <Router basename={process.env.PUBLIC_URL}>
-        <div className="App">
-          <header>
+        <div className={classes.root}>
+          <CssBaseline />
+          {/* <div className="App"> */}
+          {/* <header>
             <Navbar />
-          </header>
-          {/* <MaterialSideBar /> */}
-          <nav>
-            <Switch>
-              <Route
-                {...props}
-                exact
-                path="/"
-                component={
-                  (this.UserIsAuthenticated = () =>
-                    auth.uid ? <Sidebar uid={auth.uid} /> : null)
+          </header> */}
+          {/* <MenuAppBar props={this.props} drawerWidth={drawerWidth} /> */}
+          <AppBar position="fixed" className={classes.appBar}>
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={this.handleDrawerToggle}
+                className={classes.menuButton}
+              >
+                <MenuIcon />
+              </IconButton>
+
+              <Typography variant="h6" className={classes.title}>
+                Splitting Costs with Friends!
+              </Typography>
+              {auth.uid ? (
+                <div>
+                  <IconButton
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={(e) => this.handleMenu(e)}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={this.state.anchorEl}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    open={this.state.anchorEl}
+                    onClose={this.handleClose}
+                  >
+                    <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                  </Menu>
+                </div>
+              ) : null}
+            </Toolbar>
+          </AppBar>
+
+          <nav className={classes.drawer}>
+            {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+            <Hidden smUp implementation="css">
+              <Drawer
+                container={
+                  window !== undefined
+                    ? () => window().document.body
+                    : undefined
                 }
-              />
-              <Route
-                {...props}
-                exact
-                path="/trip/:id"
-                component={
-                  (this.UserIsAuthenticated = ({ match }) =>
-                    auth.uid ? (
-                      <Sidebar id={match.params.id} uid={auth.uid} />
-                    ) : null)
-                }
-              />
-            </Switch>
+                variant="temporary"
+                // anchor={theme.direction === "rtl" ? "right" : "left"}
+                open={this.state.mobileOpen}
+                onClose={this.handleDrawerToggle}
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+                ModalProps={{
+                  keepMounted: true, // Better open performance on mobile.
+                }}
+              >
+                {drawer}
+              </Drawer>
+            </Hidden>
+            <Hidden xsDown implementation="css">
+              <Drawer
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+                variant="permanent"
+                open
+              >
+                {drawer}
+              </Drawer>
+            </Hidden>
           </nav>
-          <main>
+          <main className={classes.content}>
+            <div className={classes.toolbar} />
             <Switch>
               <Route
                 exact
@@ -115,8 +304,9 @@ class App extends Component {
               <Route exact path="/" component={UserIsNotAuthenticated(Login)} />
             </Switch>
           </main>
-          <footer style={{ backgroundColor: "lightGrey" }}>Mark Murphy</footer>
+          {/* <footer style={{ backgroundColor: "lightGrey" }}>Mark Murphy</footer> */}
         </div>
+        {/* </div> */}
       </Router>
     );
   }
@@ -127,5 +317,6 @@ export default compose(
   connect((state) => ({
     // tripID: state.id,
     auth: state.firebase.auth,
-  }))
+  })),
+  withStyles(useStyles, { withTheme: true })
 )(App);

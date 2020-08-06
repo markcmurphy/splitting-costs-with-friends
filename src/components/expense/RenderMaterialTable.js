@@ -454,7 +454,7 @@ class RenderMaterialTable extends Component {
     filter: true,
     filterType: "dropdown",
     responsive: "vertical",
-    tableBodyHeight: "500px",
+    // tableBodyHeight: "500px",
     rowsPerPage: 15,
     resizableColumns: "resizableColumns",
     onRowsDelete: (rowsDeleted, data, newTableData) => {

@@ -11,7 +11,7 @@ import Divider from "@material-ui/core/Divider";
 export default function Sidebar(props) {
   const { id } = useParams();
   return (
-    <div>
+    <div style={{ paddingLeft: "10%" }}>
       {/* <div className="alert alert-info mt-4" role="alert">
         Add friend or friends prior to adding expense!
       </div> */}

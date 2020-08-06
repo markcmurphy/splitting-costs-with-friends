@@ -179,7 +179,7 @@ class ExpenseList extends Component {
       }),
       parseFloat(expense.expenseAmount).toFixed(2),
     ]);
-    console.log(expenseArr);
+    // console.log(expenseArr);
 
     return expenseArr;
     //   <Tr key={this.props.key}>
