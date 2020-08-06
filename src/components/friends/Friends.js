@@ -7,6 +7,9 @@ import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 
 import FriendDetails from "./FriendDetails";
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+
+import PersonAddIcon from "@material-ui/icons/PersonAdd";
 
 class Friends extends Component {
   constructor(props) {
@@ -123,15 +126,20 @@ class Friends extends Component {
           // >
           //   Close
           // </button>
+          <div>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => this.setState({ showForm: !showForm })}
+              style={{ marginTop: "5px" }}
+            >
+              Add Friend
+            </Button>
+            <IconButton aria-label="delete" color="primary">
+              <PersonAddIcon />
+            </IconButton>
+          </div>
 
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => this.setState({ showForm: !showForm })}
-            style={{ marginTop: "5px" }}
-          >
-            Add Friend
-          </Button>
           // <button
           //   className="btn btn-secondary btn-block mt-4"
           //   onClick={() => this.setState({ showForm: !showForm })}

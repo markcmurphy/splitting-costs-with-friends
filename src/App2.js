@@ -52,7 +52,7 @@ import {
   withStyles,
 } from "@material-ui/core/styles";
 
-const drawerWidth = 200;
+const drawerWidth = 240;
 
 // const theme = withTheme();
 

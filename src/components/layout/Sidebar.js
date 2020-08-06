@@ -6,14 +6,15 @@ import { Route, useParams } from "react-router-dom";
 
 import AddNewTrip from "../trips/AddNewTrip";
 import ListTrips from "../trips/ListTrips";
+import Divider from "@material-ui/core/Divider";
 
 export default function Sidebar(props) {
   const { id } = useParams();
   return (
     <div>
-      <div className="alert alert-info mt-4" role="alert">
+      {/* <div className="alert alert-info mt-4" role="alert">
         Add friend or friends prior to adding expense!
-      </div>
+      </div> */}
       <>
         {props ? (
           <>
@@ -22,6 +23,8 @@ export default function Sidebar(props) {
           </>
         ) : null}
       </>
+      <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
+
       <Route
         path="/trip/:id"
         render={() => (
