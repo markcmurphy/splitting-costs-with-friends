@@ -5,7 +5,11 @@ import {
   Route,
   Switch,
   useLocation,
+  useHistory,
+  withRouter,
+  Link as RouterLink,
 } from "react-router-dom";
+import Link from "@material-ui/core/Link";
 
 import { compose } from "redux";
 
@@ -65,8 +69,6 @@ const useStyles = (theme) => ({
     [theme.breakpoints.up("sm")]: {
       width: drawerWidth,
       flexShrink: 0,
-
-      // backgroundColor: "red",
     },
   },
   appBar: {
@@ -106,24 +108,27 @@ class App extends Component {
     });
   };
 
+  onLogoutClick = (e) => {
+    e.preventDefault();
+    const { firebase } = this.props;
+    firebase.logout().then(this.props.history.push("/login"));
+  };
+
   handleClose = () => {
     this.setState({
       anchorEl: null,
     });
   };
+
   handleDrawerToggle = () => {
     this.setState({
       mobileOpen: !this.state.mobileOpen,
     });
   };
-  container = window !== undefined ? () => window().document.body : undefined;
-  render() {
-    // const handleOpen = () => {
-    //   this.setState({
-    //     anchorEl: Boolean(this.state.anchorEl),
-    //   });
-    // };
 
+  container = window !== undefined ? () => window().document.body : undefined;
+
+  render() {
     const { window } = this.props;
 
     const { classes, auth, ...props } = this.props;
@@ -176,7 +181,6 @@ class App extends Component {
               >
                 <MenuIcon />
               </IconButton>
-
               <Typography variant="h6" className={classes.title}>
                 Splitting Costs with Friends!
               </Typography>
@@ -203,14 +207,25 @@ class App extends Component {
                       vertical: "top",
                       horizontal: "right",
                     }}
-                    open={this.state.anchorEl}
+                    open={Boolean(this.state.anchorEl)}
                     onClose={this.handleClose}
                   >
-                    <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                    <MenuItem onClick={this.handleClose}>{auth.email}</MenuItem>
                     <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                    <MenuItem onClick={this.onLogoutClick}>Logout</MenuItem>
                   </Menu>
                 </div>
-              ) : null}
+              ) : (
+                <>
+                  <Link component={RouterLink} to="/login">
+                    Login
+                  </Link>
+
+                  <Link component={RouterLink} to="/register">
+                    Register
+                  </Link>
+                </>
+              )}
             </Toolbar>
           </AppBar>
 
@@ -314,9 +329,11 @@ class App extends Component {
 
 // export default App;
 export default compose(
+  withStyles(useStyles, { withTheme: true }),
+  firebaseConnect(),
   connect((state) => ({
     // tripID: state.id,
     auth: state.firebase.auth,
   })),
-  withStyles(useStyles, { withTheme: true })
+  withRouter
 )(App);
