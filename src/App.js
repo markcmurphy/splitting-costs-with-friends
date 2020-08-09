@@ -195,6 +195,7 @@ class App extends Component {
                   >
                     <AccountCircle />
                   </IconButton>
+
                   <Menu
                     id="menu-appbar"
                     anchorEl={this.state.anchorEl}
@@ -216,15 +217,19 @@ class App extends Component {
                   </Menu>
                 </div>
               ) : (
-                <>
-                  <Link component={RouterLink} to="/login">
+                <Typography variant="h6" className={classes.title}>
+                  <Link
+                    style={{ color: "white" }}
+                    component={RouterLink}
+                    to="/login"
+                  >
                     Login
                   </Link>
 
                   <Link component={RouterLink} to="/register">
                     Register
                   </Link>
-                </>
+                </Typography>
               )}
             </Toolbar>
           </AppBar>
