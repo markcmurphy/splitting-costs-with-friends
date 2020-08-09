@@ -5,9 +5,9 @@ import { compose } from "redux";
 import { firestoreConnect, isLoaded, isEmpty } from "react-redux-firebase";
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 
-import ExpenseList from "./ExpenseList";
-import WhoPaid from "./WhoPaid.js";
-import FriendsInvolved from "./FriendsInvolved";
+import ExpenseList from "../expense/ExpenseList";
+import WhoPaid from "../expense/WhoPaid.js";
+import FriendsInvolved from "../expense/FriendsInvolved";
 import LoadingSpinner from "../loading/LoadingSpinner";
 
 class RenderExpenseList extends Component {

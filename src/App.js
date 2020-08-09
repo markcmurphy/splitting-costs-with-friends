@@ -24,7 +24,7 @@ import LoadingSpinner from "./components/loading/LoadingSpinner";
 import { queryAllByAltText } from "@testing-library/react";
 import Trip from "./components/trips/Trip";
 import Sidebar from "./components/layout/Sidebar";
-import RenderExpenseList from "./components/expense/RenderExpenseList";
+import RenderExpenseList from "./components/unused/RenderExpenseList";
 import AddNewTrip from "./components/trips/AddNewTrip";
 import ListTrips from "./components/trips/ListTrips";
 import RenderMaterialTable from "./components/expense/RenderMaterialTable";

@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { firestoreConnect, isEmpty } from "react-redux-firebase";
 import _ from "lodash";
-import EditExpense from "./EditExpense";
+import EditExpense from "../expense/EditExpense";
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import Toggle from "react-toggle";
 import "react-toggle/style.css";

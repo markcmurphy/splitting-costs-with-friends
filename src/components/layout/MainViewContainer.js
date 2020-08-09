@@ -1,5 +1,5 @@
 import React from "react";
-import RenderExpenseList from "../expense/RenderExpenseList";
+import RenderExpenseList from "../unused/RenderExpenseList";
 import AddExpense from "../expense/AddExpense";
 
 export default function MainViewContainer(props) {

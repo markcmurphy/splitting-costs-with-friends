@@ -18,17 +18,19 @@ import Switch from "@material-ui/core/Switch";
 import Toggle from "react-toggle";
 import "react-toggle/style.css";
 
+import ContentEditable from "react-contenteditable";
+
 import ExpenseList from "./ExpenseList";
 import WhoPaid from "./WhoPaid.js";
 import FriendsInvolved from "./FriendsInvolved";
 import LoadingSpinner from "../loading/LoadingSpinner";
-import MaterialExpenseList from "./MaterialExpenseList";
+import MaterialExpenseList from "../unused/MaterialExpenseList";
 // import { RenderExpenseTable } from "./MaterialExpenseList";
 
 class RenderMaterialTable extends Component {
   constructor(props) {
-    // console.log(props);
     super(props);
+    this.contentEditable = React.createRef();
     this.state = {
       showForm: false,
       expense: "",
@@ -37,8 +39,14 @@ class RenderMaterialTable extends Component {
       whoPaid: "",
       total: 0,
       totals: {},
-      data: [""],
-      switchA: true,
+      html: "Edit <b>me</b> !",
+
+      // data: [""],
+      // switchA: true,
+      // html: "Hello World",
+      // nameState: "",
+      // row: "",
+      // friends: this.props.friends,
     };
   }
 
@@ -102,32 +110,32 @@ class RenderMaterialTable extends Component {
     return <div>{friendSelectMultiple}</div>;
   }
 
-  renderExpense() {
-    const { expenses, friends, firestore, tripId } = this.props;
+  // renderExpense() {
+  //   const { expenses, friends, firestore, tripId } = this.props;
 
-    const expensesList = _.map(expenses, (value, key) => {
-      return (
-        <ExpenseList
-          key={key}
-          expense={value}
-          friends={friends}
-          firestore={firestore}
-          tripId={tripId}
-          uid={this.props.uid}
-        />
-      );
-    });
-    if (!isEmpty(expenses) && !isEmpty(friends)) {
-      return expensesList;
-    }
-    return (
-      <Tr>
-        <Td className="mt-4">
-          <h4>You have no expenses logged!</h4>
-        </Td>
-      </Tr>
-    );
-  }
+  //   const expensesList = _.map(expenses, (value, key) => {
+  //     return (
+  //       <ExpenseList
+  //         key={key}
+  //         expense={value}
+  //         friends={friends}
+  //         firestore={firestore}
+  //         tripId={tripId}
+  //         uid={this.props.uid}
+  //       />
+  //     );
+  //   });
+  //   if (!isEmpty(expenses) && !isEmpty(friends)) {
+  //     return expensesList;
+  //   }
+  //   return (
+  //     <Tr>
+  //       <Td className="mt-4">
+  //         <h4>You have no expenses logged!</h4>
+  //       </Td>
+  //     </Tr>
+  //   );
+  // }
 
   totalPerPerson() {
     const { friends, expenses } = this.props;
@@ -360,6 +368,54 @@ class RenderMaterialTable extends Component {
         label: "Expense Name",
         options: {
           filter: true,
+          customBodyRender: (value, tableMeta, updateValue) => {
+            // console.log(tableMeta.currentTableData);
+            console.log(value.name);
+            console.log("value: " + value);
+            // console.table(tableMeta);
+
+            // console.log("updateValue: " + updateValue);
+            return (
+              <ContentEditable
+                html={value.name[0]}
+                // html={this.state.html}
+                // html={this.contentEditable}
+                // index={tableMeta.columnIndex}
+                // rowindex={tableMeta.rowIndex}
+                data-column="name"
+                data-value={value.name}
+                data-row={tableMeta.rowIndex}
+                // innerRef={this.contentEditable}
+                disabled={false}
+                onChange={(e) =>
+                  this.handleContentEditableUpdate(
+                    e,
+                    expenses[tableMeta.rowIndex]
+                  )
+                }
+                // onBlur={this.handleChange}
+                // onBlur={() => console.log(expenses[tableMeta.rowIndex])}
+                // onBlur={(e) =>
+                //   this.handleChange(e, expenses[tableMeta.rowIndex])
+                // }
+                // onBlur={() => console.log(this.state)}
+              />
+              // <ContentEditable
+              //   key={key}
+              //   data-column="name"
+              //   data-row={key}
+              //   innerRef={this.contentEditable}
+              //   html={value.name} // innerHTML of the editable div
+              //   disabled={false} // use true to disable editing
+              //   onChange={
+              //     // this.handleChange
+              //     this.handleContentEditableUpdate
+              //     // (e) => this.fieldUpdate(e, value.id)
+              //   } // handle innerHTML change
+              //   tagName="article" // Use a custom HTML tag (uses a div by default)
+              // />
+            );
+          },
         },
       },
       {
@@ -403,15 +459,111 @@ class RenderMaterialTable extends Component {
     return columns;
   }
 
+  // nameState = (name) => {
+  //   this.setState({
+  //     nameState: name,
+  //   });
+  // };
+
+  handleChange = (evt) => {
+    console.log(evt.target.value);
+
+    // console.log(id);
+    // this.setState({ html: evt.target.value });
+  };
+
+  handleContentEditableUpdate = (event, expense) => {
+    const { expenses, friends, firestore, tripId, uid } = this.props;
+    const {
+      currentTarget: {
+        dataset: { row, column },
+        innerText: { text },
+      },
+      target: { value },
+    } = event;
+
+    // console.log(event);
+    // console.log(event.currentTarget.value);
+    console.log([text]);
+    console.log([value]);
+    console.log([column]);
+    console.log(parseInt([row], 10));
+    // this.setState({ html: "new!" });
+    // Update friend
+    const updExpense = {
+      name: [value],
+    };
+
+    console.log(expense.id);
+    // update friend in firestore
+    // update expense in firestore
+    firestore.update(
+      {
+        collection: "users",
+        doc: uid,
+        storeAs: `${tripId}-expense`,
+        subcollections: [
+          { collection: "trips", doc: tripId },
+          { collection: "expenses", doc: expense.id },
+        ],
+      },
+      updExpense
+    );
+
+    // console.log(this.state);
+    // console.log(currentTarget);
+    // console.log(event.currentTarget.dataset.column);
+    // this.setState(({ store }) => {
+    //   return {
+    //     store: store.map((item) => {
+    //       return item.id === parseInt(row, 10)
+    //         ? { ...item, [column]: value }
+    //         : item;
+    //     }),
+    //   };
+    // });
+  };
+
+  fieldUpdate = (e, id) => {
+    // e.preventDefault();
+    console.log(id);
+    console.log(e.target.value);
+    const { firestore, friend } = this.props;
+
+    // Update friend
+    const updExpense = {
+      name: e.target.value,
+    };
+
+    // update friend in firestore
+    firestore.update({ collection: "expenses", doc: id }, updExpense);
+  };
+
   renderMaterialExpense() {
     const { expenses, friends, firestore, tripId } = this.props;
     const expenseArr = [];
     const expenseArr2 = [];
 
     _.map(expenses, (value, key) => {
+      // console.log(key);
+      // console.log(this.contentEditable);
       return expenseArr.push([
         //   expense name
-        value.name,
+        value,
+        // <ContentEditable
+        //   key={key}
+        //   data-column="name"
+        //   data-row={key}
+        //   innerRef={this.contentEditable}
+        //   html={value.name} // innerHTML of the editable div
+        //   disabled={false} // use true to disable editing
+        //   onChange={
+        //     // this.handleChange
+        //     this.handleContentEditableUpdate
+        //     // (e) => this.fieldUpdate(e, value.id)
+        //   } // handle innerHTML change
+        //   tagName="article" // Use a custom HTML tag (uses a div by default)
+        // />,
         // who paid
         // null,
         this.renderWhoPaid(value.whoPaid),
@@ -438,7 +590,7 @@ class RenderMaterialTable extends Component {
     for (const expense of expenseArr) {
       expenseArr2.push(expense.flat());
     }
-
+    console.log(expenseArr);
     return expenseArr2;
   }
 
@@ -459,41 +611,11 @@ class RenderMaterialTable extends Component {
     resizableColumns: "resizableColumns",
     onRowsDelete: (rowsDeleted, data, newTableData) => {
       const expenseArr = this.renderMaterialExpense();
-      //   console.log(expenseArr[rowsDeleted.data[0]]);
-      //   console.log(rowsDeleted.data[0].dataIndex);
-      //   console.log(
-      //     expenseArr[rowsDeleted.data[0].dataIndex][
-      //       expenseArr[rowsDeleted.data[0].dataIndex].length - 1
-      //     ]
-      //   );
-
       for (const i of rowsDeleted.data) {
         this.handleDelete(
           expenseArr[i.dataIndex][expenseArr[i.dataIndex].length - 1]
         );
-
-        // this.handleDelete(
-        // console.log(
-
-        //     expenseArr[rowsDeleted.data[i.dataIndex].dataIndex][
-        //         expenseArr[rowsDeleted.data[i.dataIndex].dataIndex].length - 1
-        //     ]
-        //     )
-        // );
       }
-
-      //   console.log(rowsDeleted.data.length);
-
-      // works
-      //   this.handleDelete(
-      //     expenseArr[rowsDeleted.data[0].dataIndex][
-      //       expenseArr[rowsDeleted.data[0].dataIndex].length - 1
-      //     ]
-      //   );
-
-      //   console.log(rowsDeleted);
-      //   console.log(data);
-      //   console.log(newTableData);
     },
   };
 
