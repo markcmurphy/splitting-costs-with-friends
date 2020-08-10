@@ -3,34 +3,23 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import { compose } from "redux";
 import { firestoreConnect, isLoaded, isEmpty } from "react-redux-firebase";
-import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
-import MaterialTable from "material-table";
+import { Td } from "react-super-responsive-table";
 
 import MUIDataTable from "mui-datatables";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
 import Switch from "@material-ui/core/Switch";
 
-import Toggle from "react-toggle";
 import "react-toggle/style.css";
 
 import ContentEditable from "react-contenteditable";
 
-import ExpenseList from "./ExpenseList";
 import WhoPaid from "./WhoPaid.js";
 import FriendsInvolved from "./FriendsInvolved";
 import LoadingSpinner from "../loading/LoadingSpinner";
-import MaterialExpenseList from "../unused/MaterialExpenseList";
-// import { RenderExpenseTable } from "./MaterialExpenseList";
 
 class RenderMaterialTable extends Component {
   constructor(props) {
     super(props);
-    this.contentEditable = React.createRef();
+    // this.contentEditable = React.createRef();
     this.state = {
       showForm: false,
       expense: "",
@@ -39,14 +28,6 @@ class RenderMaterialTable extends Component {
       whoPaid: "",
       total: 0,
       totals: {},
-      html: "Edit <b>me</b> !",
-
-      // data: [""],
-      // switchA: true,
-      // html: "Hello World",
-      // nameState: "",
-      // row: "",
-      // friends: this.props.friends,
     };
   }
 
@@ -300,7 +281,7 @@ class RenderMaterialTable extends Component {
 
   // handles deletion of expense from Firestore
   handleDelete = (expense) => {
-    const { expenses, firestore, tripId, uid } = this.props;
+    const { firestore, tripId, uid } = this.props;
     firestore.delete({
       collection: "users",
       doc: uid,
@@ -369,23 +350,12 @@ class RenderMaterialTable extends Component {
         options: {
           filter: true,
           customBodyRender: (value, tableMeta, updateValue) => {
-            // console.log(tableMeta.currentTableData);
-            console.log(value.name);
-            console.log("value: " + value);
-            // console.table(tableMeta);
-
-            // console.log("updateValue: " + updateValue);
             return (
               <ContentEditable
                 html={value.name[0]}
-                // html={this.state.html}
-                // html={this.contentEditable}
-                // index={tableMeta.columnIndex}
-                // rowindex={tableMeta.rowIndex}
                 data-column="name"
                 data-value={value.name}
                 data-row={tableMeta.rowIndex}
-                // innerRef={this.contentEditable}
                 disabled={false}
                 onChange={(e) =>
                   this.handleContentEditableUpdate(
@@ -393,27 +363,11 @@ class RenderMaterialTable extends Component {
                     expenses[tableMeta.rowIndex]
                   )
                 }
-                // onBlur={this.handleChange}
-                // onBlur={() => console.log(expenses[tableMeta.rowIndex])}
+
                 // onBlur={(e) =>
                 //   this.handleChange(e, expenses[tableMeta.rowIndex])
                 // }
-                // onBlur={() => console.log(this.state)}
               />
-              // <ContentEditable
-              //   key={key}
-              //   data-column="name"
-              //   data-row={key}
-              //   innerRef={this.contentEditable}
-              //   html={value.name} // innerHTML of the editable div
-              //   disabled={false} // use true to disable editing
-              //   onChange={
-              //     // this.handleChange
-              //     this.handleContentEditableUpdate
-              //     // (e) => this.fieldUpdate(e, value.id)
-              //   } // handle innerHTML change
-              //   tagName="article" // Use a custom HTML tag (uses a div by default)
-              // />
             );
           },
         },
@@ -459,43 +413,21 @@ class RenderMaterialTable extends Component {
     return columns;
   }
 
-  // nameState = (name) => {
-  //   this.setState({
-  //     nameState: name,
-  //   });
-  // };
-
-  handleChange = (evt) => {
-    console.log(evt.target.value);
-
-    // console.log(id);
-    // this.setState({ html: evt.target.value });
-  };
-
   handleContentEditableUpdate = (event, expense) => {
-    const { expenses, friends, firestore, tripId, uid } = this.props;
+    const { firestore, tripId, uid } = this.props;
     const {
-      currentTarget: {
-        dataset: { row, column },
-        innerText: { text },
-      },
+      // currentTarget: {
+      //   dataset: { row, column },
+      //   innerText: { text },
+      // },
       target: { value },
     } = event;
 
-    // console.log(event);
-    // console.log(event.currentTarget.value);
-    console.log([text]);
-    console.log([value]);
-    console.log([column]);
-    console.log(parseInt([row], 10));
-    // this.setState({ html: "new!" });
     // Update friend
     const updExpense = {
       name: [value],
     };
 
-    console.log(expense.id);
-    // update friend in firestore
     // update expense in firestore
     firestore.update(
       {
@@ -509,79 +441,31 @@ class RenderMaterialTable extends Component {
       },
       updExpense
     );
-
-    // console.log(this.state);
-    // console.log(currentTarget);
-    // console.log(event.currentTarget.dataset.column);
-    // this.setState(({ store }) => {
-    //   return {
-    //     store: store.map((item) => {
-    //       return item.id === parseInt(row, 10)
-    //         ? { ...item, [column]: value }
-    //         : item;
-    //     }),
-    //   };
-    // });
-  };
-
-  fieldUpdate = (e, id) => {
-    // e.preventDefault();
-    console.log(id);
-    console.log(e.target.value);
-    const { firestore, friend } = this.props;
-
-    // Update friend
-    const updExpense = {
-      name: e.target.value,
-    };
-
-    // update friend in firestore
-    firestore.update({ collection: "expenses", doc: id }, updExpense);
   };
 
   renderMaterialExpense() {
-    const { expenses, friends, firestore, tripId } = this.props;
+    const { expenses, friends } = this.props;
     const expenseArr = [];
     const expenseArr2 = [];
 
     _.map(expenses, (value, key) => {
-      // console.log(key);
-      // console.log(this.contentEditable);
       return expenseArr.push([
         //   expense name
         value,
-        // <ContentEditable
-        //   key={key}
-        //   data-column="name"
-        //   data-row={key}
-        //   innerRef={this.contentEditable}
-        //   html={value.name} // innerHTML of the editable div
-        //   disabled={false} // use true to disable editing
-        //   onChange={
-        //     // this.handleChange
-        //     this.handleContentEditableUpdate
-        //     // (e) => this.fieldUpdate(e, value.id)
-        //   } // handle innerHTML change
-        //   tagName="article" // Use a custom HTML tag (uses a div by default)
-        // />,
         // who paid
-        // null,
         this.renderWhoPaid(value.whoPaid),
         // cost per person
         parseFloat(value.expenseAmount / value.friendsInvolved.length).toFixed(
           2
         ),
-
-        // null,
+        // friends involved
         friends
           .slice(0)
           .reverse()
           .map((val, key) => {
             return value.friendsInvolved.includes(val.id);
           }),
-        // _.map(friends, (val, key) => {
-        //   return value.friendsInvolved.includes(val.id);
-        // }),
+        // expense amount
         parseFloat(value.expenseAmount).toFixed(2),
         value.id,
       ]);
@@ -590,7 +474,6 @@ class RenderMaterialTable extends Component {
     for (const expense of expenseArr) {
       expenseArr2.push(expense.flat());
     }
-    console.log(expenseArr);
     return expenseArr2;
   }
 
@@ -606,7 +489,6 @@ class RenderMaterialTable extends Component {
     filter: true,
     filterType: "dropdown",
     responsive: "vertical",
-    // tableBodyHeight: "500px",
     rowsPerPage: 15,
     resizableColumns: "resizableColumns",
     onRowsDelete: (rowsDeleted, data, newTableData) => {
@@ -620,7 +502,6 @@ class RenderMaterialTable extends Component {
   };
 
   render() {
-    // console.log(this.options);
     return (
       <Suspense fallback={<LoadingSpinner />}>
         <MUIDataTable

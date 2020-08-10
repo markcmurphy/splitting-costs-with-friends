@@ -1,10 +1,7 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-// import { Link } from "react-router-dom";
-import { compose } from "redux";
-import { firestoreConnect } from "react-redux-firebase";
+
 import EditFriend from "./EditFriend";
-import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
+import { Tbody, Tr, Td } from "react-super-responsive-table";
 
 class FriendDetails extends Component {
   state = {

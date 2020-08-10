@@ -15,7 +15,7 @@ class ListTrips extends Component {
 
   renderForm = () => {
     const { showForm } = this.state;
-    const { trips, uid } = this.props;
+    const { trips } = this.props;
 
     if (!showForm) {
       return (
