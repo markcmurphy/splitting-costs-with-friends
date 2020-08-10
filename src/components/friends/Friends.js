@@ -11,6 +11,31 @@ import IconButton from "@material-ui/core/IconButton";
 
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 
+// import _ from "lodash";
+// import { compose } from "redux";
+// import { firestoreConnect } from "react-redux-firebase";
+import { Link } from "react-router-dom";
+import LoadingSpinner from "../loading/LoadingSpinner";
+// import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import { FixedSizeList } from "react-window";
+import List from "@material-ui/core/List";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import Avatar from "@material-ui/core/Avatar";
+// import IconButton from "@material-ui/core/IconButton";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import FolderIcon from "@material-ui/icons/Folder";
+import DeleteIcon from "@material-ui/icons/Delete";
+import ImageIcon from "@material-ui/icons/Image";
+
 class Friends extends Component {
   constructor(props) {
     super(props);
@@ -83,13 +108,35 @@ class Friends extends Component {
     const { friends, uid } = this.props;
     const friendsList = _.map(friends, (value, key) => {
       return (
-        <FriendDetails
-          key={value.id}
-          friends={value}
-          tripId={this.props.id}
-          firestore={this.props.firestore}
-          uid={uid}
-        />
+        <ListItem key={value.id}>
+          <ListItemAvatar>
+            <Avatar>
+              <ImageIcon />
+            </Avatar>
+          </ListItemAvatar>
+          {/* <Link
+                      to={{
+                        pathname: `/trip/${item.id}`,
+                        // tripProps: {
+                        //   uid: "uid",
+                        // },
+                      }}
+                      style={{ textDecoration: "none" }}
+                    > */}
+          <ListItemText
+            primary={value.firstName}
+            // secondary="Jan 7, 2014"
+          />
+          {/* </Link> */}
+        </ListItem>
+
+        // <FriendDetails
+        //   key={value.id}
+        //   friends={value}
+        //   tripId={this.props.id}
+        //   firestore={this.props.firestore}
+        //   uid={uid}
+        // />
       );
     });
 
@@ -149,11 +196,11 @@ class Friends extends Component {
         )}
         {this.renderForm()}
         <Table className="mt-4">
-          <Thead>
+          {/* <Thead>
             <Tr>
               <Th>Friend Name</Th>
             </Tr>
-          </Thead>
+          </Thead> */}
           {this.renderFriend()}
         </Table>
       </div>

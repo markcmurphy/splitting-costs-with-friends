@@ -2,6 +2,31 @@ import React, { Component } from "react";
 
 import EditFriend from "./EditFriend";
 import { Tbody, Tr, Td } from "react-super-responsive-table";
+import { connect } from "react-redux";
+import _ from "lodash";
+import { compose } from "redux";
+import { firestoreConnect } from "react-redux-firebase";
+import { Link } from "react-router-dom";
+import LoadingSpinner from "../loading/LoadingSpinner";
+import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import { FixedSizeList } from "react-window";
+import List from "@material-ui/core/List";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import Avatar from "@material-ui/core/Avatar";
+import IconButton from "@material-ui/core/IconButton";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import FolderIcon from "@material-ui/icons/Folder";
+import DeleteIcon from "@material-ui/icons/Delete";
+import ImageIcon from "@material-ui/icons/Image";
 
 class FriendDetails extends Component {
   state = {
