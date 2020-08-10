@@ -19,6 +19,9 @@ export default function Sidebar(props) {
         {props ? (
           <>
             <AddNewTrip uid={props.uid} />
+
+            <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
+
             <ListTrips uid={props.uid} />
           </>
         ) : null}
@@ -30,6 +33,9 @@ export default function Sidebar(props) {
         render={() => (
           <div>
             <AddExpense id={id} uid={props.uid} />
+
+            <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
+
             <Friends id={id} uid={props.uid} />
           </div>
         )}
