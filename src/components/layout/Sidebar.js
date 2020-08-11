@@ -5,7 +5,7 @@ import AddExpense from "../expense/AddExpense.js";
 import { Route, useParams } from "react-router-dom";
 
 import AddNewTrip from "../trips/AddNewTrip";
-import ListTrips from "../trips/ListTrips";
+import TripList from "../trips/TripList";
 import Divider from "@material-ui/core/Divider";
 
 export default function Sidebar(props) {
@@ -21,8 +21,7 @@ export default function Sidebar(props) {
             <AddNewTrip uid={props.uid} />
 
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
-
-            <ListTrips uid={props.uid} />
+            <TripList uid={props.uid} />
           </>
         ) : null}
       </>

@@ -35,6 +35,7 @@ import Typography from "@material-ui/core/Typography";
 import FolderIcon from "@material-ui/icons/Folder";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ImageIcon from "@material-ui/icons/Image";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 class Friends extends Component {
   constructor(props) {
@@ -143,13 +144,7 @@ class Friends extends Component {
     if (friends) {
       return friendsList;
     } else {
-      return (
-        <Tbody>
-          <Tr>
-            <Td>Loading</Td>
-          </Tr>
-        </Tbody>
-      );
+      return <CircularProgress />;
     }
   };
 
@@ -195,14 +190,8 @@ class Friends extends Component {
           // </button>
         )}
         {this.renderForm()}
-        <Table className="mt-4">
-          {/* <Thead>
-            <Tr>
-              <Th>Friend Name</Th>
-            </Tr>
-          </Thead> */}
-          {this.renderFriend()}
-        </Table>
+
+        {this.renderFriend()}
       </div>
     );
   }

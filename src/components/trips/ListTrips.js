@@ -24,11 +24,47 @@ import Typography from "@material-ui/core/Typography";
 import FolderIcon from "@material-ui/icons/Folder";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ImageIcon from "@material-ui/icons/Image";
+import PropTypes from "prop-types";
+
+// import { FixedSizeList } from "react-window";
 
 class ListTrips extends Component {
   state = {
     showForm: false,
     tripID: "",
+  };
+
+  renderRow = () => {
+    // const { index, style } = props;
+    const { trips, index, style } = this.props;
+    console.log(this.props);
+    trips.map((item) => {
+      return (
+        <ListItem
+          style={style}
+          key={index}
+          // key={item.id}>
+        >
+          <ListItemAvatar>
+            <Avatar>
+              <ImageIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <Link
+            to={{
+              pathname: `/trip/${item.id}`,
+            }}
+            style={{ textDecoration: "none" }}
+          >
+            <ListItemText primary={item.tripName} secondary="Jan 7, 2014" />
+          </Link>
+        </ListItem>
+      );
+    });
+
+    // <ListItem button style={style} key={index}>
+    // <ListItemText primary={`Item ${index + 1}`} />
+    // </ListItem>
   };
 
   renderForm = () => {
@@ -38,26 +74,17 @@ class ListTrips extends Component {
     if (!showForm) {
       return (
         <>
-          <List
-          // dense={dense}
-          >
-            {/* <ListItem>
-
-                  <ListItemAvatar>
-                    <Avatar>
-                      <FolderIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary="Single-line item"
-                    secondary={secondary ? 'Secondary text' : null}
-                  />
-                  
-                </ListItem>, */}
-            {trips ? (
-              trips.map((item) => {
-                return (
-                  <ListItem key={item.id}>
+          {trips ? (
+            // trips.map((item) => {
+            // return (
+            <FixedSizeList
+              height={400}
+              width={300}
+              itemSize={46}
+              itemCount={200}
+            >
+              {this.renderRow()}
+              {/* <ListItem key={item.id}>
                     <ListItemAvatar>
                       <Avatar>
                         <ImageIcon />
@@ -66,9 +93,6 @@ class ListTrips extends Component {
                     <Link
                       to={{
                         pathname: `/trip/${item.id}`,
-                        // tripProps: {
-                        //   uid: "uid",
-                        // },
                       }}
                       style={{ textDecoration: "none" }}
                     >
@@ -77,37 +101,13 @@ class ListTrips extends Component {
                         secondary="Jan 7, 2014"
                       />
                     </Link>
-                  </ListItem>
-                );
-              })
-            ) : (
-              <LoadingSpinner />
-            )}
-          </List>
-
-          {/* <ul className="list-group mt-4">
-            <li className="list-group-item active">All Trips</li>
-            {trips ? (
-              trips.map((item) => {
-                return (
-                  <li className="list-group-item" key={item.id}>
-                    <Link
-                      to={{
-                        pathname: `/trip/${item.id}`,
-                        // tripProps: {
-                        //   uid: "uid",
-                        // },
-                      }}
-                    >
-                      {item.tripName}
-                    </Link>
-                  </li>
-                );
-              })
-            ) : (
-              <LoadingSpinner />
-            )}
-          </ul> */}
+                  </ListItem> */}
+            </FixedSizeList>
+          ) : (
+            // );
+            // })
+            <LoadingSpinner />
+          )}
         </>
       );
     }
@@ -155,6 +155,11 @@ class ListTrips extends Component {
     );
   }
 }
+
+ListTrips.propTypes = {
+  index: PropTypes.number.isRequired,
+  style: PropTypes.object.isRequired,
+};
 
 export default compose(
   firestoreConnect((props) => [
