@@ -352,9 +352,9 @@ class RenderMaterialTable extends Component {
           customBodyRender: (value, tableMeta, updateValue) => {
             return (
               <ContentEditable
-                html={value.name[0]}
+                html={value}
                 data-column="name"
-                data-value={value.name}
+                data-value={value}
                 data-row={tableMeta.rowIndex}
                 disabled={false}
                 onChange={(e) =>
@@ -451,7 +451,7 @@ class RenderMaterialTable extends Component {
     _.map(expenses, (value, key) => {
       return expenseArr.push([
         //   expense name
-        value,
+        value.name,
         // who paid
         this.renderWhoPaid(value.whoPaid),
         // cost per person

@@ -15,8 +15,6 @@ import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 
 import _ from "lodash";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import RenderExpenseList from "../unused/RenderExpenseList";
 
 export default function TripList(props) {
   const [showForm, setShowForm] = useState(false);
