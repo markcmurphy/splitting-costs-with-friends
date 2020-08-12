@@ -6,6 +6,22 @@ import { firestoreConnect } from "react-redux-firebase";
 
 import FriendsInvolved from "./FriendsInvolved";
 
+// Material-UI components
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Input from "@material-ui/core/Input";
+import Select from "@material-ui/core/Select";
+import FormControl from "@material-ui/core/FormControl";
+import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
+import { FormGroup } from "@material-ui/core";
+
 class AddExpense extends Component {
   state = {
     showForm: false,
@@ -34,20 +50,24 @@ class AddExpense extends Component {
   renderFriend() {
     const { friends } = this.props;
     const friendSelect = (
-      <select
-        multiple={false}
+      <Select
+        // multiple={false}
         value={this.state.whoPaid}
         onChange={this.inputChange}
-        className="form-control"
+        // className="form-control"
         id="whoPaid"
         type="text"
         name="whoPaid"
       >
-        <option value="">Select Option</option>
+        {/* <MenuItem value="">Select Option</MenuItem> */}
         {_.map(friends, (value, key) => {
-          return <option value={value.id}>{value.firstName}</option>;
+          return (
+            <MenuItem key={key} value={value.id}>
+              {value.firstName}
+            </MenuItem>
+          );
         })}
-      </select>
+      </Select>
     );
 
     return friendSelect;
@@ -56,22 +76,34 @@ class AddExpense extends Component {
   renderFriendsInvolved() {
     const { friends } = this.props;
     const { friendsInvolved } = this.state;
+
     const friendSelectMultiple = (
-      <select
-        multiple={true}
+      <Select
+        multiple
+        native
         value={friendsInvolved}
         onChange={this.inputChangeMultiple}
-        className="form-control"
-        id="friendsInvolved"
-        type="text"
+        // className="form-control"
+        // id="friendsInvolved"
+        // type="text"
+        inputProps={{
+          id: "select-multiple-native",
+        }}
+        fullWidth
       >
         {_.map(friends, (value, key) => {
-          return <FriendsInvolved key={value.id} friends={value} />;
+          return (
+            <option key={key} value={value.id}>
+              {value.firstName}
+            </option>
+          );
+
+          // return <FriendsInvolved key={value.id} friends={value} />;
         })}
-      </select>
+      </Select>
     );
 
-    return <div>{friendSelectMultiple}</div>;
+    return friendSelectMultiple;
   }
 
   formSubmit = (e) => {
@@ -108,88 +140,213 @@ class AddExpense extends Component {
     });
   };
 
+  closeForm = () => {
+    const { showForm } = this.state;
+
+    this.setState({
+      showForm: false,
+    });
+  };
+
+  openForm = () => {
+    const { showForm } = this.state;
+
+    this.setState({
+      showForm: true,
+    });
+  };
+
   renderForm = () => {
     const { showForm, expense, amount } = this.state;
-    if (showForm) {
-      return (
-        <div className="card mt-3 pl-1">
-          <div className="card-header">Add Expense</div>
-          <div className="card-body">
-            <form onSubmit={this.formSubmit}>
-              <div className="form-group">
-                <label>Expense Name</label>
-                <input
-                  value={expense}
-                  className="form-control"
-                  onChange={this.inputChange}
+    const marginBottom = "15px";
+    // if (showForm) {
+    return (
+      <Dialog
+        open={showForm}
+        onClose={() => this.closeForm()}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Add New Expense</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Enter your expense details here to split costs with friends!
+          </DialogContentText>
+          <form onSubmit={this.formSubmit}>
+            <FormGroup>
+              <FormControl style={{ marginBottom: marginBottom }}>
+                <InputLabel>Expense Name</InputLabel>
+                <Input
+                  autoFocus
+                  // margin="dense"
                   id="friendNext"
+                  label="Expense Name"
                   type="text"
                   name="expense"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Amount</label>
-                <input
-                  value={amount}
+                  value={expense}
+                  // className="form-control"
                   onChange={this.inputChange}
-                  className="form-control"
-                  type="number"
-                  id="amount"
-                  name="amount"
+                  fullWidth
                 />
-              </div>
-              {/* Friends involved */}
-              <div className="form-group">
-                <label>Friends Involved {""}</label>
-                {this.renderFriendsInvolved()}
-              </div>
-              {/* Who Paid */}
-              <div className="form-group">
-                <label>Who Paid</label>
-                {this.renderFriend()}
-              </div>
+                {/* {console.log(this.state.expense)} */}
+              </FormControl>
+              {/* <label>Expense Name</label> */}
+              {/* <input
+                value={expense}
+                className="form-control"
+                onChange={this.inputChange}
+                id="friendNext"
+                type="text"
+                name="expense"
+              /> */}
 
+              {/* <div className="form-group">*/}
+              <FormControl style={{ marginBottom: marginBottom }}>
+                <InputLabel>Expense Amount</InputLabel>
+
+                <Input
+                  // autoFocus
+                  // margin="dense"
+                  id="amount"
+                  label="Expense Amount"
+                  type="number"
+                  name="amount"
+                  value={amount}
+                  // className="form-control"
+                  onChange={this.inputChange}
+                  startAdornment={
+                    <InputAdornment position="start">$</InputAdornment>
+                  }
+                  fullWidth
+                />
+              </FormControl>
+              {/* <label>Amount</label>
               <input
+                value={amount}
+                onChange={this.inputChange}
+                className="form-control"
+                type="number"
+                id="amount"
+                name="amount"
+              /> */}
+              {/* </div> */}
+              {/* Friends involved */}
+              <FormControl style={{ marginBottom: marginBottom }}>
+                <InputLabel shrink htmlFor="select-multiple-native">
+                  Friends Involved
+                </InputLabel>
+                {/* <InputLabel>Friends Involved</InputLabel> */}
+                {this.renderFriendsInvolved()}
+              </FormControl>
+
+              {/* Who Paid */}
+              <FormControl style={{ marginBottom: marginBottom }}>
+                <InputLabel>Who Paid</InputLabel>
+                {this.renderFriend()}
+              </FormControl>
+              <Button
                 type="submit"
                 value="Submit"
                 className="btn btn-success btn-block"
-              />
-            </form>
-          </div>
-        </div>
-      );
-    }
+                onClick={() => this.closeForm()}
+                variant="contained"
+                color="primary"
+                style={{ marginTop: "30px" }}
+              >
+                Submit{" "}
+              </Button>
+            </FormGroup>
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => this.closeForm()} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      // <div className="card mt-3 pl-1">
+      //   <div className="card-header">Add Expense</div>
+      //   <div className="card-body">
+      //     <form onSubmit={this.formSubmit}>
+      //       <div className="form-group">
+      //         <label>Expense Name</label>
+      //         <input
+      //           value={expense}
+      //           className="form-control"
+      //           onChange={this.inputChange}
+      //           id="friendNext"
+      //           type="text"
+      //           name="expense"
+      //         />
+      //       </div>
+
+      //       <div className="form-group">
+      //         <label>Amount</label>
+      //         <input
+      //           value={amount}
+      //           onChange={this.inputChange}
+      //           className="form-control"
+      //           type="number"
+      //           id="amount"
+      //           name="amount"
+      //         />
+      //       </div>
+      //       {/* Friends involved */}
+      //       <div className="form-group">
+      //         <label>Friends Involved {""}</label>
+      //         {this.renderFriendsInvolved()}
+      //       </div>
+      //       {/* Who Paid */}
+      //       <div className="form-group">
+      //         <label>Who Paid</label>
+      //         {this.renderFriend()}
+      //       </div>
+
+      //       <input
+      //         type="submit"
+      //         value="Submit"
+      //         className="btn btn-success btn-block"
+      //       />
+      //     </form>
+      //   </div>
+      // </div>
+    );
+    // }
   };
 
   render() {
     const { showForm } = this.state;
 
     return (
-      <div
-        style={
-          {
-            // marginLeft: "5%",
-            // display: "flex",
-            // flexDirection: "column",
-            // justifyContent: "center",
-          }
-        }
-      >
+      <div>
         {showForm ? (
-          <button
-            className="btn btn-danger btn-block mt-4"
+          <Button
+            variant="contained"
+            color="secondary"
             onClick={() => this.setState({ showForm: !showForm })}
           >
             Close
-          </button>
+          </Button>
         ) : (
-          <button
-            className="btn btn-secondary btn-block mt-4"
+          // <button
+          //   className="btn btn-danger btn-block mt-4"
+          //   onClick={() => this.setState({ showForm: !showForm })}
+          // >
+          //   Close
+          // </button>
+          <Button
+            variant="contained"
+            color="primary"
             onClick={() => this.setState({ showForm: !showForm })}
           >
             Add Expense{" "}
-          </button>
+          </Button>
+          // <button
+          //   className="btn btn-secondary btn-block mt-4"
+          //   onClick={() => this.setState({ showForm: !showForm })}
+          // >
+          //   Add Expense{" "}
+          // </button>
         )}
         <div>
           <div className="">{this.renderForm()}</div>

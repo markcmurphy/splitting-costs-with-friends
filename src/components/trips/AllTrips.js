@@ -17,7 +17,7 @@ import ListTrips from "./ListTrips";
 import Trip from "./Trip.js";
 import Sidebar from "../layout/Sidebar";
 import MainViewContainer from "../layout/MainViewContainer";
-import RenderExpenseList from "../expense/RenderExpenseList";
+import RenderExpenseList from "../unused/RenderExpenseList";
 
 class AllTrips extends Component {
   render() {

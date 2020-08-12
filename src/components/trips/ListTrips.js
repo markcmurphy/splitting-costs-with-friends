@@ -2,16 +2,31 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
 import { compose } from "redux";
-import { firestoreConnect, isLoaded, isEmpty } from "react-redux-firebase";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams,
-} from "react-router-dom";
+import { firestoreConnect } from "react-redux-firebase";
+import { Link } from "react-router-dom";
 import LoadingSpinner from "../loading/LoadingSpinner";
+import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import { FixedSizeList } from "react-window";
+import List from "@material-ui/core/List";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import Avatar from "@material-ui/core/Avatar";
+import IconButton from "@material-ui/core/IconButton";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import FolderIcon from "@material-ui/icons/Folder";
+import DeleteIcon from "@material-ui/icons/Delete";
+import ImageIcon from "@material-ui/icons/Image";
+import PropTypes from "prop-types";
+
+// import { FixedSizeList } from "react-window";
 
 class ListTrips extends Component {
   state = {
@@ -19,67 +34,119 @@ class ListTrips extends Component {
     tripID: "",
   };
 
+  renderRow = () => {
+    // const { index, style } = props;
+    const { trips, index, style } = this.props;
+    console.log(this.props);
+    trips.map((item) => {
+      return (
+        <ListItem
+          style={style}
+          key={index}
+          // key={item.id}>
+        >
+          <ListItemAvatar>
+            <Avatar>
+              <ImageIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <Link
+            to={{
+              pathname: `/trip/${item.id}`,
+            }}
+            style={{ textDecoration: "none" }}
+          >
+            <ListItemText primary={item.tripName} secondary="Jan 7, 2014" />
+          </Link>
+        </ListItem>
+      );
+    });
+
+    // <ListItem button style={style} key={index}>
+    // <ListItemText primary={`Item ${index + 1}`} />
+    // </ListItem>
+  };
+
   renderForm = () => {
     const { showForm } = this.state;
-    const { trips, uid } = this.props;
+    const { trips } = this.props;
 
     if (!showForm) {
       return (
-        <ul className="list-group mt-4">
-          <li className="list-group-item active">All Trips</li>
+        <>
           {trips ? (
-            trips.map((item) => {
-              return (
-                <li className="list-group-item" key={item.id}>
-                  <Link
-                    to={{
-                      pathname: `/trip/${item.id}`,
-                      // tripProps: {
-                      //   uid: "uid",
-                      // },
-                    }}
-                  >
-                    {item.tripName}
-                  </Link>
-                </li>
-              );
-            })
+            // trips.map((item) => {
+            // return (
+            <FixedSizeList
+              height={400}
+              width={300}
+              itemSize={46}
+              itemCount={200}
+            >
+              {this.renderRow()}
+              {/* <ListItem key={item.id}>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <ImageIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <Link
+                      to={{
+                        pathname: `/trip/${item.id}`,
+                      }}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <ListItemText
+                        primary={item.tripName}
+                        secondary="Jan 7, 2014"
+                      />
+                    </Link>
+                  </ListItem> */}
+            </FixedSizeList>
           ) : (
+            // );
+            // })
             <LoadingSpinner />
           )}
-        </ul>
+        </>
       );
     }
   };
 
   render() {
     const { showForm } = this.state;
-
-    console.log(this.props);
-    const { trips, uid } = this.props;
+    // const { trips, uid } = this.props;
 
     return (
-      <div
-      // style={{
-      //   display: "flex",
-      //   flexDirection: "column",
-      //   justifyContent: "center",
-      // }}
-      >
+      <div>
         {showForm ? (
-          <button
-            className="btn btn-secondary mt-4 btn-block"
+          <Button
+            variant="contained"
+            color="primary"
             onClick={() => this.setState({ showForm: !showForm })}
           >
             Display All Trips
-          </button>
+          </Button>
         ) : (
-          <button
-            className="btn btn-danger mt-4 btn-block"
+          // <button
+          //   className="btn btn-secondary mt-4 btn-block"
+          //   onClick={() => this.setState({ showForm: !showForm })}
+          // >
+          //   Display All Trips
+          // </button>
+          <Button
+            variant="contained"
+            color="secondary"
             onClick={() => this.setState({ showForm: !showForm })}
           >
             Close Trip List
-          </button>
+          </Button>
+          // <button
+          //   className="btn btn-danger mt-4 btn-block"
+          //   onClick={() => this.setState({ showForm: !showForm })}
+          // >
+          //   Close Trip List
+          // </button>
         )}
         <div>
           <div className="">{this.renderForm()}</div>
@@ -88,6 +155,11 @@ class ListTrips extends Component {
     );
   }
 }
+
+ListTrips.propTypes = {
+  index: PropTypes.number.isRequired,
+  style: PropTypes.object.isRequired,
+};
 
 export default compose(
   firestoreConnect((props) => [
