@@ -1,14 +1,9 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { firestoreConnect } from "react-redux-firebase";
-import _ from "lodash";
-import IconButton from "@material-ui/core/IconButton";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { useFirestoreConnect, useFirestore } from "react-redux-firebase";
+import AsyncSelect from "react-select/async";
+// import Async, { makeAsyncSelect } from "react-select/async";
 
-// import _ from "lodash";
-// import { compose } from "redux";
-// import { firestoreConnect } from "react-redux-firebase";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../loading/LoadingSpinner";
 // import Button from "@material-ui/core/Button";
@@ -45,65 +40,78 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import { FormGroup } from "@material-ui/core";
 
-class Friends extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showForm: false,
-      firstName: "",
-    };
-  }
+export default function FriendsHook(props) {
+  const [showForm, setForm] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [emailMatch, setEmailMatch] = useState("");
+  const [inputValue, setInputValue] = useState("");
 
-  inputChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+  // sync /users from firebase into redux
+  useFirestoreConnect([
+    {
+      collection: "users",
+    },
+  ]);
+
+  const firestore = useFirestore();
+
+  // Connect to redux state using selector hook
+  //   const users = useSelector((state) => state.firestore.data.users);
+  const users = useSelector(({ firestore: { data } }) => data.users);
+
+  const getKeyByValue = (value) => {
+    for (const prop in users) {
+      if (users.hasOwnProperty(prop)) {
+        if (users[prop].email === value) {
+          return prop;
+        } else {
+          return "";
+        }
+      }
+    }
   };
 
-  formSubmit = (e) => {
+  const inputChange = (e) => {
+    setFirstName(e.target.value);
+  };
+
+  const formSubmit = (e) => {
     e.preventDefault();
-    const { firestore, uid } = this.props;
-    const { firstName } = this.state;
+    const { uid, id } = props;
     firestore
       .add(
         {
           collection: "users",
           doc: uid,
           subcollections: [
-            { collection: "trips", doc: this.props.id },
+            { collection: "trips", doc: id },
             { collection: "friends" },
           ],
         },
-        { firstName: firstName }
+        { firstName: firstName, id: getKeyByValue(firstName) }
       )
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
       });
 
-    this.setState({ firstName: "", showForm: false });
+    setFirstName("");
+    setForm(false);
   };
 
-  closeForm = () => {
-    const { showForm } = this.state;
-
-    this.setState({
-      showForm: false,
-    });
-  };
-
-  renderForm = () => {
-    const { showForm, firstName } = this.state;
+  function renderForm() {
     const marginBottom = "15px";
 
     if (showForm) {
       return (
         <Dialog
           open={showForm}
-          onClose={() => this.closeForm()}
+          onClose={() => setForm(false)}
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">Add New Friend</DialogTitle>
           <DialogContent>
             <DialogContentText>Enter your friends here!</DialogContentText>
-            <form onSubmit={this.formSubmit} id="newFriendForm">
+            <form onSubmit={formSubmit} id="newFriendForm">
               <FormGroup>
                 <FormControl style={{ marginBottom: marginBottom }}>
                   <InputLabel>Friend Name</InputLabel>
@@ -113,7 +121,7 @@ class Friends extends Component {
                     type="text"
                     name="firstName"
                     value={firstName}
-                    onChange={this.inputChange}
+                    onChange={inputChange}
                     fullWidth
                   />
                 </FormControl>
@@ -129,100 +137,81 @@ class Friends extends Component {
             </form>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => this.closeForm()} color="primary">
+            <Button onClick={() => setForm(false)} color="primary">
               Cancel
             </Button>
           </DialogActions>
         </Dialog>
       );
     }
-  };
+  }
 
-  renderFriend = (props) => {
-    const { friends, uid } = this.props;
-    const friendsList = _.map(friends, (value, key) => {
-      return (
-        <ListItem key={value.id}>
-          <ListItemAvatar>
-            <Avatar>
-              <ImageIcon />
-            </Avatar>
-          </ListItemAvatar>
-          {/* <Link
-                      to={{
-                        pathname: `/trip/${item.id}`,
-                        // tripProps: {
-                        //   uid: "uid",
-                        // },
-                      }}
-                      style={{ textDecoration: "none" }}
-                    > */}
-          <ListItemText
-            primary={value.firstName}
-            // secondary="Jan 7, 2014"
-          />
-          {/* </Link> */}
-        </ListItem>
-      );
-    });
+  //   const getKeyByValue = (object, value) => {
+  //     for (const prop in object) {
+  //       if (object.hasOwnProperty(prop)) {
+  //         if (object[prop].email === value) return prop;
+  //       }
+  //     }
+  //   }
 
-    if (friends) {
-      return friendsList;
-    } else {
-      return <CircularProgress />;
-    }
-  };
+  // const filterColors = (inputValue) => {
+  //   return colourOptions.filter((i) =>
+  //     i.label.toLowerCase().includes(inputValue.toLowerCase())
+  //   );
+  // };
 
-  render() {
-    const { showForm } = this.state;
-    return (
-      <div>
-        {/* {showForm ? (
+  //   console.log(inputValue);
+
+  //   const loadOptions = (inputValue, callback) => {
+  //     setTimeout(() => {
+  //       callback(getKeyByValue(inputValue));
+  //     }, 5000);
+  //   };
+
+  //   const handleInputChange = (newValue) => {
+  //     const cleanValue = newValue.replace(/\W/g, "");
+  //     setInputValue(cleanValue);
+  //     return inputValue;
+  //   };
+
+  return (
+    <div>
+      {showForm ? (
+        <>
           <Button
             variant="contained"
             color="secondary"
-            onClick={() => this.setState({ showForm: !showForm })}
+            onClick={() => setForm(!showForm)}
             style={{ marginTop: "5px" }}
           >
             Close
           </Button>
-        ) : (
-          <div>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => this.setState({ showForm: !showForm })}
-              style={{ marginTop: "5px" }}
-            >
-              Add Friend
-            </Button>
-            <IconButton aria-label="delete" color="primary">
+        </>
+      ) : (
+        <div>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => setForm(!showForm)}
+            style={{ marginTop: "5px" }}
+          >
+            Add Friend
+          </Button>
+          {/* <IconButton aria-label="delete" color="primary">
               <PersonAddIcon />
-            </IconButton>
-          </div>
-        )}
-        {this.renderForm()} */}
-
-        {this.renderFriend()}
-      </div>
-    );
-  }
+            </IconButton> */}
+        </div>
+      )}
+      {/* <div>
+        <pre>inputValue: "{inputValue}"</pre>
+        <AsyncSelect
+          //   cacheOptions
+          loadOptions={loadOptions}
+          defaultOptions
+          onInputChange={handleInputChange}
+        />
+      </div> */}
+      {renderForm()}
+    </div>
+  );
 }
-
-export default compose(
-  firestoreConnect((props) => [
-    {
-      collection: "users",
-      doc: props.uid,
-      storeAs: `${props.id}-friends`,
-      subcollections: [
-        { collection: "trips", doc: props.id },
-        { collection: "friends" },
-      ],
-    },
-  ]),
-
-  connect(({ firestore: { ordered } }, props) => ({
-    friends: ordered[`${props.id}-friends`],
-  }))
-)(Friends);
