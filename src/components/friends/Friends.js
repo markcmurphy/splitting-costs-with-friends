@@ -6,7 +6,6 @@ import _ from "lodash";
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 
 import FriendDetails from "./FriendDetails";
-import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
@@ -27,7 +26,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Avatar from "@material-ui/core/Avatar";
 // import IconButton from "@material-ui/core/IconButton";
-import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Grid from "@material-ui/core/Grid";
@@ -36,6 +34,20 @@ import FolderIcon from "@material-ui/icons/Folder";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ImageIcon from "@material-ui/icons/Image";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Input from "@material-ui/core/Input";
+import Select from "@material-ui/core/Select";
+import FormControl from "@material-ui/core/FormControl";
+import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
+import { FormGroup } from "@material-ui/core";
 
 class Friends extends Component {
   constructor(props) {
@@ -70,37 +82,54 @@ class Friends extends Component {
         console.log("Document written with ID: ", docRef.id);
       });
 
-    this.setState({ firstName: "" });
+    this.setState({ firstName: "", showForm: false });
   };
 
   renderForm = () => {
     const { showForm, firstName } = this.state;
+    const marginBottom = "15px";
+
     if (showForm) {
       return (
-        <div className="card mb-4 mt-4 ">
-          <div className="card-header">Add Friend</div>
-          <div className="card-body">
-            <form onSubmit={this.formSubmit}>
-              <div className="form-group">
-                <label htmlFor="firstName">First Name</label>
-                <input
-                  value={firstName}
-                  onChange={this.inputChange}
-                  id="friendNext"
-                  type="text"
-                  className="form-control"
-                  name="firstName"
-                />
-              </div>
-
-              <input
-                type="submit"
-                value="Submit"
-                className="btn btn-primary btn-block"
-              />
+        <Dialog
+          open={showForm}
+          onClose={() => this.closeForm()}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Add New Friend</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Enter your friends here!</DialogContentText>
+            <form onSubmit={this.formSubmit} id="newFriendForm">
+              <FormGroup>
+                <FormControl style={{ marginBottom: marginBottom }}>
+                  <InputLabel>Trip Name</InputLabel>
+                  <Input
+                    autoFocus
+                    id="friendNext"
+                    type="text"
+                    name="firstName"
+                    value={firstName}
+                    onChange={this.inputChange}
+                    fullWidth
+                  />
+                </FormControl>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  style={{ marginTop: "30px" }}
+                >
+                  Submit{" "}
+                </Button>
+              </FormGroup>
             </form>
-          </div>
-        </div>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => this.closeForm()} color="primary">
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
       );
     }
   };
@@ -130,14 +159,6 @@ class Friends extends Component {
           />
           {/* </Link> */}
         </ListItem>
-
-        // <FriendDetails
-        //   key={value.id}
-        //   friends={value}
-        //   tripId={this.props.id}
-        //   firestore={this.props.firestore}
-        //   uid={uid}
-        // />
       );
     });
 
@@ -162,12 +183,6 @@ class Friends extends Component {
             Close
           </Button>
         ) : (
-          // <button
-          //   className="btn btn-danger btn-block mt-4"
-          //   onClick={() => this.setState({ showForm: !showForm })}
-          // >
-          //   Close
-          // </button>
           <div>
             <Button
               variant="contained"
@@ -181,13 +196,6 @@ class Friends extends Component {
               <PersonAddIcon />
             </IconButton>
           </div>
-
-          // <button
-          //   className="btn btn-secondary btn-block mt-4"
-          //   onClick={() => this.setState({ showForm: !showForm })}
-          // >
-          //   Add Friend
-          // </button>
         )}
         {this.renderForm()}
 

@@ -95,7 +95,6 @@ class MaterialAddNewTrip extends Component {
                 <Button
                   type="submit"
                   //   value="Submit"
-                  className="btn btn-success btn-block"
                   //   onClick={() => this.closeForm()}
                   variant="contained"
                   color="primary"

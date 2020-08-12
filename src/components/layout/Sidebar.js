@@ -19,7 +19,6 @@ export default function Sidebar(props) {
       <>
         {props ? (
           <>
-            {/* <AddNewTrip uid={props.uid} /> */}
             <MaterialAddNewTrip uid={props.uid} />
 
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
