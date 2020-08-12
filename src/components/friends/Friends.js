@@ -85,6 +85,14 @@ class Friends extends Component {
     this.setState({ firstName: "", showForm: false });
   };
 
+  closeForm = () => {
+    const { showForm } = this.state;
+
+    this.setState({
+      showForm: false,
+    });
+  };
+
   renderForm = () => {
     const { showForm, firstName } = this.state;
     const marginBottom = "15px";
