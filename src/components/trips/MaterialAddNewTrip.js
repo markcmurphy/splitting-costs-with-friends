@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import _ from "lodash";
 import { compose } from "redux";
-import { firestoreConnect } from "react-redux-firebase";
+import { firestoreConnect, isLoaded, isEmpty } from "react-redux-firebase";
+
+import AsyncCreatableSelect from "react-select/async-creatable";
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -23,6 +25,8 @@ class MaterialAddNewTrip extends Component {
   state = {
     showForm: false,
     tripName: "",
+    inputValue: "",
+    friendsInvolved: [""],
   };
 
   inputChange = (e) => {
@@ -33,14 +37,20 @@ class MaterialAddNewTrip extends Component {
 
   formSubmit = (e) => {
     e.preventDefault();
-    const { tripName } = this.state;
+    const { tripName, friendsInvolved } = this.state;
     const { firestore, uid } = this.props;
     const docRefConfig = {
-      collection: "users",
-      doc: uid,
-      subcollections: [{ collection: "trips" }],
+      collection: "trips",
+      // doc: uid,
+      // subcollections: [{ collection: "trips" }],
     };
-    firestore.add(docRefConfig, { tripName: tripName }).then((docRef) => {
+
+    const tripInfo = {
+      tripName: tripName,
+      tripOwner: uid,
+      friendsInvolved: friendsInvolved,
+    };
+    firestore.add(docRefConfig, tripInfo).then((docRef) => {
       console.log("Document written with ID: ", docRef.id);
     });
 
@@ -58,9 +68,82 @@ class MaterialAddNewTrip extends Component {
     });
   };
 
+  inputChangeMultiple = (e) => {
+    // console.log(e.target.selectedOptions);
+    this.setState({
+      friendsInvolved: Array.from(
+        e.target.selectedOptions,
+        (item) => item.value
+      ),
+      // friendsInvolved: e.target.selectedOptions,
+    });
+  };
+
+  renderFriendsInvolved() {
+    const { friends } = this.props;
+    const { friendsInvolved } = this.state;
+
+    // const filterColors = (inputValue) => {
+    //   console.log(friends);
+    //   if (!isEmpty(friends)) {
+    //     return friends.filter((i) =>
+    //       // (i) => console.log(i)
+    //       i.firstName.toLowerCase().includes(inputValue.toLowerCase())
+    //     );
+    //   }
+    // };
+
+    // const loadOptions = (inputValue, callback) => {
+    //   setTimeout(() => {
+    //     callback(filterColors(inputValue));
+    //   }, 1000);
+    // };
+
+    // const handleInputChange = (newValue) => {
+    //   const inputValue = newValue.replace(/\W/g, "");
+    //   this.setState({ inputValue: inputValue });
+    //   return inputValue;
+    // };
+    const friendSelectMultiple = (
+      // todo: finish setting up async-creatable select
+      // <AsyncCreatableSelect
+      //   cacheOptions
+      //   isMulti
+      //   defaultOptions={friends}
+      //   loadOptions={loadOptions}
+      //   onInputChange={handleInputChange}
+      // />
+      <Select
+        multiple
+        native
+        value={friendsInvolved}
+        onChange={this.inputChangeMultiple}
+        // className="form-control"
+        // id="friendsInvolved"
+        // type="text"
+        inputProps={{
+          id: "select-multiple-native",
+        }}
+        fullWidth
+      >
+        {_.map(friends, (value, key) => {
+          return (
+            <option key={key} value={value.id}>
+              {value.firstName}
+            </option>
+          );
+
+          // return <FriendsInvolved key={value.id} friends={value} />;
+        })}
+      </Select>
+    );
+    return friendSelectMultiple;
+  }
+
   renderForm = () => {
     const { showForm, tripName } = this.state;
     const marginBottom = "15px";
+    // console.log(this.props);
 
     if (showForm) {
       return (
@@ -91,6 +174,15 @@ class MaterialAddNewTrip extends Component {
                     fullWidth
                   />
                   {/* {console.log(this.state.expense)} */}
+                </FormControl>
+                <FormControl style={{ marginBottom: marginBottom }}>
+                  <InputLabel shrink htmlFor="select-multiple-native">
+                    Friends Involved
+                  </InputLabel>
+
+                  <pre>inputValue: "{this.state.inputValue}"</pre>
+                  {/* <InputLabel>Friends Involved</InputLabel> */}
+                  {this.renderFriendsInvolved()}
                 </FormControl>
                 <Button
                   type="submit"
@@ -158,27 +250,41 @@ class MaterialAddNewTrip extends Component {
   }
 }
 
+// export default compose(
+//   firestoreConnect((props) => [
+//     {
+//       collection: "expenses",
+//       storeAs: "expense",
+//     },
+//     {
+//       collection: "friends",
+//       storeAs: "friend",
+//     },
+//     {
+//       collection: "users",
+//       doc: props.uid,
+//       subcollections: [{ collection: "trips" }],
+//       storeAs: `${props.uid}-trips`,
+//     },
+//   ]),
+//   connect(({ firestore: { data } }, props) => ({
+//     expenses: data.expenses,
+//     friends: data.friends,
+//     trips: data[`${props.uid}-trips`],
+//   }))
+// )(MaterialAddNewTrip);
 export default compose(
   firestoreConnect((props) => [
     {
-      collection: "expenses",
-      storeAs: "expense",
-    },
-    {
-      collection: "friends",
-      storeAs: "friend",
-    },
-    {
       collection: "users",
       doc: props.uid,
-      subcollections: [{ collection: "trips" }],
-      storeAs: `${props.uid}-trips`,
+      storeAs: `${props.id}-contacts`,
+      subcollections: [{ collection: "contacts" }],
     },
   ]),
 
-  connect(({ firestore: { data } }, props) => ({
-    expenses: data.expenses,
-    friends: data.friends,
-    trips: data[`${props.uid}-trips`],
+  connect(({ firestore: { ordered } }, props) => ({
+    friends: ordered[`${props.id}-contacts`],
+    // expenses: ordered[`${props.id}-expenses`],
   }))
 )(MaterialAddNewTrip);

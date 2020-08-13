@@ -9,9 +9,11 @@ import MaterialAddNewTrip from "../trips/MaterialAddNewTrip";
 import TripList from "../trips/TripList";
 import Divider from "@material-ui/core/Divider";
 import FriendsHook from "../friends/FriendsHook";
+import AddContact from "../friends/AddContact";
 
 export default function Sidebar(props) {
   const { id } = useParams();
+  console.log(props);
   return (
     <div style={{ paddingLeft: "10%" }}>
       {/* <div className="alert alert-info mt-4" role="alert">
@@ -20,7 +22,7 @@ export default function Sidebar(props) {
       <>
         {props ? (
           <>
-            <MaterialAddNewTrip uid={props.uid} />
+            <MaterialAddNewTrip uid={props.uid} friends={props.friends} />
 
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
             <TripList uid={props.uid} />
@@ -36,7 +38,8 @@ export default function Sidebar(props) {
             <AddExpense id={id} uid={props.uid} />
 
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
-            <FriendsHook uid={props.uid} id={id} />
+            {/* <FriendsHook uid={props.uid} id={id} /> */}
+            <AddContact uid={props.uid} id={id} />
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
 
             <Friends id={id} uid={props.uid} />

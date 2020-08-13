@@ -28,6 +28,7 @@ class AddExpense extends Component {
     expense: "",
     amount: 0,
     friendsInvolved: [""],
+    // friendsInvolved: {},
     whoPaid: "",
     total: 0,
   };
@@ -39,11 +40,13 @@ class AddExpense extends Component {
   };
 
   inputChangeMultiple = (e) => {
+    console.log(e.target.selectedOptions);
     this.setState({
       friendsInvolved: Array.from(
         e.target.selectedOptions,
         (item) => item.value
       ),
+      // friendsInvolved: e.target.selectedOptions,
     });
   };
 
@@ -114,15 +117,10 @@ class AddExpense extends Component {
     firestore
       .add(
         {
-          collection: "users",
-          doc: uid,
-          subcollections: [
-            { collection: "trips", doc: this.props.id },
-            { collection: "expenses" },
-          ],
+          collection: "expenses",
         },
         {
-          name: expense,
+          expenseName: expense,
           expenseAmount: Number(amount),
           friendsInvolved: friendsInvolved,
           whoPaid: whoPaid,
@@ -159,7 +157,7 @@ class AddExpense extends Component {
   renderForm = () => {
     const { showForm, expense, amount } = this.state;
     const marginBottom = "15px";
-    // if (showForm) {
+
     return (
       <Dialog
         open={showForm}
@@ -177,29 +175,16 @@ class AddExpense extends Component {
                 <InputLabel>Expense Name</InputLabel>
                 <Input
                   autoFocus
-                  // margin="dense"
                   id="friendNext"
                   label="Expense Name"
                   type="text"
                   name="expense"
                   value={expense}
-                  // className="form-control"
                   onChange={this.inputChange}
                   fullWidth
                 />
-                {/* {console.log(this.state.expense)} */}
               </FormControl>
-              {/* <label>Expense Name</label> */}
-              {/* <input
-                value={expense}
-                className="form-control"
-                onChange={this.inputChange}
-                id="friendNext"
-                type="text"
-                name="expense"
-              /> */}
 
-              {/* <div className="form-group">*/}
               <FormControl style={{ marginBottom: marginBottom }}>
                 <InputLabel>Expense Amount</InputLabel>
 
@@ -219,22 +204,10 @@ class AddExpense extends Component {
                   fullWidth
                 />
               </FormControl>
-              {/* <label>Amount</label>
-              <input
-                value={amount}
-                onChange={this.inputChange}
-                className="form-control"
-                type="number"
-                id="amount"
-                name="amount"
-              /> */}
-              {/* </div> */}
-              {/* Friends involved */}
               <FormControl style={{ marginBottom: marginBottom }}>
                 <InputLabel shrink htmlFor="select-multiple-native">
                   Friends Involved
                 </InputLabel>
-                {/* <InputLabel>Friends Involved</InputLabel> */}
                 {this.renderFriendsInvolved()}
               </FormControl>
 
@@ -263,55 +236,7 @@ class AddExpense extends Component {
           </Button>
         </DialogActions>
       </Dialog>
-
-      // <div className="card mt-3 pl-1">
-      //   <div className="card-header">Add Expense</div>
-      //   <div className="card-body">
-      //     <form onSubmit={this.formSubmit}>
-      //       <div className="form-group">
-      //         <label>Expense Name</label>
-      //         <input
-      //           value={expense}
-      //           className="form-control"
-      //           onChange={this.inputChange}
-      //           id="friendNext"
-      //           type="text"
-      //           name="expense"
-      //         />
-      //       </div>
-
-      //       <div className="form-group">
-      //         <label>Amount</label>
-      //         <input
-      //           value={amount}
-      //           onChange={this.inputChange}
-      //           className="form-control"
-      //           type="number"
-      //           id="amount"
-      //           name="amount"
-      //         />
-      //       </div>
-      //       {/* Friends involved */}
-      //       <div className="form-group">
-      //         <label>Friends Involved {""}</label>
-      //         {this.renderFriendsInvolved()}
-      //       </div>
-      //       {/* Who Paid */}
-      //       <div className="form-group">
-      //         <label>Who Paid</label>
-      //         {this.renderFriend()}
-      //       </div>
-
-      //       <input
-      //         type="submit"
-      //         value="Submit"
-      //         className="btn btn-success btn-block"
-      //       />
-      //     </form>
-      //   </div>
-      // </div>
     );
-    // }
   };
 
   render() {
@@ -328,12 +253,6 @@ class AddExpense extends Component {
             Close
           </Button>
         ) : (
-          // <button
-          //   className="btn btn-danger btn-block mt-4"
-          //   onClick={() => this.setState({ showForm: !showForm })}
-          // >
-          //   Close
-          // </button>
           <Button
             variant="contained"
             color="primary"
@@ -341,12 +260,6 @@ class AddExpense extends Component {
           >
             Add Expense{" "}
           </Button>
-          // <button
-          //   className="btn btn-secondary btn-block mt-4"
-          //   onClick={() => this.setState({ showForm: !showForm })}
-          // >
-          //   Add Expense{" "}
-          // </button>
         )}
         <div>
           <div className="">{this.renderForm()}</div>

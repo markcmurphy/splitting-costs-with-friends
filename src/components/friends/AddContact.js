@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { useFirestoreConnect, useFirestore } from "react-redux-firebase";
+import {
+  useFirestoreConnect,
+  useFirestore,
+  useFirebase,
+} from "react-redux-firebase";
 import AsyncSelect from "react-select/async";
 // import Async, { makeAsyncSelect } from "react-select/async";
+import firebase from "firebase";
+import { createStore, combineReducers, compose } from "redux";
+import "firebase/firestore";
 
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../loading/LoadingSpinner";
@@ -40,7 +47,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import { FormGroup } from "@material-ui/core";
 
-export default function FriendsHook(props) {
+// import GetNameById from "./GetNameById";
+
+export default function AddContact(props) {
   const [showForm, setForm] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [emailMatch, setEmailMatch] = useState("");
@@ -55,10 +64,12 @@ export default function FriendsHook(props) {
 
   const firestore = useFirestore();
 
-  // Connect to redux state using selector hook
-  //   const users = useSelector((state) => state.firestore.data.users);
+  //* Connect to redux state using selector hook
+  ////   const users = useSelector((state) => state.firestore.data.users);
+
   const users = useSelector(({ firestore: { data } }) => data.users);
 
+  // TODO: get UID by email using cloud function instead of searching users
   const getKeyByValue = (value) => {
     for (const prop in users) {
       if (users.hasOwnProperty(prop)) {
@@ -72,22 +83,24 @@ export default function FriendsHook(props) {
     }
   };
 
-  const inputChange = (e) => {
+  //   todo: combine input change methods
+  const inputChangeName = (e) => {
     setFirstName(e.target.value);
+  };
+  const inputChangeEmail = (e) => {
+    setEmailMatch(e.target.value);
   };
 
   const addExtTrip = () => {
     const { uid, id } = props;
-
     const userValue = getKeyByValue(firstName);
-
     firestore
       .add(
         {
           collection: "users",
           doc: userValue,
           subcollections: [
-            { collection: "trips" },
+            { collection: "contacts" },
             // { collection: "friends" },
           ],
         },
@@ -96,33 +109,52 @@ export default function FriendsHook(props) {
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
       });
-
     // setFirstName("");
     // setForm(false);
   };
 
-  console.log(getKeyByValue(firstName));
+  //   console.log(<GetNameById id={getKeyByValue(emailMatch)} />);
+
+  //   useFirestoreConnect((inputValue) => [
+  //     { collection: "users", doc: inputValue, storeAs: "user" }, // or `todos/${props.todoId}`
+  //   ]);
+
+  //   const userName = useSelector(
+  //     ({ firestore: { data } }) => data.users && data.users[inputValue]
+  //   );
+
+  //   const userId = getKeyByValue(emailMatch);
+
+  //   if (userName) {
+  //     console.log(userName.firstName);
+  //     setInputValue(userId);
+  //   }
+  //   console.log(GetNameById("3wsjhXqIYNN4Tls2gSs3jaUb4On2"));
 
   const formSubmit = (e) => {
     e.preventDefault();
     const { uid, id } = props;
+
     firestore
       .add(
         {
           collection: "users",
           doc: uid,
           subcollections: [
-            { collection: "trips", doc: id },
-            { collection: "friends" },
+            // { collection: "trips", doc: id },
+            { collection: "contacts" },
           ],
         },
-        { firstName: firstName, id: getKeyByValue(firstName) }
+        {
+          id: getKeyByValue(emailMatch),
+          firstName: firstName,
+        }
       )
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
       });
 
-    addExtTrip();
+    // addExtTrip();
 
     setFirstName("");
     setForm(false);
@@ -138,6 +170,8 @@ export default function FriendsHook(props) {
           onClose={() => setForm(false)}
           aria-labelledby="form-dialog-title"
         >
+          {/* <GetNameById id="3wsjhXqIYNN4Tls2gSs3jaUb4On2" /> */}
+
           <DialogTitle id="form-dialog-title">Add New Friend</DialogTitle>
           <DialogContent>
             <DialogContentText>Enter your friends here!</DialogContentText>
@@ -151,10 +185,34 @@ export default function FriendsHook(props) {
                     type="text"
                     name="firstName"
                     value={firstName}
-                    onChange={inputChange}
+                    onChange={inputChangeName}
                     fullWidth
                   />
                 </FormControl>
+                <FormControl style={{ marginBottom: marginBottom }}>
+                  <InputLabel>Email Address</InputLabel>
+                  <Input
+                    autoFocus
+                    id="emailNext"
+                    type="text"
+                    name="emailAddress"
+                    value={emailMatch}
+                    onChange={inputChangeEmail}
+                    fullWidth
+                  />
+                </FormControl>
+                {/* <FormControl style={{ marginBottom: marginBottom }}>
+                  <InputLabel>Friend Name</InputLabel>
+                  <Input
+                    autoFocus
+                    id="friendNext"
+                    type="text"
+                    name="firstName"
+                    value={firstName}
+                    onChange={inputChange}
+                    fullWidth
+                  />
+                </FormControl> */}
                 <Button
                   type="submit"
                   variant="contained"
