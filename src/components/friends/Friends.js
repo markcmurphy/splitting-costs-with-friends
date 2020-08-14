@@ -175,37 +175,7 @@ class Friends extends Component {
 
   render() {
     const { showForm } = this.state;
-    return (
-      <div>
-        {/* {showForm ? (
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => this.setState({ showForm: !showForm })}
-            style={{ marginTop: "5px" }}
-          >
-            Close
-          </Button>
-        ) : (
-          <div>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => this.setState({ showForm: !showForm })}
-              style={{ marginTop: "5px" }}
-            >
-              Add Friend
-            </Button>
-            <IconButton aria-label="delete" color="primary">
-              <PersonAddIcon />
-            </IconButton>
-          </div>
-        )}
-        {this.renderForm()} */}
-
-        {this.renderFriend()}
-      </div>
-    );
+    return <div>{this.renderFriend()}</div>;
   }
 }
 

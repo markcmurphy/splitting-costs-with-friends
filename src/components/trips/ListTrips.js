@@ -161,17 +161,50 @@ ListTrips.propTypes = {
   style: PropTypes.object.isRequired,
 };
 
+// export default compose(
+//   firestoreConnect((props) => [
+//     {
+//       collection: "users",
+//       doc: props.uid,
+//       subcollections: [{ collection: "trips" }],
+//       storeAs: `${props.uid}-trips`,
+//     },
+//   ]),
+
+//   connect(({ firestore: { ordered } }, props) => ({
+//     trips: ordered[`${props.uid}-trips`],
+//   }))
+// )(ListTrips);
 export default compose(
   firestoreConnect((props) => [
+    { collection: "trips" },
     {
-      collection: "users",
-      doc: props.uid,
-      subcollections: [{ collection: "trips" }],
-      storeAs: `${props.uid}-trips`,
+      collection: "trips",
+      where: [["tripOwner", "==", "3wsjhXqIYNN4Tls2gSs3jaUb4On2"]],
+      storeAs: `myOwnedTripsMark`,
     },
   ]),
-
   connect(({ firestore: { ordered } }, props) => ({
-    trips: ordered[`${props.uid}-trips`],
+    trips: ordered,
+    myOwnedTrips: ordered[`myOwnedTripsMark`],
   }))
 )(ListTrips);
+
+// connect((state, props) => ({
+//   : state.firestore.data.projects,
+//   myProjects: state.firestore.data[myProjectsReduxName] // use storeAs path to gather from redux
+// }))
+
+//   firestoreConnect((props) => [
+//     {
+//       collection: "trips",
+//       // doc: props.uid,
+//       // subcollections: [{ collection: "trips" }],
+//       // storeAs: `${props.uid}-trips`,
+//     },
+//   ]),
+
+//   connect(({ firestore: { ordered } }, props) => ({
+//     trips: ordered[`${props.uid}-trips`],
+//   }))
+// )(ListTrips)

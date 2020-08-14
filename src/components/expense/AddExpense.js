@@ -109,6 +109,7 @@ class AddExpense extends Component {
     return friendSelectMultiple;
   }
 
+  // todo: associate expense with current trip and current UID
   formSubmit = (e) => {
     e.preventDefault();
     const { expense, amount, friendsInvolved, whoPaid } = this.state;

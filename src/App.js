@@ -34,7 +34,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { withStyles } from "@material-ui/core/styles";
 
-const drawerWidth = 200;
+const drawerWidth = 240;
 
 const useStyles = (theme) => ({
   root: {

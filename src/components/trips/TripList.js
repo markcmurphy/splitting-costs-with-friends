@@ -13,28 +13,92 @@ import { Link as RouterLink } from "react-router-dom";
 import Link from "@material-ui/core/Link";
 import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
+import { makeStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 
 import _ from "lodash";
 
 export default function TripList(props) {
   const [showForm, setShowForm] = useState(false);
 
+  // useFirestoreConnect([
+  //   {
+  //     collection: "users",
+  //     doc: props.uid,
+  //     subcollections: [{ collection: "trips" }],
+  //     storeAs: "trips",
+  //   },
+  // ]);
   useFirestoreConnect([
     {
-      collection: "users",
-      doc: props.uid,
-      subcollections: [{ collection: "trips" }],
-      storeAs: "trips",
+      collection: "trips",
+      where: [["tripOwner", "==", props.uid]],
+      storeAs: "myOwnedTrips",
+    },
+    {
+      collection: "trips",
+      where: [["friendsInvolved", "array-contains", props.uid]],
+      storeAs: "tripsNotOwned",
     },
   ]);
 
-  const trips = useSelector((state) => state.firestore.ordered.trips);
+  const trips = useSelector((state) => state.firestore.ordered.myOwnedTrips);
+  const tripsNotOwned = useSelector(
+    (state) => state.firestore.ordered.tripsNotOwned
+  );
+
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      flexGrow: 1,
+      maxWidth: 752,
+    },
+    demo: {
+      backgroundColor: theme.palette.background.paper,
+    },
+    title: {
+      margin: theme.spacing(4, 0, 2),
+    },
+  }));
+
+  const classes = useStyles();
 
   function RenderList() {
     if (!showForm) {
       return (
         <List>
           {_.map(trips, (item) => {
+            return (
+              <ListItem key={item.id}>
+                <ListItemAvatar>
+                  <Avatar>
+                    <ImageIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <Link
+                  style={{ textDecoration: "none" }}
+                  component={RouterLink}
+                  to={{
+                    pathname: `/trip/${item.id}`,
+                  }}
+                >
+                  <ListItemText
+                    primary={item.tripName}
+                    secondary="Jan 7, 2014"
+                  />
+                </Link>
+              </ListItem>
+            );
+          })}
+        </List>
+      );
+    }
+  }
+
+  function RenderListTripsNotOwned() {
+    if (!showForm) {
+      return (
+        <List>
+          {_.map(tripsNotOwned, (item) => {
             return (
               <ListItem key={item.id}>
                 <ListItemAvatar>
@@ -82,7 +146,14 @@ export default function TripList(props) {
           Close Trip List
         </Button>
       )}
+      <Typography variant="h6" className={classes.title}>
+        My Owned Trips
+      </Typography>
       <List>{RenderList()}</List>
+      <Typography variant="h6" className={classes.title}>
+        Trips I'm involved in
+      </Typography>
+      <List>{RenderListTripsNotOwned()}</List>
     </>
   );
 }

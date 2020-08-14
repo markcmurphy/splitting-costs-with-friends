@@ -27,6 +27,7 @@ class MaterialAddNewTrip extends Component {
     tripName: "",
     inputValue: "",
     friendsInvolved: [""],
+    // tripID: "",
   };
 
   inputChange = (e) => {
@@ -44,15 +45,48 @@ class MaterialAddNewTrip extends Component {
       // doc: uid,
       // subcollections: [{ collection: "trips" }],
     };
-
     const tripInfo = {
       tripName: tripName,
       tripOwner: uid,
       friendsInvolved: friendsInvolved,
     };
+
+    let tripID = [];
+
     firestore.add(docRefConfig, tripInfo).then((docRef) => {
+      // this.setState({ tripID: docRef.id });
+      // this.tripID = docRef.id;
+      for (const friend of friendsInvolved) {
+        // console.log(this.state.tripID);
+        firestore.update(
+          {
+            collection: "users",
+            // where: [["id", "==", friend]],
+            doc: friend,
+            // subcollections: [{ collection: "onTrips" }],
+          },
+          { onTrips: firestore.FieldValue.arrayUnion(docRef.id) }
+        );
+      }
       console.log("Document written with ID: ", docRef.id);
     });
+
+    // for (const friend of friendsInvolved) {
+    //   // console.log(this.state.tripID);
+    //   firestore.update(
+    //     {
+    //       collection: "users",
+    //       // where: [["id", "==", friend]],
+    //       doc: friend,
+    //       // subcollections: [{ collection: "onTrips" }],
+    //     },
+    //     { tripID: tripID }
+    //   );
+    // }
+
+    // firestore.add(docRefConfig, tripInfo).then((docRef) => {
+    //   console.log("Document written with ID: ", docRef.id);
+    // });
 
     this.setState({
       tripName: "",

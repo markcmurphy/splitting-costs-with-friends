@@ -45,6 +45,7 @@ export default function FriendsHook(props) {
   const [firstName, setFirstName] = useState("");
   const [emailMatch, setEmailMatch] = useState("");
   const [inputValue, setInputValue] = useState("");
+  const firestore = useFirestore();
 
   // sync /users from firebase into redux
   useFirestoreConnect([
@@ -53,12 +54,11 @@ export default function FriendsHook(props) {
     },
   ]);
 
-  const firestore = useFirestore();
-
   // Connect to redux state using selector hook
   //   const users = useSelector((state) => state.firestore.data.users);
   const users = useSelector(({ firestore: { data } }) => data.users);
 
+  // todo: firebase query
   const getKeyByValue = (value) => {
     for (const prop in users) {
       if (users.hasOwnProperty(prop)) {
@@ -76,33 +76,7 @@ export default function FriendsHook(props) {
     setFirstName(e.target.value);
   };
 
-  const addExtTrip = () => {
-    const { uid, id } = props;
-
-    const userValue = getKeyByValue(firstName);
-
-    firestore
-      .add(
-        {
-          collection: "users",
-          doc: userValue,
-          subcollections: [
-            { collection: "trips" },
-            // { collection: "friends" },
-          ],
-        },
-        { id: id }
-      )
-      .then((docRef) => {
-        console.log("Document written with ID: ", docRef.id);
-      });
-
-    // setFirstName("");
-    // setForm(false);
-  };
-
-  console.log(getKeyByValue(firstName));
-
+  // todo: handle adding contacts not already created if UID not found
   const formSubmit = (e) => {
     e.preventDefault();
     const { uid, id } = props;
@@ -116,13 +90,11 @@ export default function FriendsHook(props) {
             { collection: "friends" },
           ],
         },
-        { firstName: firstName, id: getKeyByValue(firstName) }
+        { firstName: firstName, id: getKeyByValue(firstName), label: firstName }
       )
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
       });
-
-    addExtTrip();
 
     setFirstName("");
     setForm(false);
