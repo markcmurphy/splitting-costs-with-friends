@@ -17,28 +17,19 @@ export default function ListFriendsOnTrip(props) {
   useFirestoreConnect([
     {
       collection: "users",
-      //   doc: props.id,
       where: [["onTrips", "array-contains", props.id]],
-
-      //   subcollections: [{ collection: "friendsInvolved" }],
-      //   where: [["tripOwner", "==", props.uid]],
       storeAs: "tripFriendIDs",
     },
-    // {
-    //   collection: "trips",
-    //   where: [["friendsInvolved", "array-contains", props.uid]],
-    //   storeAs: "tripsNotOwned",
-    // },
   ]);
 
   const tripFriendIDs = useSelector(
     (state) => state.firestore.ordered.tripFriendIDs
   );
 
-  if (tripFriendIDs) {
-    console.log(tripFriendIDs);
-  }
-  console.log(props.id);
+  // if (tripFriendIDs) {
+  //   console.log(tripFriendIDs);
+  // }
+  // console.log(props.id);
   //    const tripsNotOwned = useSelector(
   //      (state) => state.firestore.ordered.tripsNotOwned
   //    );
@@ -52,7 +43,7 @@ export default function ListFriendsOnTrip(props) {
       backgroundColor: theme.palette.background.paper,
     },
     title: {
-      margin: theme.spacing(4, 0, 2),
+      margin: theme.spacing(2, 0, 1),
     },
   }));
 
@@ -61,12 +52,12 @@ export default function ListFriendsOnTrip(props) {
   const renderFriend = (props) => {
     const friendsList = _.map(tripFriendIDs, (value, key) => {
       return (
-        <ListItem key={value.id}>
-          <ListItemAvatar>
+        <ListItem key={value.id} dense={true}>
+          {/* <ListItemAvatar>
             <Avatar>
               <ImageIcon />
             </Avatar>
-          </ListItemAvatar>
+          </ListItemAvatar> */}
           {/* <Link
                         to={{
                           pathname: `/trip/${item.id}`,

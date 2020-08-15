@@ -43,11 +43,15 @@ export default function Sidebar(props) {
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
             {/* <FriendsHook uid={props.uid} id={id} /> */}
             <AddContact uid={props.uid} id={id} />
-            <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
+
+            {/* <Divider style={{ marginTop: "15px", marginBottom: "15px" }} /> */}
 
             <Friends id={id} uid={props.uid} />
+
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
+
             <ListFriends id={id} uid={props.uid} />
+            <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
             <ListFriendsOnTrip id={id} uid={props.uid} />
           </div>
         )}

@@ -51,7 +51,8 @@ class AddExpense extends Component {
   };
 
   renderFriend() {
-    const { friends } = this.props;
+    const { friends, tripFriendIDs } = this.props;
+    console.log(tripFriendIDs);
     const friendSelect = (
       <Select
         // multiple={false}
@@ -63,10 +64,10 @@ class AddExpense extends Component {
         name="whoPaid"
       >
         {/* <MenuItem value="">Select Option</MenuItem> */}
-        {_.map(friends, (value, key) => {
+        {_.map(tripFriendIDs, (value, key) => {
           return (
             <MenuItem key={key} value={value.id}>
-              {value.firstName}
+              {value.label}
             </MenuItem>
           );
         })}
@@ -77,7 +78,7 @@ class AddExpense extends Component {
   }
 
   renderFriendsInvolved() {
-    const { friends } = this.props;
+    const { friends, tripFriendIDs } = this.props;
     const { friendsInvolved } = this.state;
 
     const friendSelectMultiple = (
@@ -94,10 +95,10 @@ class AddExpense extends Component {
         }}
         fullWidth
       >
-        {_.map(friends, (value, key) => {
+        {_.map(tripFriendIDs, (value, key) => {
           return (
             <option key={key} value={value.id}>
-              {value.firstName}
+              {value.label}
             </option>
           );
 
@@ -121,6 +122,8 @@ class AddExpense extends Component {
           collection: "expenses",
         },
         {
+          createdAt: Date.now(),
+          createdBy: uid,
           expenseName: expense,
           expenseAmount: Number(amount),
           friendsInvolved: friendsInvolved,
@@ -290,10 +293,16 @@ export default compose(
         { collection: "friends" },
       ],
     },
+    {
+      collection: "users",
+      where: [["onTrips", "array-contains", props.id]],
+      storeAs: `${props.id}-tripFriendIDs`,
+    },
   ]),
 
   connect(({ firestore: { ordered } }, props) => ({
     friends: ordered[`${props.id}-friends`],
     expenses: ordered[`${props.id}-expenses`],
+    tripFriendIDs: ordered[`${props.id}-tripFriendIDs`],
   }))
 )(AddExpense);

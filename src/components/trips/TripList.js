@@ -15,6 +15,7 @@ import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
 
 import _ from "lodash";
 
@@ -56,7 +57,7 @@ export default function TripList(props) {
       backgroundColor: theme.palette.background.paper,
     },
     title: {
-      margin: theme.spacing(4, 0, 2),
+      margin: theme.spacing(2, 0, 1),
     },
   }));
 
@@ -68,12 +69,13 @@ export default function TripList(props) {
         <List>
           {_.map(trips, (item) => {
             return (
-              <ListItem key={item.id}>
-                <ListItemAvatar>
+              <ListItem key={item.id} dense={true}>
+                {/* TODO: reenable avatars */}
+                {/* <ListItemAvatar>
                   <Avatar>
                     <ImageIcon />
                   </Avatar>
-                </ListItemAvatar>
+                </ListItemAvatar> */}
                 <Link
                   style={{ textDecoration: "none" }}
                   component={RouterLink}
@@ -81,9 +83,10 @@ export default function TripList(props) {
                     pathname: `/trip/${item.id}`,
                   }}
                 >
+                  {/* TODO: reenable secondary text */}
                   <ListItemText
                     primary={item.tripName}
-                    secondary="Jan 7, 2014"
+                    // secondary="Jan 7, 2014"
                   />
                 </Link>
               </ListItem>
@@ -97,15 +100,15 @@ export default function TripList(props) {
   function RenderListTripsNotOwned() {
     if (!showForm) {
       return (
-        <List>
+        <>
           {_.map(tripsNotOwned, (item) => {
             return (
               <ListItem key={item.id}>
-                <ListItemAvatar>
+                {/* <ListItemAvatar>
                   <Avatar>
                     <ImageIcon />
                   </Avatar>
-                </ListItemAvatar>
+                </ListItemAvatar> */}
                 <Link
                   style={{ textDecoration: "none" }}
                   component={RouterLink}
@@ -115,13 +118,13 @@ export default function TripList(props) {
                 >
                   <ListItemText
                     primary={item.tripName}
-                    secondary="Jan 7, 2014"
+                    // secondary="Jan 7, 2014"
                   />
                 </Link>
               </ListItem>
             );
           })}
-        </List>
+        </>
       );
     }
   }
@@ -146,10 +149,12 @@ export default function TripList(props) {
           Close Trip List
         </Button>
       )}
+      <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
       <Typography variant="h6" className={classes.title}>
         My Owned Trips
       </Typography>
       <List>{RenderList()}</List>
+      <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
       <Typography variant="h6" className={classes.title}>
         Trips I'm involved in
       </Typography>

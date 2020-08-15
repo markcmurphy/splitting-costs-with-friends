@@ -30,7 +30,7 @@ export default function ListFriends(props) {
   ]);
 
   const myContacts = useSelector((state) => state.firestore.ordered.myContacts);
-  console.log(myContacts);
+  // console.log(myContacts);
   //    const tripsNotOwned = useSelector(
   //      (state) => state.firestore.ordered.tripsNotOwned
   //    );
@@ -44,7 +44,7 @@ export default function ListFriends(props) {
       backgroundColor: theme.palette.background.paper,
     },
     title: {
-      margin: theme.spacing(4, 0, 2),
+      margin: theme.spacing(2, 0, 1),
     },
   }));
 
@@ -53,12 +53,13 @@ export default function ListFriends(props) {
   const renderFriend = (props) => {
     const friendsList = _.map(myContacts, (value, key) => {
       return (
-        <ListItem key={value.id}>
-          <ListItemAvatar>
+        <ListItem key={value.id} dense={true}>
+          {/* TODO: reenable avatars */}
+          {/* <ListItemAvatar>
             <Avatar>
               <ImageIcon />
             </Avatar>
-          </ListItemAvatar>
+          </ListItemAvatar> */}
           {/* <Link
                       to={{
                         pathname: `/trip/${item.id}`,
@@ -70,6 +71,8 @@ export default function ListFriends(props) {
                     > */}
           <ListItemText
             primary={value.firstName}
+            // TODO: reenable secondary text
+
             // secondary="Jan 7, 2014"
           />
           {/* </Link> */}
