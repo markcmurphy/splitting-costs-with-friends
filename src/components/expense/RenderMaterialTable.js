@@ -20,7 +20,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 class RenderMaterialTable extends Component {
   constructor(props) {
     super(props);
-    // this.contentEditable = React.createRef();
     this.state = {
       showForm: false,
       expense: "",
@@ -91,33 +90,6 @@ class RenderMaterialTable extends Component {
 
     return <div>{friendSelectMultiple}</div>;
   }
-
-  // renderExpense() {
-  //   const { expenses, friends, firestore, tripId } = this.props;
-
-  //   const expensesList = _.map(expenses, (value, key) => {
-  //     return (
-  //       <ExpenseList
-  //         key={key}
-  //         expense={value}
-  //         friends={friends}
-  //         firestore={firestore}
-  //         tripId={tripId}
-  //         uid={this.props.uid}
-  //       />
-  //     );
-  //   });
-  //   if (!isEmpty(expenses) && !isEmpty(friends)) {
-  //     return expensesList;
-  //   }
-  //   return (
-  //     <Tr>
-  //       <Td className="mt-4">
-  //         <h4>You have no expenses logged!</h4>
-  //       </Td>
-  //     </Tr>
-  //   );
-  // }
 
   totalPerPerson() {
     const { tripFriendIDs, tripExpenses } = this.props;
@@ -431,21 +403,24 @@ class RenderMaterialTable extends Component {
       target: { value },
     } = event;
 
+    console.log(value);
+    console.log(expense);
+
     // Update friend
     const updExpense = {
-      name: [value],
+      expenseName: value,
     };
 
     // update expense in firestore
     firestore.update(
       {
-        collection: "users",
-        doc: uid,
-        storeAs: `${tripId}-expense`,
-        subcollections: [
-          { collection: "trips", doc: tripId },
-          { collection: "expenses", doc: expense.id },
-        ],
+        collection: "expenses",
+        doc: expense.id,
+        // storeAs: `${tripId}-expense`,
+        // subcollections: [
+        //   { collection: "trips", doc: tripId },
+        //   { collection: "expenses", doc: expense.id },
+        // ],
       },
       updExpense
     );
