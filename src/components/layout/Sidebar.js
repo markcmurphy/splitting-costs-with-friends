@@ -16,7 +16,6 @@ import ListFriendsOnTrip from "../friends/ListFriendsOnTrip.js";
 
 export default function Sidebar(props) {
   const { id } = useParams();
-  console.log(props);
   return (
     <div style={{ paddingLeft: "10%" }}>
       {/* <div className="alert alert-info mt-4" role="alert">
@@ -28,7 +27,7 @@ export default function Sidebar(props) {
             <MaterialAddNewTrip uid={props.uid} friends={props.friends} />
 
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
-            <TripList uid={props.uid} />
+            {/* <TripList uid={props.uid} id={props.id} /> */}
           </>
         ) : null}
       </>
@@ -38,6 +37,8 @@ export default function Sidebar(props) {
         path="/trip/:id"
         render={() => (
           <div>
+            <TripList uid={props.uid} id={props.id} />
+
             <AddExpense id={id} uid={props.uid} />
 
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />

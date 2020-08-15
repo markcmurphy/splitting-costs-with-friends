@@ -15,6 +15,7 @@ import ContentEditable from "react-contenteditable";
 import WhoPaid from "./WhoPaid.js";
 import FriendsInvolved from "./FriendsInvolved";
 import LoadingSpinner from "../loading/LoadingSpinner";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 class RenderMaterialTable extends Component {
   constructor(props) {
@@ -32,16 +33,16 @@ class RenderMaterialTable extends Component {
   }
 
   addTotalExpenses = () => {
-    const { expenses } = this.props;
+    const { tripExpenses } = this.props;
     let newTotal = 0;
-    for (let x in expenses) {
-      newTotal += Number(expenses[x].expenseAmount);
+    for (let x in tripExpenses) {
+      newTotal += Number(tripExpenses[x].expenseAmount);
     }
     return newTotal;
   };
 
   renderFriend() {
-    const { friends } = this.props;
+    const { tripFriendIDs } = this.props;
     const friendSelect = (
       <select
         multiple={false}
@@ -53,12 +54,12 @@ class RenderMaterialTable extends Component {
       >
         <option value="">Select Option</option>
 
-        {_.map(friends, (value, key) => {
+        {_.map(tripFriendIDs, (value, key) => {
           return <WhoPaid key={value.id} friends={value} />;
         })}
       </select>
     );
-    if (!isEmpty(friends)) {
+    if (!isEmpty(tripFriendIDs)) {
       return <div>{friendSelect}</div>;
     } else {
       return <LoadingSpinner />;
@@ -66,7 +67,7 @@ class RenderMaterialTable extends Component {
   }
 
   renderFriendsInvolved() {
-    const { friends } = this.props;
+    const { tripFriendIDs } = this.props;
     const { friendsInvolved } = this.state;
     const friendSelectMultiple = (
       <select
@@ -76,7 +77,7 @@ class RenderMaterialTable extends Component {
         id="friendsInvolved"
         type="text"
       >
-        {_.map(friends, (value, key) => {
+        {_.map(tripFriendIDs, (value, key) => {
           return (
             <FriendsInvolved
               key={value.id}
@@ -119,12 +120,12 @@ class RenderMaterialTable extends Component {
   // }
 
   totalPerPerson() {
-    const { friends, expenses } = this.props;
+    const { tripFriendIDs, tripExpenses } = this.props;
     const friendsObj = {};
 
-    if (!isEmpty(expenses) && !isEmpty(friends)) {
-      _.map(friends, (value, key) => {
-        for (let expense of expenses) {
+    if (!isEmpty(tripExpenses) && !isEmpty(tripFriendIDs)) {
+      _.map(tripFriendIDs, (value, key) => {
+        for (let expense of tripExpenses) {
           if (
             friendsObj[value.id] &&
             expense.friendsInvolved.includes(value.id)
@@ -145,8 +146,8 @@ class RenderMaterialTable extends Component {
   }
 
   renderTotalPerPerson(friendsObj) {
-    const { friends } = this.props;
-    const map = _.map(friends, (value, key) => {
+    const { tripFriendIDs } = this.props;
+    const map = _.map(tripFriendIDs, (value, key) => {
       if (friendsObj[value.id]) {
         return (
           <Td key={value.id}>${parseFloat(friendsObj[value.id]).toFixed(2)}</Td>
@@ -159,11 +160,11 @@ class RenderMaterialTable extends Component {
   }
 
   totalAmountPaidPerPerson() {
-    const { friends, expenses } = this.props;
+    const { tripFriendIDs, tripExpenses } = this.props;
     const friendsObj = {};
-    if (!isEmpty(expenses) && !isEmpty(friends)) {
-      _.map(friends, (value, key) => {
-        for (let expense of expenses) {
+    if (!isEmpty(tripExpenses) && !isEmpty(tripFriendIDs)) {
+      _.map(tripFriendIDs, (value, key) => {
+        for (let expense of tripExpenses) {
           if (friendsObj[value.id] && expense.whoPaid.includes(value.id)) {
             let bal = expense.expenseAmount;
             friendsObj[value.id] += bal;
@@ -192,11 +193,11 @@ class RenderMaterialTable extends Component {
   };
 
   renderTotalAmountPaidPerPerson() {
-    const { friends } = this.props;
+    const { tripFriendIDs } = this.props;
 
     const friendsObj = this.totalAmountPaidPerPerson();
 
-    const map1 = _.map(friends, (value, key) => {
+    const map1 = _.map(tripFriendIDs, (value, key) => {
       if (friendsObj[value.id]) {
         return <Td key={value.id}>${friendsObj[value.id].toFixed(2)}</Td>;
       } else {
@@ -207,12 +208,12 @@ class RenderMaterialTable extends Component {
   }
 
   renderTotalDifferencePerPerson1() {
-    const { friends, expenses } = this.props;
+    const { tripFriendIDs, tripExpenses } = this.props;
     let friendsObj = this.totalAmountPaidPerPerson();
     let friendsObj1 = this.totalPerPerson();
     let diffAmount = {};
-    if (!isEmpty(expenses) && !isEmpty(friends)) {
-      _.map(friends, (value, key) => {
+    if (!isEmpty(tripExpenses) && !isEmpty(tripFriendIDs)) {
+      _.map(tripFriendIDs, (value, key) => {
         diffAmount[value.id] = 0;
         if (friendsObj[value.id]) {
           diffAmount[value.id] -= friendsObj1[value.id];
@@ -224,18 +225,18 @@ class RenderMaterialTable extends Component {
   }
 
   renderTotalDifferencePerPerson() {
-    const { friends, expenses } = this.props;
+    const { tripFriendIDs, tripExpenses } = this.props;
     let friendsObj = this.totalAmountPaidPerPerson();
     let friendsObj1 = this.totalPerPerson();
     const diffAmount = {};
-    if (!isEmpty(expenses) && !isEmpty(friends)) {
-      _.map(friends, (value, key) => {
+    if (!isEmpty(tripExpenses) && !isEmpty(tripFriendIDs)) {
+      _.map(tripFriendIDs, (value, key) => {
         diffAmount[value.id] = 0;
         diffAmount[value.id] += friendsObj[value.id] - friendsObj1[value.id];
       });
     }
 
-    const map = _.map(friends, (value, key) => {
+    const map = _.map(tripFriendIDs, (value, key) => {
       if (diffAmount[value.id]) {
         return <Td key={value.id}>${diffAmount[value.id].toFixed(2)}</Td>;
       }
@@ -296,15 +297,15 @@ class RenderMaterialTable extends Component {
   // renders name of friend who paid for expense
   renderWhoPaid(whoPaid) {
     // console.log(whoPaid);
-    const { friends } = this.props;
-    // console.log(friends);
-    for (const friend of friends) {
+    const { tripFriendIDs } = this.props;
+    // console.log(tripFriendIDs);
+    for (const friend of tripFriendIDs) {
       if (friend.id === whoPaid) {
-        return friend.firstName;
+        return friend.label;
       }
     }
     // if (friendsObj && friendsObj[whoPaid]) {
-    //   return friendsObj[whoPaid].firstName;
+    //   return friendsObj[whoPaid].label;
     // } else {
     //   return null;
     // }
@@ -341,7 +342,7 @@ class RenderMaterialTable extends Component {
   };
 
   renderFriendHeader() {
-    const { friends, expenses } = this.props;
+    const { tripFriendIDs, tripExpenses, tripId } = this.props;
 
     const columns = [
       {
@@ -360,7 +361,7 @@ class RenderMaterialTable extends Component {
                 onChange={(e) =>
                   this.handleContentEditableUpdate(
                     e,
-                    expenses[tableMeta.rowIndex]
+                    tripExpenses[tableMeta.rowIndex]
                   )
                 }
 
@@ -387,10 +388,11 @@ class RenderMaterialTable extends Component {
       },
     ];
 
-    _.map(friends, (val, key) => {
+    _.map(tripFriendIDs, (val, key) => {
+      console.log(val);
       columns.splice(3, 0, {
-        name: val.firstName,
-        label: val.firstName,
+        name: val.label,
+        label: val.label,
         options: {
           customBodyRender: (value, tableMeta, updateValue) => {
             return (
@@ -401,8 +403,14 @@ class RenderMaterialTable extends Component {
                 color="primary"
                 onChange={() => {
                   value
-                    ? this.removeIncluded(expenses[tableMeta.rowIndex], val.id)
-                    : this.addIncluded(expenses[tableMeta.rowIndex], val.id);
+                    ? this.removeIncluded(
+                        tripExpenses[tableMeta.rowIndex],
+                        val.id
+                      )
+                    : this.addIncluded(
+                        tripExpenses[tableMeta.rowIndex],
+                        val.id
+                      );
                 }}
               />
             );
@@ -444,29 +452,30 @@ class RenderMaterialTable extends Component {
   };
 
   renderMaterialExpense() {
-    const { expenses, friends } = this.props;
+    const { tripExpenses, tripFriendIDs } = this.props;
     const expenseArr = [];
     const expenseArr2 = [];
 
-    _.map(expenses, (value, key) => {
+    _.map(tripExpenses, (value, key) => {
       return expenseArr.push([
         //   expense name
-        value.name,
+        value.expenseName,
         // who paid
         this.renderWhoPaid(value.whoPaid),
         // cost per person
-        parseFloat(value.expenseAmount / value.friendsInvolved.length).toFixed(
-          2
-        ),
-        // friends involved
-        friends
+        "$" +
+          parseFloat(
+            value.expenseAmount / value.friendsInvolved.length
+          ).toFixed(2),
+        // tripFriendIDs involved
+        tripFriendIDs
           .slice(0)
           .reverse()
           .map((val, key) => {
             return value.friendsInvolved.includes(val.id);
           }),
         // expense amount
-        parseFloat(value.expenseAmount).toFixed(2),
+        "$" + parseFloat(value.expenseAmount).toFixed(2),
         value.id,
       ]);
     });
@@ -474,13 +483,15 @@ class RenderMaterialTable extends Component {
     for (const expense of expenseArr) {
       expenseArr2.push(expense.flat());
     }
+    console.log(expenseArr2);
+    // console.log(this.state);
     return expenseArr2;
   }
 
   //   lifecycle tests
   componentDidMount() {}
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.expenses !== this.props.expenses) {
+    if (prevProps.tripExpenses !== this.props.tripExpenses) {
       console.log("Updated!");
     }
   }
@@ -503,11 +514,17 @@ class RenderMaterialTable extends Component {
 
   render() {
     return (
-      <Suspense fallback={<LoadingSpinner />}>
+      <Suspense fallback={<CircularProgress />}>
         <MUIDataTable
-          title={"Expenses"}
-          data={this.props.friends ? this.renderMaterialExpense() : [""]}
-          columns={this.props.friends ? this.renderFriendHeader() : [""]}
+          title={
+            this.props.tripName ? (
+              this.props.tripName.tripName + " Expenses"
+            ) : (
+              <CircularProgress />
+            )
+          }
+          data={this.props.tripFriendIDs ? this.renderMaterialExpense() : [""]}
+          columns={this.props.tripFriendIDs ? this.renderFriendHeader() : [""]}
           options={this.options}
         />
       </Suspense>
@@ -520,26 +537,24 @@ export default compose(
   firestoreConnect((props) => [
     {
       collection: "users",
-      doc: props.uid,
-      storeAs: `${props.tripId}-expenses`,
-      subcollections: [
-        { collection: "trips", doc: props.tripId },
-        { collection: "expenses" },
-      ],
+      where: [["onTrips", "array-contains", props.tripId]],
+      storeAs: `${props.tripId}-tripFriendIDs`,
     },
     {
-      collection: "users",
-      doc: props.uid,
-      storeAs: `${props.tripId}-friends`,
-      subcollections: [
-        { collection: "trips", doc: props.tripId },
-        { collection: "friends" },
-      ],
+      collection: "expenses",
+      where: [["tripID", "==", props.tripId]],
+      storeAs: `${props.tripId}-expenses1`,
+    },
+    {
+      collection: "trips",
+      doc: props.tripId,
+      // where: [["tripID", "==", props.tripId]],
+      storeAs: `${props.tripId}-tripName`,
     },
   ]),
-
-  connect(({ firestore: { ordered } }, props) => ({
-    expenses: ordered[`${props.tripId}-expenses`],
-    friends: ordered[`${props.tripId}-friends`],
+  connect(({ firestore: { ordered, data } }, props) => ({
+    tripFriendIDs: ordered[`${props.tripId}-tripFriendIDs`],
+    tripExpenses: ordered[`${props.tripId}-expenses1`],
+    tripName: data[`${props.tripId}-tripName`],
   }))
 )(RenderMaterialTable);

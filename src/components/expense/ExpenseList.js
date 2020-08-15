@@ -231,15 +231,15 @@ class ExpenseList extends Component {
 // connects to relevent Firestore collections and documents and passes to props
 export default compose(
   firestoreConnect((props) => [
-    {
-      collection: "users",
-      doc: props.uid,
-      storeAs: `${props.tripId}-expenses`,
-      subcollections: [
-        { collection: "trips", doc: props.tripId },
-        { collection: "expenses" },
-      ],
-    },
+    // {
+    //   collection: "users",
+    //   doc: props.uid,
+    //   storeAs: `${props.tripId}-expenses`,
+    //   subcollections: [
+    //     { collection: "trips", doc: props.tripId },
+    //     { collection: "expenses" },
+    //   ],
+    // },
     {
       collection: "users",
       doc: props.uid,
@@ -249,10 +249,16 @@ export default compose(
         { collection: "friends" },
       ],
     },
+    {
+      collection: "users",
+      where: [["onTrips", "array-contains", props.tripId]],
+      storeAs: `${props.tripId}-tripFriendIDs`,
+    },
   ]),
 
   connect(({ firestore: { data } }, props) => ({
     // expensesObj: data[`${props.tripId}-expenses`],
-    friendsObj: data[`${props.tripId}-friends`],
+    // friendsObj: data[`${props.tripId}-friends`],
+    friendsObj: data[`${props.tripId}-tripFriendIDs`],
   }))
 )(ExpenseList);

@@ -52,7 +52,6 @@ class AddExpense extends Component {
 
   renderFriend() {
     const { friends, tripFriendIDs } = this.props;
-    console.log(tripFriendIDs);
     const friendSelect = (
       <Select
         // multiple={false}
@@ -114,7 +113,7 @@ class AddExpense extends Component {
   formSubmit = (e) => {
     e.preventDefault();
     const { expense, amount, friendsInvolved, whoPaid } = this.state;
-    const { firestore, uid } = this.props;
+    const { firestore, uid, id } = this.props;
 
     firestore
       .add(
@@ -124,6 +123,7 @@ class AddExpense extends Component {
         {
           createdAt: Date.now(),
           createdBy: uid,
+          tripID: id,
           expenseName: expense,
           expenseAmount: Number(amount),
           friendsInvolved: friendsInvolved,
@@ -275,15 +275,15 @@ class AddExpense extends Component {
 
 export default compose(
   firestoreConnect((props) => [
-    {
-      collection: "users",
-      doc: props.uid,
-      storeAs: `${props.id}-expenses`,
-      subcollections: [
-        { collection: "trips", doc: props.id },
-        { collection: "expenses" },
-      ],
-    },
+    // {
+    //   collection: "users",
+    //   doc: props.uid,
+    //   storeAs: `${props.id}-expenses`,
+    //   subcollections: [
+    //     { collection: "trips", doc: props.id },
+    //     { collection: "expenses" },
+    //   ],
+    // },
     {
       collection: "users",
       doc: props.uid,
@@ -302,7 +302,7 @@ export default compose(
 
   connect(({ firestore: { ordered } }, props) => ({
     friends: ordered[`${props.id}-friends`],
-    expenses: ordered[`${props.id}-expenses`],
+    // expenses: ordered[`${props.id}-expenses`],
     tripFriendIDs: ordered[`${props.id}-tripFriendIDs`],
   }))
 )(AddExpense);
