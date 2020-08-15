@@ -47,8 +47,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import { FormGroup } from "@material-ui/core";
 
-// import GetNameById from "./GetNameById";
-
 export default function AddContact(props) {
   const [showForm, setForm] = useState(false);
   const [firstName, setFirstName] = useState("");

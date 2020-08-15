@@ -255,9 +255,10 @@ class RenderMaterialTable extends Component {
   // handles deletion of expense from Firestore
   handleDelete = (expense) => {
     const { firestore, tripId, uid } = this.props;
+    console.log(expense);
     firestore.delete({
       collection: "expenses",
-      doc: expense.id,
+      doc: expense,
       // storeAs: `${tripId.id}-expenses`,
       // subcollections: [
       //   { collection: "trips", doc: tripId },
