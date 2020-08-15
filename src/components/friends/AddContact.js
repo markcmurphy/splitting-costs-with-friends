@@ -76,9 +76,6 @@ export default function AddContact(props) {
         if (users[prop].email === value) {
           return prop;
         }
-        // else {
-        //   return "";
-        // }
       }
     }
   };
@@ -87,49 +84,10 @@ export default function AddContact(props) {
   const inputChangeName = (e) => {
     setFirstName(e.target.value);
   };
+
   const inputChangeEmail = (e) => {
     setEmailMatch(e.target.value);
   };
-
-  const addExtTrip = () => {
-    const { uid, id } = props;
-    const userValue = getKeyByValue(firstName);
-    firestore
-      .add(
-        {
-          collection: "users",
-          doc: userValue,
-          subcollections: [
-            { collection: "contacts" },
-            // { collection: "friends" },
-          ],
-        },
-        { id: id }
-      )
-      .then((docRef) => {
-        console.log("Document written with ID: ", docRef.id);
-      });
-    // setFirstName("");
-    // setForm(false);
-  };
-
-  //   console.log(<GetNameById id={getKeyByValue(emailMatch)} />);
-
-  //   useFirestoreConnect((inputValue) => [
-  //     { collection: "users", doc: inputValue, storeAs: "user" }, // or `todos/${props.todoId}`
-  //   ]);
-
-  //   const userName = useSelector(
-  //     ({ firestore: { data } }) => data.users && data.users[inputValue]
-  //   );
-
-  //   const userId = getKeyByValue(emailMatch);
-
-  //   if (userName) {
-  //     console.log(userName.firstName);
-  //     setInputValue(userId);
-  //   }
-  //   console.log(GetNameById("3wsjhXqIYNN4Tls2gSs3jaUb4On2"));
 
   const formSubmit = (e) => {
     e.preventDefault();
@@ -140,21 +98,16 @@ export default function AddContact(props) {
         {
           collection: "users",
           doc: uid,
-          subcollections: [
-            // { collection: "trips", doc: id },
-            { collection: "contacts" },
-          ],
+          subcollections: [{ collection: "contacts" }],
         },
         {
-          id: getKeyByValue(emailMatch),
+          id: getKeyByValue(emailMatch) ? getKeyByValue(emailMatch) : "",
           firstName: firstName,
         }
       )
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
       });
-
-    // addExtTrip();
 
     setFirstName("");
     setForm(false);
@@ -170,8 +123,6 @@ export default function AddContact(props) {
           onClose={() => setForm(false)}
           aria-labelledby="form-dialog-title"
         >
-          {/* <GetNameById id="3wsjhXqIYNN4Tls2gSs3jaUb4On2" /> */}
-
           <DialogTitle id="form-dialog-title">Add New Friend</DialogTitle>
           <DialogContent>
             <DialogContentText>Enter your friends here!</DialogContentText>

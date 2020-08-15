@@ -240,13 +240,13 @@ class RenderMaterialTable extends Component {
     // update expense in firestore
     firestore.update(
       {
-        collection: "users",
-        doc: uid,
-        storeAs: `${tripId}-expenses`,
-        subcollections: [
-          { collection: "trips", doc: tripId },
-          { collection: "expenses", doc: expense.id },
-        ],
+        collection: "expenses",
+        doc: expense.id,
+        // storeAs: `${tripId}-expenses`,
+        // subcollections: [
+        //   { collection: "trips", doc: tripId },
+        //   { collection: "expenses", doc: expense.id },
+        // ],
       },
       updExpense
     );
@@ -256,13 +256,13 @@ class RenderMaterialTable extends Component {
   handleDelete = (expense) => {
     const { firestore, tripId, uid } = this.props;
     firestore.delete({
-      collection: "users",
-      doc: uid,
-      storeAs: `${tripId.id}-expenses`,
-      subcollections: [
-        { collection: "trips", doc: tripId },
-        { collection: "expenses", doc: expense },
-      ],
+      collection: "expenses",
+      doc: expense.id,
+      // storeAs: `${tripId.id}-expenses`,
+      // subcollections: [
+      //   { collection: "trips", doc: tripId },
+      //   { collection: "expenses", doc: expense },
+      // ],
     });
   };
 
@@ -301,13 +301,13 @@ class RenderMaterialTable extends Component {
     // update expense in firestore
     firestore.update(
       {
-        collection: "users",
-        doc: uid,
-        storeAs: `${tripId}-expenses`,
-        subcollections: [
-          { collection: "trips", doc: tripId },
-          { collection: "expenses", doc: expense.id },
-        ],
+        collection: "expenses",
+        doc: expense.id,
+        // storeAs: `${tripId}-expenses`,
+        // subcollections: [
+        //   { collection: "trips", doc: tripId },
+        //   { collection: "expenses", doc: expense.id },
+        // ],
       },
       updExpense
     );
@@ -396,33 +396,16 @@ class RenderMaterialTable extends Component {
   handleContentEditableUpdate = (event, expense) => {
     const { firestore, tripId, uid } = this.props;
     const {
-      // currentTarget: {
-      //   dataset: { row, column },
-      //   innerText: { text },
-      // },
       target: { value },
     } = event;
-
-    console.log(value);
-    console.log(expense);
-
-    // Update friend
-    const updExpense = {
-      expenseName: value,
-    };
 
     // update expense in firestore
     firestore.update(
       {
         collection: "expenses",
         doc: expense.id,
-        // storeAs: `${tripId}-expense`,
-        // subcollections: [
-        //   { collection: "trips", doc: tripId },
-        //   { collection: "expenses", doc: expense.id },
-        // ],
       },
-      updExpense
+      { expenseName: value }
     );
   };
 
