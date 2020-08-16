@@ -192,7 +192,11 @@ class App extends Component {
                   </Menu>
                 </div>
               ) : (
-                <Typography variant="h6" className={classes.title}>
+                <Typography
+                  style={{ marginLeft: "20px" }}
+                  variant="h6"
+                  className={classes.title}
+                >
                   <Link
                     style={{ color: "white" }}
                     component={RouterLink}
@@ -201,7 +205,11 @@ class App extends Component {
                     Login
                   </Link>
 
-                  <Link component={RouterLink} to="/register">
+                  <Link
+                    style={{ color: "white", marginLeft: "20px" }}
+                    component={RouterLink}
+                    to="/register"
+                  >
                     Register
                   </Link>
                 </Typography>

@@ -10,7 +10,6 @@ import { Route, useParams } from "react-router-dom";
 import MaterialAddNewTrip from "../trips/MaterialAddNewTrip";
 import TripList from "../trips/TripList";
 import Divider from "@material-ui/core/Divider";
-import FriendsHook from "../friends/FriendsHook";
 import AddContact from "../friends/AddContact";
 import ListFriendsOnTrip from "../friends/ListFriendsOnTrip.js";
 
@@ -42,7 +41,7 @@ export default function Sidebar(props) {
             <AddExpense id={id} uid={props.uid} />
 
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
-            {/* <FriendsHook uid={props.uid} id={id} /> */}
+
             <AddContact uid={props.uid} id={id} />
 
             {/* <Divider style={{ marginTop: "15px", marginBottom: "15px" }} /> */}

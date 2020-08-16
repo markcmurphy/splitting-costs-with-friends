@@ -26,7 +26,7 @@ class MaterialAddNewTrip extends Component {
     showForm: false,
     tripName: "",
     inputValue: "",
-    friendsInvolved: [""],
+    friendsInvolved: [],
     // tripID: "",
   };
 
@@ -39,59 +39,51 @@ class MaterialAddNewTrip extends Component {
   formSubmit = (e) => {
     e.preventDefault();
     const { tripName, friendsInvolved } = this.state;
-    const { firestore, uid } = this.props;
+    const { firestore, uid, friends, user } = this.props;
     const docRefConfig = {
       collection: "trips",
       // doc: uid,
       // subcollections: [{ collection: "trips" }],
     };
+
+    const uidArr = [uid];
+
+    this.setState({ friendsInvolved: friendsInvolved.push(uid) });
+
+    console.log(friendsInvolved);
     const tripInfo = {
       tripName: tripName,
       tripOwner: uid,
+      // friendsInvolved: uidArr.concat(friendsInvolved),
       friendsInvolved: friendsInvolved,
     };
 
     let tripID = [];
 
-    firestore.add(docRefConfig, tripInfo).then((docRef) => {
-      // this.setState({ tripID: docRef.id });
-      // this.tripID = docRef.id;
-      for (const friend of friendsInvolved) {
-        // console.log(this.state.tripID);
-        firestore.update(
-          {
-            collection: "users",
-            // where: [["id", "==", friend]],
-            doc: friend,
-            // subcollections: [{ collection: "onTrips" }],
-          },
-          { onTrips: firestore.FieldValue.arrayUnion(docRef.id) }
+    firestore
+      .add(docRefConfig, tripInfo)
+      .then((docRef) => {
+        friendsInvolved.forEach((f) =>
+          firestore.update(
+            {
+              collection: "users",
+              doc: f,
+            },
+            {
+              onTrips: Boolean(user.onTrips)
+                ? firestore.FieldValue.arrayUnion(docRef.id)
+                : new Array(docRef.id),
+            }
+          )
         );
-      }
-      console.log("Document written with ID: ", docRef.id);
-    });
-
-    // for (const friend of friendsInvolved) {
-    //   // console.log(this.state.tripID);
-    //   firestore.update(
-    //     {
-    //       collection: "users",
-    //       // where: [["id", "==", friend]],
-    //       doc: friend,
-    //       // subcollections: [{ collection: "onTrips" }],
-    //     },
-    //     { tripID: tripID }
-    //   );
-    // }
-
-    // firestore.add(docRefConfig, tripInfo).then((docRef) => {
-    //   console.log("Document written with ID: ", docRef.id);
-    // });
-
-    this.setState({
-      tripName: "",
-      showForm: false,
-    });
+      })
+      .then(() =>
+        this.setState({
+          tripName: "",
+          showForm: false,
+        })
+      )
+      .catch("failed");
   };
 
   closeForm = () => {
@@ -178,7 +170,7 @@ class MaterialAddNewTrip extends Component {
     const { showForm, tripName } = this.state;
     const marginBottom = "15px";
     // console.log(this.props);
-
+    console.log(this.props);
     if (showForm) {
       return (
         <Dialog
@@ -244,6 +236,10 @@ class MaterialAddNewTrip extends Component {
 
   render() {
     const { showForm } = this.state;
+    if (this.props.user) {
+      console.log(this.props.user.onTrips);
+      console.log(Boolean(this.props.user.onTrips));
+    }
 
     return (
       <div>
@@ -315,10 +311,22 @@ export default compose(
       storeAs: `${props.id}-contacts`,
       subcollections: [{ collection: "contacts" }],
     },
+    {
+      collection: "users",
+      doc: props.uid,
+      storeAs: "user",
+
+      // where: [["tripOwner", "==", props.uid]],
+
+      // doc: props.uid,
+      // storeAs: `${props.id}-contacts`,
+      // subcollections: [{ collection: "contacts" }],
+    },
   ]),
 
-  connect(({ firestore: { ordered } }, props) => ({
+  connect(({ firestore: { ordered, data } }, props) => ({
     friends: ordered[`${props.id}-contacts`],
+    user: data["user"],
     // expenses: ordered[`${props.id}-expenses`],
   }))
 )(MaterialAddNewTrip);
