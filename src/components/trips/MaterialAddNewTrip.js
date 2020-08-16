@@ -65,37 +65,39 @@ class MaterialAddNewTrip extends Component {
     let tripID = [];
 
     // batch
-    var batch = firestore.batch();
-
-    // set
-    // var cityRef = db.collection("cities").doc("BJ");
-
-    // var setWithMerge = cityRef.set(
-    //   {
-    //     capital: true,
-    //   },
-    //   { merge: true }
-    // );
+    // const batch = firestore.batch();
 
     firestore
       .add(docRefConfig, tripInfo)
       .then((docRef) => {
-        // friendsInvolved.forEach((f) =>
-        firestore.set(
-          {
-            collection: "users",
-            doc: uid,
-          },
-          {
-            onTrips: firestore.FieldValue.arrayUnion(docRef.id),
-            // onTrips: Boolean(user.onTrips)
-            //   ? firestore.FieldValue.arrayUnion(docRef.id)
-            //   : [docRef.id],
-          },
-          { merge: true }
+        // console.log(docRef.id);
+        uidFriendsInvolvedConcat.forEach((f) =>
+          //     batch.set(
+          //       {
+          //         collection: "users",
+          //         doc: f,
+          //       },
+          //       {
+          //         onTrips: firestore.FieldValue.arrayUnion(docRef.id),
+          //       },
+          //       { merge: true }
+          //     )
+          firestore.set(
+            {
+              collection: "users",
+              doc: f,
+            },
+            {
+              onTrips: firestore.FieldValue.arrayUnion(docRef.id),
+              // onTrips: Boolean(user.onTrips)
+              //   ? firestore.FieldValue.arrayUnion(docRef.id)
+              //   : [docRef.id],
+            },
+            { merge: true }
+          )
         );
-        // );
       })
+      // .then(() => batch.commit())
       .catch("failed");
 
     this.setState({

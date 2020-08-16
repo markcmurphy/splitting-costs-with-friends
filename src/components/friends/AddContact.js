@@ -58,6 +58,11 @@ export default function AddContact(props) {
     {
       collection: "users",
     },
+    // {
+    //   collection: "users",
+    //   where: [["email", "==", emailMatch]],
+    //   storeAs: "userEmailMatch",
+    // },
   ]);
 
   const firestore = useFirestore();
@@ -66,6 +71,12 @@ export default function AddContact(props) {
   ////   const users = useSelector((state) => state.firestore.data.users);
 
   const users = useSelector(({ firestore: { data } }) => data.users);
+  // const userEmail = useSelector(
+  //   ({ firestore: { data } }) => data.userEmailMatch
+  // );
+
+  // console.log(emailMatch);
+  // console.log(userEmail);
 
   // TODO: get UID by email using cloud function instead of searching users
   const getKeyByValue = (value) => {
@@ -90,6 +101,20 @@ export default function AddContact(props) {
   const formSubmit = (e) => {
     e.preventDefault();
     const { uid, id } = props;
+
+    firestore
+      .collection("users")
+      .where("email", "==", emailMatch)
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data());
+        });
+      })
+      .catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
 
     firestore
       .add(

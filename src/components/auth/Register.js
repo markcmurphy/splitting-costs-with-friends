@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { compose } from "redux";
 import { connect } from "react-redux";
 // import { firestoreConnect } from "react-redux-firebase";
-import { firebaseConnect } from "react-redux-firebase";
+import { firebaseConnect, firestoreConnect } from "react-redux-firebase";
 import { notifyUser } from "../../actions/notifyActions";
 import Alert from "../layout/Alert";
 
@@ -10,6 +10,7 @@ class Register extends Component {
   state = {
     email: "",
     password: "",
+    displayName: "",
   };
 
   componentWillMount() {
@@ -22,13 +23,76 @@ class Register extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { firebase, notifyUser } = this.props;
-    const { email, password } = this.state;
+    const { firebase, notifyUser, firestore } = this.props;
+    const { email, password, displayName } = this.state;
 
     // Register with firebase
     firebase
       .createUser({ email, password })
-      .catch((err) => notifyUser("User Already Exists", "error"))
+      .then(() => {
+        firebase.auth().onAuthStateChanged(function (user) {
+          //check if user is signed in
+          if (user) {
+            //user is signed in
+            //get user display
+            if (user.displayName !== undefined) {
+              var username = user.displayName;
+              //add displayName to firestore
+              firestore
+                .set(
+                  { collection: "users", doc: user.uid },
+                  {
+                    username: displayName,
+                  },
+                  { merge: true }
+                )
+
+                // .collection("users")
+                // .doc(user.uid)
+                // .set(
+                //   {
+                //     username: displayName,
+                //   },
+                //   { merge: true }
+                // )
+                .then(function () {
+                  alert("displayName added!");
+                })
+                .catch(function (e) {
+                  //there was an error writing to firestore
+                  //check console
+                  console.log(e);
+                });
+            } else {
+              //user has not set displayName
+              alert("no displayName");
+            }
+          }
+        });
+      })
+      // .catch((err) => notifyUser("User Already Exists", "error"))
+      // .then((user) => {
+      //   if (user) {
+      //     user.updateProfile({
+      //       displayName: displayName,
+      //       //  photoURL: // some photo url
+      //     });
+      //     // .then(
+      //     //   (s)=> // perform any other operation
+      //     // )
+      //   }
+      // })
+
+      // .then((userRecord) => {
+      //   userRecord.user.updateProfile({
+      //     displayName: displayName,
+      //     // photoURL: ''
+      //   });
+      // })
+      // .then((userRecord) => {
+      //   this.updateUserData(userRecord.user);
+      //   resolve(userRecord);
+      // })
       .then(this.props.history.push("/"));
   };
 
@@ -50,16 +114,25 @@ class Register extends Component {
             </h1>
             <form onSubmit={this.onSubmit}>
               <div className="form-group">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="displayName">Name</label>
                 <input
                   type="text"
                   className="form-control"
-                  name="email"
+                  name="displayName"
                   required
-                  value={this.state.email}
+                  value={this.state.displayName}
                   onChange={this.onChange}
                 />
               </div>
+              <label htmlFor="email">Email</label>
+              <input
+                type="text"
+                className="form-control"
+                name="email"
+                required
+                value={this.state.email}
+                onChange={this.onChange}
+              />
               <div className="form-group">
                 <label htmlFor="password">Password</label>
                 <input
@@ -87,6 +160,7 @@ class Register extends Component {
 
 export default compose(
   firebaseConnect(),
+  firestoreConnect(),
   connect(
     (state, props) => ({
       notify: state.notify,

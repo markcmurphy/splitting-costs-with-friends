@@ -95,7 +95,7 @@ class AddExpense extends Component {
         fullWidth
       >
         {_.map(tripFriendIDs, (value, key) => {
-          console.log(value);
+          // console.log(value);
           return (
             <option key={key} value={value.id}>
               {value.label}

@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import List from "@material-ui/core/List";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import FriendsInvolved from "../expense/FriendsInvolved";
 
 export default function ListFriendsOnTrip(props) {
   useFirestoreConnect([
@@ -25,14 +26,6 @@ export default function ListFriendsOnTrip(props) {
   const tripFriendIDs = useSelector(
     (state) => state.firestore.ordered.tripFriendIDs
   );
-
-  // if (tripFriendIDs) {
-  //   console.log(tripFriendIDs);
-  // }
-  // console.log(props.id);
-  //    const tripsNotOwned = useSelector(
-  //      (state) => state.firestore.ordered.tripsNotOwned
-  //    );
 
   const useStyles = makeStyles((theme) => ({
     root: {
