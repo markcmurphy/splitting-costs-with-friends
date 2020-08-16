@@ -26,6 +26,7 @@ class MaterialAddNewTrip extends Component {
     showForm: false,
     tripName: "",
     inputValue: "",
+    // friendsInvolved: new Array(),
     friendsInvolved: [],
     // tripID: "",
   };
@@ -42,48 +43,68 @@ class MaterialAddNewTrip extends Component {
     const { firestore, uid, friends, user } = this.props;
     const docRefConfig = {
       collection: "trips",
-      // doc: uid,
-      // subcollections: [{ collection: "trips" }],
     };
 
     const uidArr = [uid];
-
-    this.setState({ friendsInvolved: friendsInvolved.push(uid) });
-
+    const uidFriendsInvolvedConcat = friendsInvolved.concat(uidArr);
+    console.log(uidArr);
     console.log(friendsInvolved);
+    console.log(friendsInvolved.concat(uidArr));
+
+    // this.setState({
+    //   friendsInvolved: uidFriendsInvolvedConcat,
+    // });
+
     const tripInfo = {
       tripName: tripName,
       tripOwner: uid,
       // friendsInvolved: uidArr.concat(friendsInvolved),
-      friendsInvolved: friendsInvolved,
+      friendsInvolved: uidFriendsInvolvedConcat,
     };
 
     let tripID = [];
 
+    // batch
+    var batch = firestore.batch();
+
+    // set
+    // var cityRef = db.collection("cities").doc("BJ");
+
+    // var setWithMerge = cityRef.set(
+    //   {
+    //     capital: true,
+    //   },
+    //   { merge: true }
+    // );
+
     firestore
       .add(docRefConfig, tripInfo)
       .then((docRef) => {
-        friendsInvolved.forEach((f) =>
-          firestore.update(
-            {
-              collection: "users",
-              doc: f,
-            },
-            {
-              onTrips: Boolean(user.onTrips)
-                ? firestore.FieldValue.arrayUnion(docRef.id)
-                : new Array(docRef.id),
-            }
-          )
+        // friendsInvolved.forEach((f) =>
+        firestore.set(
+          {
+            collection: "users",
+            doc: uid,
+          },
+          {
+            onTrips: firestore.FieldValue.arrayUnion(docRef.id),
+            // onTrips: Boolean(user.onTrips)
+            //   ? firestore.FieldValue.arrayUnion(docRef.id)
+            //   : [docRef.id],
+          },
+          { merge: true }
         );
+        // );
       })
-      .then(() =>
-        this.setState({
-          tripName: "",
-          showForm: false,
-        })
-      )
       .catch("failed");
+
+    this.setState({
+      tripName: "",
+      showForm: false,
+      friendsInvolved: [],
+    });
+
+    // console.log(this.state);
   };
 
   closeForm = () => {
@@ -103,6 +124,7 @@ class MaterialAddNewTrip extends Component {
       ),
       // friendsInvolved: e.target.selectedOptions,
     });
+    console.log(this.state.friendsInvolved);
   };
 
   renderFriendsInvolved() {
@@ -154,7 +176,7 @@ class MaterialAddNewTrip extends Component {
       >
         {_.map(friends, (value, key) => {
           return (
-            <option key={key} value={value.id}>
+            <option key={value.uid} value={value.uid}>
               {value.firstName}
             </option>
           );
@@ -170,7 +192,7 @@ class MaterialAddNewTrip extends Component {
     const { showForm, tripName } = this.state;
     const marginBottom = "15px";
     // console.log(this.props);
-    console.log(this.props);
+    // console.log(this.props);
     if (showForm) {
       return (
         <Dialog
@@ -206,7 +228,7 @@ class MaterialAddNewTrip extends Component {
                     Friends Involved
                   </InputLabel>
 
-                  <pre>inputValue: "{this.state.inputValue}"</pre>
+                  {/* <pre>inputValue: "{this.state.inputValue}"</pre> */}
                   {/* <InputLabel>Friends Involved</InputLabel> */}
                   {this.renderFriendsInvolved()}
                 </FormControl>
@@ -236,10 +258,10 @@ class MaterialAddNewTrip extends Component {
 
   render() {
     const { showForm } = this.state;
-    if (this.props.user) {
-      console.log(this.props.user.onTrips);
-      console.log(Boolean(this.props.user.onTrips));
-    }
+    // if (this.props.user) {
+    //   console.log(this.props.user.onTrips);
+    //   console.log(Boolean(this.props.user.onTrips));
+    // }
 
     return (
       <div>

@@ -104,10 +104,26 @@ export default function AddContact(props) {
         }
       )
       .then((docRef) => {
-        console.log("Document written with ID: ", docRef.id);
+        firestore.update(
+          {
+            collection: "users",
+            doc: uid,
+            subcollections: [
+              {
+                collection: "contacts",
+                doc: docRef.id,
+              },
+            ],
+          },
+          {
+            uid: docRef.id,
+          }
+        );
+        // console.log("Document written with ID: ", docRef.id);
       });
 
     setFirstName("");
+    setEmailMatch("");
     setForm(false);
   };
 

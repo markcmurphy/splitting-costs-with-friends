@@ -53,7 +53,8 @@ export default function ListFriends(props) {
   const renderFriend = (props) => {
     const friendsList = _.map(myContacts, (value, key) => {
       return (
-        <ListItem key={value.id} dense={true}>
+        // <ListItem key={value.id} dense={true}>
+        <ListItem key={key} dense={true}>
           {/* TODO: reenable avatars */}
           {/* <ListItemAvatar>
             <Avatar>

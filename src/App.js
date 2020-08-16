@@ -191,29 +191,29 @@ class App extends Component {
                     <MenuItem onClick={this.onLogoutClick}>Logout</MenuItem>
                   </Menu>
                 </div>
-              ) : (
-                <Typography
-                  style={{ marginLeft: "20px" }}
-                  variant="h6"
-                  className={classes.title}
-                >
-                  <Link
-                    style={{ color: "white" }}
-                    component={RouterLink}
-                    to="/login"
-                  >
-                    Login
-                  </Link>
+              ) : null
+              // <Typography
+              //   style={{ marginLeft: "20px" }}
+              //   variant="h6"
+              //   className={classes.title}
+              // >
+              //   <Link
+              //     style={{ color: "white" }}
+              //     component={RouterLink}
+              //     to="/login"
+              //   >
+              //     Login
+              //   </Link>
 
-                  <Link
-                    style={{ color: "white", marginLeft: "20px" }}
-                    component={RouterLink}
-                    to="/register"
-                  >
-                    Register
-                  </Link>
-                </Typography>
-              )}
+              //   <Link
+              //     style={{ color: "white", marginLeft: "20px" }}
+              //     component={RouterLink}
+              //     to="/register"
+              //   >
+              //     Register
+              //   </Link>
+              // </Typography>
+              }
             </Toolbar>
           </AppBar>
 

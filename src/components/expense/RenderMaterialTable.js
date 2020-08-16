@@ -362,7 +362,7 @@ class RenderMaterialTable extends Component {
     ];
 
     _.map(tripFriendIDs, (val, key) => {
-      console.log(val);
+      // console.log(val);
       columns.splice(3, 0, {
         name: val.label,
         label: val.label,
@@ -442,7 +442,7 @@ class RenderMaterialTable extends Component {
     for (const expense of expenseArr) {
       expenseArr2.push(expense.flat());
     }
-    console.log(expenseArr2);
+    // console.log(expenseArr2);
     // console.log(this.state);
     return expenseArr2;
   }

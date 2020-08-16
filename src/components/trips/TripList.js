@@ -48,6 +48,9 @@ export default function TripList(props) {
     (state) => state.firestore.ordered.tripsNotOwned
   );
 
+  // console.log(props);
+  // console.log(trips);
+
   const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,

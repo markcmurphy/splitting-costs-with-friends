@@ -52,7 +52,8 @@ export default function ListFriendsOnTrip(props) {
   const renderFriend = (props) => {
     const friendsList = _.map(tripFriendIDs, (value, key) => {
       return (
-        <ListItem key={value.id} dense={true}>
+        // <ListItem key={value.id} dense={true}>
+        <ListItem key={key} dense={true}>
           {/* <ListItemAvatar>
             <Avatar>
               <ImageIcon />

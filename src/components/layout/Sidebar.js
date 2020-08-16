@@ -1,5 +1,5 @@
 import React from "react";
-import Friends from "../friends/Friends.js";
+
 import ListFriends from "../friends/ListFriends.js";
 // import ListFriendsOnTrip from "../friends/ListFriendsOnTrip.js";
 import AddExpense from "../expense/AddExpense.js";
@@ -27,17 +27,15 @@ export default function Sidebar(props) {
 
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
             {/* <TripList uid={props.uid} id={props.id} /> */}
+            <TripList uid={props.uid} id={props.id} />
           </>
         ) : null}
       </>
-      <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
 
       <Route
         path="/trip/:id"
         render={() => (
           <div>
-            <TripList uid={props.uid} id={props.id} />
-
             <AddExpense id={id} uid={props.uid} />
 
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
@@ -46,7 +44,7 @@ export default function Sidebar(props) {
 
             {/* <Divider style={{ marginTop: "15px", marginBottom: "15px" }} /> */}
 
-            <Friends id={id} uid={props.uid} />
+            {/* <Friends id={id} uid={props.uid} /> */}
 
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
 
