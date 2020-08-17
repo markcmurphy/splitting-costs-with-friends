@@ -30,7 +30,7 @@ class MaterialAddNewTrip extends Component {
       inputValue: "",
       // friendsInvolved: new Array(),
       friendsInvolved: [],
-      tripID: "",
+      newTripID: "",
     };
   }
 
@@ -42,7 +42,7 @@ class MaterialAddNewTrip extends Component {
 
   formSubmit = (e) => {
     e.preventDefault();
-    const { tripName, friendsInvolved, tripID } = this.state;
+    const { tripName, friendsInvolved, newTripID } = this.state;
     const { firestore, uid, friends, user } = this.props;
     const docRefConfig = {
       collection: "trips",
@@ -50,34 +50,23 @@ class MaterialAddNewTrip extends Component {
 
     const uidArr = [uid];
     const uidFriendsInvolvedConcat = friendsInvolved.concat(uidArr);
-    console.log(uidArr);
-    console.log(friendsInvolved);
-    console.log(friendsInvolved.concat(uidArr));
-
-    // this.setState({
-    //   friendsInvolved: uidFriendsInvolvedConcat,
-    // });
 
     const tripInfo = {
       tripName: tripName,
       tripOwner: uid,
-      // friendsInvolved: uidArr.concat(friendsInvolved),
-      friendsInvolved: uidFriendsInvolvedConcat,
+      // friendsInvolved: uidFriendsInvolvedConcat,
     };
-
-    // batch
-    // const batch = firestore.batch();
 
     firestore
       .add(docRefConfig, tripInfo)
-      // .then((docRef) => {
-      //   this.setState({
-      //     tripID: docRef.id,
-      //   });
-      // })
       .then((docRef) => {
-        uidFriendsInvolvedConcat.forEach((f) =>
+        let batch = firestore.batch();
+        console.log(docRef.id);
+        console.log(uidFriendsInvolvedConcat);
+
+        uidFriendsInvolvedConcat.forEach((f) => {
           firestore.set(
+            // usrRef,
             {
               collection: "users",
               doc: f,
@@ -86,27 +75,22 @@ class MaterialAddNewTrip extends Component {
               onTrips: firestore.FieldValue.arrayUnion(docRef.id),
             },
             { merge: true }
-          )
-        );
-      })
-      // .then(() => {
-      //   firestore.set(
-      //     {
-      //       collection: "trips",
-      //       doc: docRef.id,
-      //       subcollections: [{ collection: "friendsInvolved" }],
-      //     },
-      //     {
-      //       uid: uidFriendsInvolvedConcat,
-      //     },
-      //     { merge: true }
-      //   );
-      // })
-      .catch("failed");
+          );
 
-    // if (tripID) {
-    console.log(tripID);
-    // }
+          firestore.add(
+            {
+              collection: "trips",
+              doc: docRef.id,
+              // doc: "nkgmvHTSaiIB7FrZ1d0q",
+              subcollections: [{ collection: "friendsInvolved" }],
+            },
+            {
+              uid: f,
+            }
+          );
+        });
+      })
+      .catch("failed");
 
     this.setState({
       tripName: "",
