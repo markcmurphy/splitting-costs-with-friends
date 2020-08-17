@@ -16,6 +16,7 @@ import WhoPaid from "./WhoPaid.js";
 import FriendsInvolved from "./FriendsInvolved";
 import LoadingSpinner from "../loading/LoadingSpinner";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import TransferList from "../layout/TransferList.js";
 
 class RenderMaterialTable extends Component {
   constructor(props) {
@@ -474,6 +475,7 @@ class RenderMaterialTable extends Component {
   render() {
     return (
       <Suspense fallback={<CircularProgress />}>
+        <TransferList id={this.props.tripId} uid={this.props.uid} />
         <MUIDataTable
           title={
             this.props.tripName ? (

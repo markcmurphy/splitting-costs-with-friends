@@ -12,6 +12,7 @@ import TripList from "../trips/TripList";
 import Divider from "@material-ui/core/Divider";
 import AddContact from "../friends/AddContact";
 import ListFriendsOnTrip from "../friends/ListFriendsOnTrip.js";
+import TransferList from "./TransferList.js";
 
 export default function Sidebar(props) {
   const { id } = useParams();
@@ -47,7 +48,7 @@ export default function Sidebar(props) {
             {/* <Friends id={id} uid={props.uid} /> */}
 
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
-
+            {/* <TransferList id={id} uid={props.uid} /> */}
             <ListFriends id={id} uid={props.uid} />
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
             <ListFriendsOnTrip id={id} uid={props.uid} />

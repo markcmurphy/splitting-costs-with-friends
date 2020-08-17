@@ -55,9 +55,9 @@ class Register extends Component {
                 //   },
                 //   { merge: true }
                 // )
-                .then(function () {
-                  alert("displayName added!");
-                })
+                // .then(function () {
+                //   alert("displayName added!");
+                // })
                 .catch(function (e) {
                   //there was an error writing to firestore
                   //check console

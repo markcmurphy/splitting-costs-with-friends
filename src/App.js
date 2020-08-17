@@ -159,60 +159,63 @@ class App extends Component {
               <Typography variant="h6" className={classes.title}>
                 Splitting Costs with Friends!
               </Typography>
-              {auth.uid ? (
-                <div>
-                  <IconButton
-                    aria-label="account of current user"
-                    aria-controls="menu-appbar"
-                    aria-haspopup="true"
-                    onClick={(e) => this.handleMenu(e)}
-                    color="inherit"
-                  >
-                    <AccountCircle />
-                  </IconButton>
+              {
+                auth.uid ? (
+                  <div>
+                    <IconButton
+                      aria-label="account of current user"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      onClick={(e) => this.handleMenu(e)}
+                      color="inherit"
+                    >
+                      <AccountCircle />
+                    </IconButton>
 
-                  <Menu
-                    id="menu-appbar"
-                    anchorEl={this.state.anchorEl}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    open={Boolean(this.state.anchorEl)}
-                    onClose={this.handleClose}
-                  >
-                    <MenuItem onClick={this.handleClose}>{auth.email}</MenuItem>
-                    <MenuItem onClick={this.handleClose}>My account</MenuItem>
-                    <MenuItem onClick={this.onLogoutClick}>Logout</MenuItem>
-                  </Menu>
-                </div>
-              ) : null
-              // <Typography
-              //   style={{ marginLeft: "20px" }}
-              //   variant="h6"
-              //   className={classes.title}
-              // >
-              //   <Link
-              //     style={{ color: "white" }}
-              //     component={RouterLink}
-              //     to="/login"
-              //   >
-              //     Login
-              //   </Link>
+                    <Menu
+                      id="menu-appbar"
+                      anchorEl={this.state.anchorEl}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      open={Boolean(this.state.anchorEl)}
+                      onClose={this.handleClose}
+                    >
+                      <MenuItem onClick={this.handleClose}>
+                        {auth.email}
+                      </MenuItem>
+                      <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                      <MenuItem onClick={this.onLogoutClick}>Logout</MenuItem>
+                    </Menu>
+                  </div>
+                ) : null
+                // <Typography
+                //   style={{ marginLeft: "20px" }}
+                //   variant="h6"
+                //   className={classes.title}
+                // >
+                //   <Link
+                //     style={{ color: "white" }}
+                //     component={RouterLink}
+                //     to="/login"
+                //   >
+                //     Login
+                //   </Link>
 
-              //   <Link
-              //     style={{ color: "white", marginLeft: "20px" }}
-              //     component={RouterLink}
-              //     to="/register"
-              //   >
-              //     Register
-              //   </Link>
-              // </Typography>
+                //   <Link
+                //     style={{ color: "white", marginLeft: "20px" }}
+                //     component={RouterLink}
+                //     to="/register"
+                //   >
+                //     Register
+                //   </Link>
+                // </Typography>
               }
             </Toolbar>
           </AppBar>

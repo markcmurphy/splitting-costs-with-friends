@@ -22,14 +22,17 @@ import InputLabel from "@material-ui/core/InputLabel";
 import { FormGroup } from "@material-ui/core";
 
 class MaterialAddNewTrip extends Component {
-  state = {
-    showForm: false,
-    tripName: "",
-    inputValue: "",
-    // friendsInvolved: new Array(),
-    friendsInvolved: [],
-    // tripID: "",
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      showForm: false,
+      tripName: "",
+      inputValue: "",
+      // friendsInvolved: new Array(),
+      friendsInvolved: [],
+      tripID: "",
+    };
+  }
 
   inputChange = (e) => {
     this.setState({
@@ -39,7 +42,7 @@ class MaterialAddNewTrip extends Component {
 
   formSubmit = (e) => {
     e.preventDefault();
-    const { tripName, friendsInvolved } = this.state;
+    const { tripName, friendsInvolved, tripID } = this.state;
     const { firestore, uid, friends, user } = this.props;
     const docRefConfig = {
       collection: "trips",
@@ -62,26 +65,18 @@ class MaterialAddNewTrip extends Component {
       friendsInvolved: uidFriendsInvolvedConcat,
     };
 
-    let tripID = [];
-
     // batch
     // const batch = firestore.batch();
 
     firestore
       .add(docRefConfig, tripInfo)
+      // .then((docRef) => {
+      //   this.setState({
+      //     tripID: docRef.id,
+      //   });
+      // })
       .then((docRef) => {
-        // console.log(docRef.id);
         uidFriendsInvolvedConcat.forEach((f) =>
-          //     batch.set(
-          //       {
-          //         collection: "users",
-          //         doc: f,
-          //       },
-          //       {
-          //         onTrips: firestore.FieldValue.arrayUnion(docRef.id),
-          //       },
-          //       { merge: true }
-          //     )
           firestore.set(
             {
               collection: "users",
@@ -89,16 +84,29 @@ class MaterialAddNewTrip extends Component {
             },
             {
               onTrips: firestore.FieldValue.arrayUnion(docRef.id),
-              // onTrips: Boolean(user.onTrips)
-              //   ? firestore.FieldValue.arrayUnion(docRef.id)
-              //   : [docRef.id],
             },
             { merge: true }
           )
         );
       })
-      // .then(() => batch.commit())
+      // .then(() => {
+      //   firestore.set(
+      //     {
+      //       collection: "trips",
+      //       doc: docRef.id,
+      //       subcollections: [{ collection: "friendsInvolved" }],
+      //     },
+      //     {
+      //       uid: uidFriendsInvolvedConcat,
+      //     },
+      //     { merge: true }
+      //   );
+      // })
       .catch("failed");
+
+    // if (tripID) {
+    console.log(tripID);
+    // }
 
     this.setState({
       tripName: "",
@@ -126,7 +134,7 @@ class MaterialAddNewTrip extends Component {
       ),
       // friendsInvolved: e.target.selectedOptions,
     });
-    console.log(this.state.friendsInvolved);
+    // console.log(this.state.friendsInvolved);
   };
 
   renderFriendsInvolved() {

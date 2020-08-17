@@ -102,6 +102,9 @@ export default function AddContact(props) {
     e.preventDefault();
     const { uid, id } = props;
 
+    let userDoc = undefined;
+    let userID = undefined;
+
     firestore
       .collection("users")
       .where("email", "==", emailMatch)
@@ -109,42 +112,46 @@ export default function AddContact(props) {
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
           // doc.data() is never undefined for query doc snapshots
-          console.log(doc.id, " => ", doc.data());
+          userDoc = doc.data();
+          userID = doc.id;
+          // console.log(doc.id, " => ", doc.data());
         });
       })
-      .catch(function (error) {
-        console.log("Error getting documents: ", error);
-      });
-
-    firestore
-      .add(
-        {
-          collection: "users",
-          doc: uid,
-          subcollections: [{ collection: "contacts" }],
-        },
-        {
-          id: getKeyByValue(emailMatch) ? getKeyByValue(emailMatch) : "",
-          firstName: firstName,
-        }
-      )
-      .then((docRef) => {
-        firestore.update(
+      // .catch(function (error) {
+      //   console.log("Error getting documents: ", error);
+      // });
+      .then((doc) => {
+        firestore.add(
           {
             collection: "users",
             doc: uid,
-            subcollections: [
-              {
-                collection: "contacts",
-                doc: docRef.id,
-              },
-            ],
+            subcollections: [{ collection: "contacts" }],
           },
           {
-            uid: docRef.id,
+            // id: getKeyByValue(emailMatch) ? getKeyByValue(emailMatch) : "",
+            // firstName: firstName,
+            uid: userID,
+            firstName: userDoc.username,
           }
         );
-        // console.log("Document written with ID: ", docRef.id);
+        // .then((docRef) => {
+        //   firestore.update(
+        //     {
+        //       collection: "users",
+        //       doc: uid,
+        //       subcollections: [
+        //         {
+        //           collection: "contacts",
+        //           doc: docRef.id,
+        //         },
+        //       ],
+        //     },
+        //     {
+        //       uid: docRef.id,
+        //     }
+        //   );
+        //   // console.log("Document written with ID: ", docRef.id);
+        // });
       });
 
     setFirstName("");
