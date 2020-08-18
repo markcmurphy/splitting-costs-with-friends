@@ -54,7 +54,7 @@ class MaterialAddNewTrip extends Component {
     const tripInfo = {
       tripName: tripName,
       tripOwner: uid,
-      // friendsInvolved: uidFriendsInvolvedConcat,
+      friendsInvolved: uidFriendsInvolvedConcat,
     };
 
     firestore
@@ -110,15 +110,13 @@ class MaterialAddNewTrip extends Component {
   };
 
   inputChangeMultiple = (e) => {
-    // console.log(e.target.selectedOptions);
     this.setState({
       friendsInvolved: Array.from(
         e.target.selectedOptions,
         (item) => item.value
       ),
-      // friendsInvolved: e.target.selectedOptions,
     });
-    // console.log(this.state.friendsInvolved);
+    console.log(this.state.friendsInvolved);
   };
 
   renderFriendsInvolved() {
@@ -169,9 +167,10 @@ class MaterialAddNewTrip extends Component {
         fullWidth
       >
         {_.map(friends, (value, key) => {
+          console.log(value);
           return (
-            <option key={value.uid} value={value.uid}>
-              {value.firstName}
+            <option key={key} value={value.id}>
+              {value.username}
             </option>
           );
 
@@ -323,9 +322,10 @@ export default compose(
   firestoreConnect((props) => [
     {
       collection: "users",
-      doc: props.uid,
+      // doc: props.uid,
+      where: [["contactOf", "array-contains", props.uid]],
       storeAs: `${props.id}-contacts`,
-      subcollections: [{ collection: "contacts" }],
+      // subcollections: [{ collection: "contacts" }],
     },
     {
       collection: "users",

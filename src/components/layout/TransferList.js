@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import List from "@material-ui/core/List";
@@ -35,26 +35,26 @@ function intersection(a, b) {
 }
 
 export default function TransferList(props) {
-  const classes = useStyles();
-  const [checked, setChecked] = useState([]);
-  const [left, setLeft] = useState([]);
-  const [right, setRight] = useState([]);
-
-  const leftChecked = intersection(checked, left);
-  const rightChecked = intersection(checked, right);
-
   useFirestoreConnect([
     {
       collection: "users",
-      doc: props.uid,
-      subcollections: [{ collection: "contacts" }],
+      // doc: props.uid,
+      where: [["contactOf", "array-contains", props.uid]],
+
+      // subcollections: [{ collection: "contacts" }],
       storeAs: "myContacts",
     },
     {
-      collection: "trips",
-      doc: props.tripId,
-      //   subcollections: [{ collection: "contacts" }],
-      //   where: [["tripOwner", "==", props.uid]],
+      // collection: "trips",
+      // doc: props.tripId,
+      // subcollections: [{ collection: "friendsInvolved" }],
+      // // where: [["uid", "==", props.uid]],
+      // storeAs: "friendsOnTrip",
+      collection: "users",
+      where: [["onTrips", "array-contains", props.tripId]],
+
+      // doc: props.tripId,
+      // subcollections: [{ collection: "friendsInvolved" }],
       storeAs: "friendsOnTrip",
     },
   ]);
@@ -65,15 +65,30 @@ export default function TransferList(props) {
     (state) => state.firestore.ordered.friendsOnTrip
   );
 
-  if (friendsOnTrip) {
-    console.log(friendsOnTrip[0].friendsInvolved);
-  }
+  const classes = useStyles();
+  const [checked, setChecked] = useState([]);
+  const [left, setLeft] = useState([]);
+  const [right, setRight] = useState([]);
+
+  const leftChecked = intersection(checked, left);
+  const rightChecked = intersection(checked, right);
+
+  // if (friendsOnTrip) {
+  //   console.log(friendsOnTrip[0].friendsInvolved);
+  // }
+  // console.log(friendsOnTrip);
   console.log(myContacts);
 
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+  useEffect(() => {
+    setLeft(myContacts);
+  }, [myContacts]);
 
+  const handleToggle = (value) => {
+    console.log(value.id);
+    const currentIndex = checked.indexOf(value.id);
+    console.log(currentIndex);
+    const newChecked = [...checked];
+    console.log(newChecked);
     if (currentIndex === -1) {
       newChecked.push(value);
     } else {
@@ -110,24 +125,24 @@ export default function TransferList(props) {
       <List dense component="div" role="list">
         {_.map(items, (value, key) => {
           const labelId = `transfer-list-item-${key}-label`;
-          //   console.log(value, key);
+          console.log(value, key);
 
           return (
             <ListItem
               key={key}
               role="listitem"
               button
-              onClick={handleToggle(value)}
+              onClick={handleToggle(value.id)}
             >
               <ListItemIcon>
                 <Checkbox
-                  checked={checked.indexOf(value) !== -1}
+                  checked={checked.indexOf(value.id) !== -1}
                   tabIndex={-1}
                   disableRipple
                   inputProps={{ "aria-labelledby": labelId }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={value.firstName} />
+              <ListItemText id={labelId} primary={value.username} />
             </ListItem>
           );
         })}
@@ -144,7 +159,7 @@ export default function TransferList(props) {
       alignItems="center"
       className={classes.root}
     >
-      <Grid item>{customList(myContacts)}</Grid>
+      <Grid item>{customList(left)}</Grid>
       <Grid item>
         <Grid container direction="column" alignItems="center">
           {/* <Button
@@ -189,7 +204,7 @@ export default function TransferList(props) {
           </Button> */}
         </Grid>
       </Grid>
-      <Grid item>{customList(friendsOnTrip)}</Grid>
+      <Grid item>{customList(right)}</Grid>
     </Grid>
   );
 }

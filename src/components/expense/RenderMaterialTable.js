@@ -275,7 +275,7 @@ class RenderMaterialTable extends Component {
     // console.log(tripFriendIDs);
     for (const friend of tripFriendIDs) {
       if (friend.id === whoPaid) {
-        return friend.label;
+        return friend.username;
       }
     }
     // if (friendsObj && friendsObj[whoPaid]) {
@@ -365,8 +365,8 @@ class RenderMaterialTable extends Component {
     _.map(tripFriendIDs, (val, key) => {
       // console.log(val);
       columns.splice(3, 0, {
-        name: val.label,
-        label: val.label,
+        name: val.username,
+        label: val.username,
         options: {
           customBodyRender: (value, tableMeta, updateValue) => {
             return (
@@ -475,7 +475,7 @@ class RenderMaterialTable extends Component {
   render() {
     return (
       <Suspense fallback={<CircularProgress />}>
-        <TransferList id={this.props.tripId} uid={this.props.uid} />
+        {/* <TransferList tripId={this.props.tripId} uid={this.props.uid} /> */}
         <MUIDataTable
           title={
             this.props.tripName ? (

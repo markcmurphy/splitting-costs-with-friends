@@ -17,8 +17,10 @@ export default function ListFriends(props) {
   useFirestoreConnect([
     {
       collection: "users",
-      doc: props.uid,
-      subcollections: [{ collection: "contacts" }],
+      where: [["contactOf", "array-contains", props.uid]],
+
+      // doc: props.uid,
+      // subcollections: [{ collection: "contacts" }],
       //   where: [["tripOwner", "==", props.uid]],
       storeAs: "myContacts",
     },
@@ -71,7 +73,7 @@ export default function ListFriends(props) {
                       style={{ textDecoration: "none" }}
                     > */}
           <ListItemText
-            primary={value.firstName}
+            primary={value.username}
             // TODO: reenable secondary text
 
             // secondary="Jan 7, 2014"

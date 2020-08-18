@@ -44,6 +44,7 @@ export default function ListFriendsOnTrip(props) {
 
   const renderFriend = (props) => {
     const friendsList = _.map(tripFriendIDs, (value, key) => {
+      // console.log(value);
       return (
         // <ListItem key={value.id} dense={true}>
         <ListItem key={key} dense={true}>
@@ -62,7 +63,7 @@ export default function ListFriendsOnTrip(props) {
                         style={{ textDecoration: "none" }}
                       > */}
           <ListItemText
-            primary={value.label}
+            primary={value.username}
             // secondary="Jan 7, 2014"
           />
           {/* </Link> */}

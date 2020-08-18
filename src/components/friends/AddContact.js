@@ -79,15 +79,15 @@ export default function AddContact(props) {
   // console.log(userEmail);
 
   // TODO: get UID by email using cloud function instead of searching users
-  const getKeyByValue = (value) => {
-    for (const prop in users) {
-      if (users.hasOwnProperty(prop)) {
-        if (users[prop].email === value) {
-          return prop;
-        }
-      }
-    }
-  };
+  // const getKeyByValue = (value) => {
+  //   for (const prop in users) {
+  //     if (users.hasOwnProperty(prop)) {
+  //       if (users[prop].email === value) {
+  //         return prop;
+  //       }
+  //     }
+  //   }
+  // };
 
   //   todo: combine input change methods
   const inputChangeName = (e) => {
@@ -120,19 +120,35 @@ export default function AddContact(props) {
       // .catch(function (error) {
       //   console.log("Error getting documents: ", error);
       // });
+      // .then((doc) => {
+      //   firestore.add(
+      //     {
+      //       collection: "users",
+      //       doc: uid,
+      //       subcollections: [{ collection: "contacts" }],
+      //     },
+      //     {
+      //       // id: getKeyByValue(emailMatch) ? getKeyByValue(emailMatch) : "",
+      //       // firstName: firstName,
+      //       uid: userID,
+      //       username: userDoc.username,
+      //     }
+      //   );
       .then((doc) => {
-        firestore.add(
+        firestore.set(
           {
             collection: "users",
-            doc: uid,
-            subcollections: [{ collection: "contacts" }],
+            doc: userID,
+            // subcollections: [{ collection: "contacts" }],
           },
           {
             // id: getKeyByValue(emailMatch) ? getKeyByValue(emailMatch) : "",
             // firstName: firstName,
-            uid: userID,
-            firstName: userDoc.username,
-          }
+            // uid: userID,
+            contactOf: firestore.FieldValue.arrayUnion(uid),
+            // username: userDoc.username,
+          },
+          { merge: true }
         );
         // .then((docRef) => {
         //   firestore.update(
@@ -174,7 +190,7 @@ export default function AddContact(props) {
             <DialogContentText>Enter your friends here!</DialogContentText>
             <form onSubmit={formSubmit} id="newFriendForm">
               <FormGroup>
-                <FormControl style={{ marginBottom: marginBottom }}>
+                {/* <FormControl style={{ marginBottom: marginBottom }}>
                   <InputLabel>Friend Name</InputLabel>
                   <Input
                     autoFocus
@@ -185,7 +201,7 @@ export default function AddContact(props) {
                     onChange={inputChangeName}
                     fullWidth
                   />
-                </FormControl>
+                </FormControl> */}
                 <FormControl style={{ marginBottom: marginBottom }}>
                   <InputLabel>Email Address</InputLabel>
                   <Input
@@ -280,7 +296,7 @@ export default function AddContact(props) {
             onClick={() => setForm(!showForm)}
             style={{ marginTop: "5px" }}
           >
-            Add Friend
+            Add Contact
           </Button>
           {/* <IconButton aria-label="delete" color="primary">
               <PersonAddIcon />

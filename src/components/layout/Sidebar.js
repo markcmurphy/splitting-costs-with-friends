@@ -9,6 +9,7 @@ import { Route, useParams } from "react-router-dom";
 // import AddNewTrip from "../trips/AddNewTrip";
 import MaterialAddNewTrip from "../trips/MaterialAddNewTrip";
 import TripList from "../trips/TripList";
+import SetFriendsOnTrip from "../trips/SetFriendsOnTrip";
 import Divider from "@material-ui/core/Divider";
 import AddContact from "../friends/AddContact";
 import ListFriendsOnTrip from "../friends/ListFriendsOnTrip.js";
@@ -25,6 +26,10 @@ export default function Sidebar(props) {
         {props ? (
           <>
             <MaterialAddNewTrip uid={props.uid} friends={props.friends} />
+            <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
+            <AddContact uid={props.uid} />
+            <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
+            <ListFriends id={id} uid={props.uid} />
 
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
             {/* <TripList uid={props.uid} id={props.id} /> */}
@@ -39,17 +44,14 @@ export default function Sidebar(props) {
           <div>
             <AddExpense id={id} uid={props.uid} />
 
-            <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
-
-            <AddContact uid={props.uid} id={id} />
-
             {/* <Divider style={{ marginTop: "15px", marginBottom: "15px" }} /> */}
 
-            {/* <Friends id={id} uid={props.uid} /> */}
-
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
+
+            {/* <Friends id={id} uid={props.uid} /> */}
+            <SetFriendsOnTrip id={id} uid={props.uid} />
+
             {/* <TransferList id={id} uid={props.uid} /> */}
-            <ListFriends id={id} uid={props.uid} />
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
             <ListFriendsOnTrip id={id} uid={props.uid} />
           </div>
