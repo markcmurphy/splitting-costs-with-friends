@@ -5,6 +5,29 @@ import { connect } from "react-redux";
 import { firebaseConnect, firestoreConnect } from "react-redux-firebase";
 import { notifyUser } from "../../actions/notifyActions";
 import Alert from "../layout/Alert";
+import {
+  Paper,
+  withStyles,
+  Grid,
+  TextField,
+  Button,
+  FormControlLabel,
+  Checkbox,
+} from "@material-ui/core";
+import Input from "@material-ui/core/Input";
+
+import { Face, Fingerprint } from "@material-ui/icons";
+import ContactMailIcon from "@material-ui/icons/ContactMail";
+import InputAdornment from "@material-ui/core/InputAdornment";
+
+const styles = (theme) => ({
+  margin: {
+    margin: theme.spacing(2),
+  },
+  padding: {
+    padding: theme.spacing(),
+  },
+});
 
 class Register extends Component {
   state = {
@@ -12,13 +35,6 @@ class Register extends Component {
     password: "",
     displayName: "",
   };
-
-  componentWillMount() {
-    // const { allowRegistration } = this.props.settings;
-    // if (!allowRegistration) {
-    //   this.props.history.push("/");
-    // }
-  }
 
   onSubmit = (e) => {
     e.preventDefault();
@@ -46,21 +62,7 @@ class Register extends Component {
                   },
                   { merge: true }
                 )
-
-                // .collection("users")
-                // .doc(user.uid)
-                // .set(
-                //   {
-                //     username: displayName,
-                //   },
-                //   { merge: true }
-                // )
-                // .then(function () {
-                //   alert("displayName added!");
-                // })
                 .catch(function (e) {
-                  //there was an error writing to firestore
-                  //check console
                   console.log(e);
                 });
             } else {
@@ -70,29 +72,6 @@ class Register extends Component {
           }
         });
       })
-      // .catch((err) => notifyUser("User Already Exists", "error"))
-      // .then((user) => {
-      //   if (user) {
-      //     user.updateProfile({
-      //       displayName: displayName,
-      //       //  photoURL: // some photo url
-      //     });
-      //     // .then(
-      //     //   (s)=> // perform any other operation
-      //     // )
-      //   }
-      // })
-
-      // .then((userRecord) => {
-      //   userRecord.user.updateProfile({
-      //     displayName: displayName,
-      //     // photoURL: ''
-      //   });
-      // })
-      // .then((userRecord) => {
-      //   this.updateUserData(userRecord.user);
-      //   resolve(userRecord);
-      // })
       .then(this.props.history.push("/"));
   };
 
@@ -100,65 +79,109 @@ class Register extends Component {
 
   render() {
     const { message, messageType } = this.props.notify;
+    const { classes } = this.props;
     return (
-      <div className="col-md-6 mx-auto">
-        <div className="card">
-          <div className="card-body">
-            {message ? (
-              <Alert message={message} messageType={messageType} />
-            ) : null}
-            <h1 className="text-center pb-4 pt-3">
-              <span className="text-primary">
-                <i className="fa fa-lock"></i> Register
-              </span>
-            </h1>
-            <form onSubmit={this.onSubmit}>
-              <div className="form-group">
-                <label htmlFor="displayName">Name</label>
-                <input
-                  type="text"
-                  className="form-control"
+      <Paper className={classes.padding}>
+        <div className={classes.margin}>
+          {message ? (
+            <Alert message={message} messageType={messageType} />
+          ) : null}
+          <form onSubmit={this.onSubmit}>
+            <Grid container spacing={8} alignItems="flex-end">
+              <Grid item>
+                <Face />
+              </Grid>
+              <Grid item md={true} sm={true} xs={true}>
+                <Input
+                  id="username"
+                  label="username"
                   name="displayName"
-                  required
+                  type="username"
                   value={this.state.displayName}
                   onChange={this.onChange}
-                />
-              </div>
-              <label htmlFor="email">Email</label>
-              <input
-                type="text"
-                className="form-control"
-                name="email"
-                required
-                value={this.state.email}
-                onChange={this.onChange}
-              />
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  className="form-control"
-                  name="password"
+                  placeholder="Username"
+                  fullWidth
+                  autoFocus
                   required
+                />
+              </Grid>
+            </Grid>
+            <Grid container spacing={8} alignItems="flex-end">
+              <Grid item>
+                <ContactMailIcon />
+              </Grid>
+              <Grid item md={true} sm={true} xs={true}>
+                <Input
+                  id="email"
+                  label="email"
+                  name="email"
+                  type="email"
+                  placeholder="Email"
+                  value={this.state.email}
+                  onChange={this.onChange}
+                  fullWidth
+                  autoFocus
+                  required
+                />
+              </Grid>
+            </Grid>
+            <Grid container spacing={8} alignItems="flex-end">
+              <Grid item>
+                <Fingerprint />
+              </Grid>
+              <Grid item md={true} sm={true} xs={true}>
+                <Input
+                  id="password"
+                  label="Password"
+                  type="password"
+                  placeholder="Password"
                   value={this.state.password}
                   onChange={this.onChange}
+                  name="password"
+                  fullWidth
+                  required
                 />
-              </div>
-
-              <input
+              </Grid>
+            </Grid>
+            <Grid container alignItems="center" justify="space-between">
+              <Grid item>
+                <FormControlLabel
+                  control={<Checkbox color="primary" />}
+                  label="Remember me"
+                />
+              </Grid>
+              <Grid item>
+                <Button
+                  disableFocusRipple
+                  disableRipple
+                  style={{ textTransform: "none" }}
+                  variant="text"
+                  color="primary"
+                >
+                  Forgot password ?
+                </Button>
+              </Grid>
+            </Grid>
+            <Grid container justify="center" style={{ marginTop: "10px" }}>
+              <Button
+                variant="outlined"
+                color="primary"
                 type="submit"
-                value="Register"
-                className="btn btn-primary btn-block"
-              />
-            </form>
-          </div>
+                style={{ textTransform: "none" }}
+              >
+                Login
+              </Button>
+            </Grid>
+          </form>
         </div>
-      </div>
+      </Paper>
     );
   }
 }
 
 export default compose(
+  withStyles(styles),
+
   firebaseConnect(),
   firestoreConnect(),
   connect(

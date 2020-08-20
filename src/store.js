@@ -6,8 +6,8 @@ import { firestoreReducer } from "redux-firestore";
 import { createFirestoreInstance } from "redux-firestore";
 
 // Reducers
-import data from "./reducers/data";
-import expenseData from "./reducers/expenseData";
+// import data from "./reducers/data";
+// import expenseData from "./reducers/expenseData";
 import notifyReducer from "./reducers/notifyReducer";
 
 const fbConfig = {
@@ -36,9 +36,9 @@ const firestore = firebase.firestore();
 const rootReducer = combineReducers({
   firebase: firebaseReducer,
   firestore: firestoreReducer,
-  data: data,
+  // data: data,
   notify: notifyReducer,
-  expenseData: expenseData,
+  // expenseData: expenseData,
 });
 
 const initialState = {};

@@ -29,3 +29,15 @@ export const UserIsNotAuthenticated = connectedRouterRedirect({
   authenticatedSelector: ({ firebase: { auth } }) =>
     auth.isLoaded && auth.isEmpty,
 });
+
+export const UserIsAnon = connectedRouterRedirect({
+  wrapperDisplayName: "UserIsAnon",
+  AuthenticatingComponent: LoadingSpinner,
+  allowRedirectBack: true,
+  redirectPath: (state, ownProps) =>
+    locationHelper.getRedirectQueryParam(ownProps) || "/",
+  authenticatingSelector: ({ firebase: { auth, isInitializing } }) =>
+    !auth.isLoaded || isInitializing === true,
+  authenticatedSelector: ({ firebase: { auth } }) =>
+    auth.isLoaded && auth.isEmpty,
+});

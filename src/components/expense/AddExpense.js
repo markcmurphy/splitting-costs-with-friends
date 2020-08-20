@@ -194,14 +194,11 @@ class AddExpense extends Component {
                 <InputLabel>Expense Amount</InputLabel>
 
                 <Input
-                  // autoFocus
-                  // margin="dense"
                   id="amount"
                   label="Expense Amount"
                   type="number"
                   name="amount"
                   value={amount}
-                  // className="form-control"
                   onChange={this.inputChange}
                   startAdornment={
                     <InputAdornment position="start">$</InputAdornment>
@@ -276,15 +273,6 @@ class AddExpense extends Component {
 
 export default compose(
   firestoreConnect((props) => [
-    // {
-    //   collection: "users",
-    //   doc: props.uid,
-    //   storeAs: `${props.id}-expenses`,
-    //   subcollections: [
-    //     { collection: "trips", doc: props.id },
-    //     { collection: "expenses" },
-    //   ],
-    // },
     {
       collection: "users",
       doc: props.uid,
@@ -303,7 +291,6 @@ export default compose(
 
   connect(({ firestore: { ordered } }, props) => ({
     friends: ordered[`${props.id}-friends`],
-    // expenses: ordered[`${props.id}-expenses`],
     tripFriendIDs: ordered[`${props.id}-tripFriendIDs`],
   }))
 )(AddExpense);

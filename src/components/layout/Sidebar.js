@@ -1,39 +1,64 @@
 import React from "react";
-
 import ListFriends from "../friends/ListFriends.js";
-// import ListFriendsOnTrip from "../friends/ListFriendsOnTrip.js";
 import AddExpense from "../expense/AddExpense.js";
-
 import { Route, useParams } from "react-router-dom";
-
-// import AddNewTrip from "../trips/AddNewTrip";
-import MaterialAddNewTrip from "../trips/MaterialAddNewTrip";
+import AddNewTrip from "../trips/AddNewTrip";
 import TripList from "../trips/TripList";
-import SetFriendsOnTrip from "../trips/SetFriendsOnTrip";
 import Divider from "@material-ui/core/Divider";
 import AddContact from "../friends/AddContact";
 import ListFriendsOnTrip from "../friends/ListFriendsOnTrip.js";
-import TransferList from "./TransferList.js";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+    "& > *": {
+      margin: theme.spacing(1),
+    },
+  },
+}));
 
 export default function Sidebar(props) {
   const { id } = useParams();
+  const classes = useStyles();
+
   return (
-    <div style={{ paddingLeft: "10%" }}>
+    <div>
       {/* <div className="alert alert-info mt-4" role="alert">
         Add friend or friends prior to adding expense!
       </div> */}
       <>
         {props ? (
           <>
-            <MaterialAddNewTrip uid={props.uid} friends={props.friends} />
+            <div className={classes.root} style={{ paddingLeft: "10%" }}>
+              <ButtonGroup
+                orientation="vertical"
+                color="primary"
+                aria-label="vertical contained primary button group"
+                variant="contained"
+              >
+                <Button>
+                  <AddNewTrip uid={props.uid} friends={props.friends} />
+                </Button>
+                <Button>
+                  <AddContact uid={props.uid} />
+                </Button>
+              </ButtonGroup>
+            </div>
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
-            <AddContact uid={props.uid} />
-            <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
-            <ListFriends id={id} uid={props.uid} />
-
-            <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
-            {/* <TripList uid={props.uid} id={props.id} /> */}
-            <TripList uid={props.uid} id={props.id} />
+            <div style={{ paddingLeft: "10%" }}>
+              <ListFriends id={id} uid={props.uid} />
+            </div>
+            {/* <Divider style={{ marginTop: "15px", marginBottom: "15px" }} /> */}
+            <div style={{ paddingLeft: "10%" }}>
+              <TripList
+                uid={props.uid}
+                id={props.id}
+                style={{ paddingLeft: "10%" }}
+              />
+            </div>
           </>
         ) : null}
       </>
@@ -42,18 +67,23 @@ export default function Sidebar(props) {
         path="/trip/:id"
         render={() => (
           <div>
-            <AddExpense id={id} uid={props.uid} />
-
             {/* <Divider style={{ marginTop: "15px", marginBottom: "15px" }} /> */}
-
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
-
-            {/* <Friends id={id} uid={props.uid} /> */}
-            <SetFriendsOnTrip id={id} uid={props.uid} />
-
-            {/* <TransferList id={id} uid={props.uid} /> */}
+            <div style={{ paddingLeft: "10%" }}>
+              <ListFriendsOnTrip
+                id={id}
+                uid={props.uid}
+                style={{ paddingLeft: "10%" }}
+              />
+            </div>
             <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
-            <ListFriendsOnTrip id={id} uid={props.uid} />
+            <div style={{ paddingLeft: "10%" }}>
+              <AddExpense
+                id={id}
+                uid={props.uid}
+                style={{ paddingLeft: "10%" }}
+              />
+            </div>
           </div>
         )}
       />

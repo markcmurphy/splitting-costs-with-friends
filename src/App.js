@@ -1,5 +1,9 @@
 import React, { Component } from "react";
-import { UserIsAuthenticated, UserIsNotAuthenticated } from "./helpers/auth";
+import {
+  UserIsAuthenticated,
+  UserIsNotAuthenticated,
+  UserIsAnon,
+} from "./helpers/auth";
 import {
   BrowserRouter as Router,
   Route,
@@ -15,6 +19,7 @@ import { connect } from "react-redux";
 import { firebaseConnect } from "react-redux-firebase";
 
 import Login from "./components/auth/Login";
+import AnonLogin from "./components/auth/AnonLogin";
 import Register from "./components/auth/Register";
 import Sidebar from "./components/layout/Sidebar";
 import RenderMaterialTable from "./components/expense/RenderMaterialTable";
@@ -33,6 +38,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { withStyles } from "@material-ui/core/styles";
+import Alert from "@material-ui/lab/Alert";
 
 const drawerWidth = 240;
 
@@ -69,8 +75,6 @@ const useStyles = (theme) => ({
   },
 });
 
-// const classes = useStyles;
-
 class App extends Component {
   state = {
     mobileOpen: false,
@@ -104,6 +108,7 @@ class App extends Component {
   container = window !== undefined ? () => window().document.body : undefined;
 
   render() {
+    console.log(this.props);
     const { window } = this.props;
 
     const { classes, auth, ...props } = this.props;
@@ -132,6 +137,26 @@ class App extends Component {
                 ) : null)
             }
           />
+          <Route
+            {...props}
+            exact
+            path="/"
+            component={
+              (this.UserIsAnon = () =>
+                auth.uid ? <Sidebar uid={auth.uid} /> : null)
+            }
+          />
+          <Route
+            {...props}
+            exact
+            path="/trip/:id"
+            component={
+              (this.UserIsAnon = ({ match }) =>
+                auth.uid ? (
+                  <Sidebar id={match.params.id} uid={auth.uid} />
+                ) : null)
+            }
+          />
         </Switch>
       </div>
     );
@@ -140,11 +165,6 @@ class App extends Component {
       <Router basename={process.env.PUBLIC_URL}>
         <div className={classes.root}>
           <CssBaseline />
-          {/* <div className="App"> */}
-          {/* <header>
-            <Navbar />
-          </header> */}
-          {/* <MenuAppBar props={this.props} drawerWidth={drawerWidth} /> */}
           <AppBar position="fixed" className={classes.appBar}>
             <Toolbar>
               <IconButton
@@ -159,64 +179,68 @@ class App extends Component {
               <Typography variant="h6" className={classes.title}>
                 Splitting Costs with Friends!
               </Typography>
-              {
-                auth.uid ? (
-                  <div>
-                    <IconButton
-                      aria-label="account of current user"
-                      aria-controls="menu-appbar"
-                      aria-haspopup="true"
-                      onClick={(e) => this.handleMenu(e)}
-                      color="inherit"
-                    >
-                      <AccountCircle />
-                    </IconButton>
+              {auth.uid ? (
+                <div>
+                  <IconButton
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={(e) => this.handleMenu(e)}
+                    color="inherit"
+                  >
+                    <AccountCircle />
+                  </IconButton>
 
-                    <Menu
-                      id="menu-appbar"
-                      anchorEl={this.state.anchorEl}
-                      anchorOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                      }}
-                      keepMounted
-                      transformOrigin={{
-                        vertical: "top",
-                        horizontal: "right",
-                      }}
-                      open={Boolean(this.state.anchorEl)}
-                      onClose={this.handleClose}
-                    >
-                      <MenuItem onClick={this.handleClose}>
-                        {auth.email}
-                      </MenuItem>
-                      <MenuItem onClick={this.handleClose}>My account</MenuItem>
-                      <MenuItem onClick={this.onLogoutClick}>Logout</MenuItem>
-                    </Menu>
-                  </div>
-                ) : null
-                // <Typography
-                //   style={{ marginLeft: "20px" }}
-                //   variant="h6"
-                //   className={classes.title}
-                // >
-                //   <Link
-                //     style={{ color: "white" }}
-                //     component={RouterLink}
-                //     to="/login"
-                //   >
-                //     Login
-                //   </Link>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={this.state.anchorEl}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    open={Boolean(this.state.anchorEl)}
+                    onClose={this.handleClose}
+                  >
+                    <MenuItem onClick={this.handleClose}>{auth.email}</MenuItem>
+                    <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                    <MenuItem onClick={this.onLogoutClick}>Logout</MenuItem>
+                  </Menu>
+                </div>
+              ) : (
+                <Typography
+                  style={{ marginLeft: "20px" }}
+                  variant="h6"
+                  className={classes.title}
+                >
+                  <Link
+                    style={{ color: "white" }}
+                    component={RouterLink}
+                    to="/login"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    style={{ color: "white", marginLeft: "20px" }}
+                    component={RouterLink}
+                    to="/AnonLogin"
+                  >
+                    Anon Login
+                  </Link>
 
-                //   <Link
-                //     style={{ color: "white", marginLeft: "20px" }}
-                //     component={RouterLink}
-                //     to="/register"
-                //   >
-                //     Register
-                //   </Link>
-                // </Typography>
-              }
+                  <Link
+                    style={{ color: "white", marginLeft: "20px" }}
+                    component={RouterLink}
+                    to="/register"
+                  >
+                    Register
+                  </Link>
+                </Typography>
+              )}
             </Toolbar>
           </AppBar>
 
@@ -265,6 +289,11 @@ class App extends Component {
               />
               <Route
                 exact
+                path="/AnonLogin"
+                component={UserIsNotAuthenticated(AnonLogin)}
+              />
+              <Route
+                exact
                 path="/register"
                 component={UserIsNotAuthenticated(Register)}
               />
@@ -272,12 +301,13 @@ class App extends Component {
                 exact
                 path="/"
                 component={UserIsAuthenticated(() => (
-                  // <AllTrips uid={auth.uid} />
-                  <h1>Select trip from left sidebar</h1>
+                  <Alert severity="info">
+                    Select trip from drawer. If no trips created yet, create a
+                    contact and then a trip!
+                  </Alert>
                 ))}
               />
               <Route
-                // {...props}
                 exact
                 path="/trip/:id"
                 render={
@@ -287,32 +317,15 @@ class App extends Component {
                         tripId={match.params.id}
                         uid={this.props.auth.uid}
                       />
-                    ) : // <RenderExpenseList
-                    //   tripId={match.params.id}
-                    //   uid={this.props.auth.uid}
-                    // />
-                    //  <Trip id={match.params.id} uid={this.props.auth.uid} />
-                    null)
-                }
-              />
-              {/* <Route
-                {...props}
-                exact
-                path="/trip/:id"
-                render={
-                  (this.UserIsAuthenticated = ({ match, props }) =>
-                    this.props.auth.uid ? (
-                      <Trip id={match.params.id} uid={this.props.auth.uid} />
                     ) : null)
                 }
-              /> */}
+              />
 
               <Route exact path="/" component={UserIsNotAuthenticated(Login)} />
             </Switch>
           </main>
           {/* <footer style={{ backgroundColor: "lightGrey" }}>Mark Murphy</footer> */}
         </div>
-        {/* </div> */}
       </Router>
     );
   }
@@ -323,7 +336,6 @@ export default compose(
   withStyles(useStyles, { withTheme: true }),
   firebaseConnect(),
   connect((state) => ({
-    // tripID: state.id,
     auth: state.firebase.auth,
   })),
   withRouter

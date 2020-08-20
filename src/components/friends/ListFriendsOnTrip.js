@@ -46,13 +46,10 @@ export default function ListFriendsOnTrip(props) {
     const friendsList = _.map(tripFriendIDs, (value, key) => {
       // console.log(value);
       return (
-        // <ListItem key={value.id} dense={true}>
-        <ListItem key={key} dense={true}>
-          {/* <ListItemAvatar>
-            <Avatar>
-              <ImageIcon />
-            </Avatar>
-          </ListItemAvatar> */}
+        <ListItem key={key}>
+          <ListItemAvatar>
+            <Avatar>{value.username ? value.username.charAt(0) : "A"}</Avatar>
+          </ListItemAvatar>
           {/* <Link
                         to={{
                           pathname: `/trip/${item.id}`,

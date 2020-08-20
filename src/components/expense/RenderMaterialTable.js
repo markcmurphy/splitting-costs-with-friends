@@ -443,8 +443,6 @@ class RenderMaterialTable extends Component {
     for (const expense of expenseArr) {
       expenseArr2.push(expense.flat());
     }
-    // console.log(expenseArr2);
-    // console.log(this.state);
     return expenseArr2;
   }
 
@@ -475,7 +473,6 @@ class RenderMaterialTable extends Component {
   render() {
     return (
       <Suspense fallback={<CircularProgress />}>
-        {/* <TransferList tripId={this.props.tripId} uid={this.props.uid} /> */}
         <MUIDataTable
           title={
             this.props.tripName ? (

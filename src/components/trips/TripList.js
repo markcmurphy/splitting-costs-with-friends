@@ -17,19 +17,14 @@ import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import EditIcon from "@material-ui/icons/Edit";
+import EditTrip from "./EditTrip";
 import _ from "lodash";
 
 export default function TripList(props) {
   const [showForm, setShowForm] = useState(false);
 
-  // useFirestoreConnect([
-  //   {
-  //     collection: "users",
-  //     doc: props.uid,
-  //     subcollections: [{ collection: "trips" }],
-  //     storeAs: "trips",
-  //   },
-  // ]);
   useFirestoreConnect([
     {
       collection: "trips",
@@ -47,20 +42,16 @@ export default function TripList(props) {
   const tripsNotOwned = useSelector(
     (state) => state.firestore.ordered.tripsNotOwned
   );
-
-  // console.log(props);
-  // console.log(trips);
-
   const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
-      maxWidth: 752,
+      maxWidth: 240,
     },
     demo: {
       backgroundColor: theme.palette.background.paper,
     },
     title: {
-      margin: theme.spacing(2, 0, 1),
+      margin: theme.spacing(2, 0, 0),
     },
   }));
 
@@ -71,14 +62,15 @@ export default function TripList(props) {
       return (
         <List>
           {_.map(trips, (item) => {
+            console.log(item);
             return (
-              <ListItem key={item.id} dense={true}>
+              <ListItem key={item.id}>
                 {/* TODO: reenable avatars */}
-                {/* <ListItemAvatar>
+                <ListItemAvatar>
                   <Avatar>
                     <ImageIcon />
                   </Avatar>
-                </ListItemAvatar> */}
+                </ListItemAvatar>
                 <Link
                   style={{ textDecoration: "none" }}
                   component={RouterLink}
@@ -89,9 +81,16 @@ export default function TripList(props) {
                   {/* TODO: reenable secondary text */}
                   <ListItemText
                     primary={item.tripName}
-                    // secondary="Jan 7, 2014"
+                    // secondary={item.createdAt.toDateString()}
                   />
                 </Link>
+                <EditTrip
+                  tripid={item.id}
+                  uid={props.uid}
+                  friendsinvolved={item.friendsInvolved}
+                  tripname={item.tripName}
+                  tripowner={item.tripOwner}
+                />
               </ListItem>
             );
           })}
@@ -124,6 +123,9 @@ export default function TripList(props) {
                     // secondary="Jan 7, 2014"
                   />
                 </Link>
+                <ListItemIcon style={{ marginLeft: "10px" }}>
+                  <EditIcon />
+                </ListItemIcon>
               </ListItem>
             );
           })}
@@ -132,9 +134,8 @@ export default function TripList(props) {
     }
   }
 
-  // return trips ? (
   return (
-    <>
+    <div style={{ marginTop: "3%" }}>
       {showForm ? (
         <Button
           variant="contained"
@@ -144,24 +145,26 @@ export default function TripList(props) {
           Display All Trips
         </Button>
       ) : (
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => setShowForm(!showForm)}
-        >
-          Close Trip List
-        </Button>
+        <>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => setShowForm(!showForm)}
+          >
+            Close Trip List
+          </Button>
+          <Typography variant="h6" className={classes.title}>
+            My Owned Trips
+          </Typography>
+        </>
       )}
-      <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
-      <Typography variant="h6" className={classes.title}>
-        My Owned Trips
-      </Typography>
+      {/* <Divider style={{ marginTop: "15px", marginBottom: "15px" }} /> */}
       <List>{RenderList()}</List>
-      <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
+      {/* <Divider style={{ marginTop: "15px", marginBottom: "15px" }} />
       <Typography variant="h6" className={classes.title}>
         Trips I'm involved in
       </Typography>
-      <List>{RenderListTripsNotOwned()}</List>
-    </>
+      <List>{RenderListTripsNotOwned()}</List> */}
+    </div>
   );
 }
