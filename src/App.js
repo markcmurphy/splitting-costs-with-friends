@@ -22,6 +22,7 @@ import Login from "./components/auth/Login";
 import AnonLogin from "./components/auth/AnonLogin";
 import Register from "./components/auth/Register";
 import Sidebar from "./components/layout/Sidebar";
+import LoggedOutSidebar from "./components/layout/LoggedOutSidebar";
 import RenderMaterialTable from "./components/expense/RenderMaterialTable";
 
 import AppBar from "@material-ui/core/AppBar";
@@ -58,6 +59,8 @@ const useStyles = (theme) => ({
     [theme.breakpoints.up("sm")]: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
+      // display: "flex",
+      // justifyContent: "space-between",
     },
   },
   menuButton: {
@@ -110,9 +113,7 @@ class App extends Component {
   container = window !== undefined ? () => window().document.body : undefined;
 
   render() {
-    console.log(this.props);
     const { window } = this.props;
-
     const { classes, auth, ...props } = this.props;
 
     const drawer = (
@@ -182,7 +183,7 @@ class App extends Component {
                 Splitting Costs with Friends!
               </Typography>
               {auth.uid ? (
-                <div>
+                <div style={{ float: "right" }}>
                   <IconButton
                     aria-label="account of current user"
                     aria-controls="menu-appbar"
@@ -216,7 +217,8 @@ class App extends Component {
               ) : (
                 <ButtonGroup
                   variant="contained"
-                  aria-label="contained  button group"
+                  size="small"
+                  aria-label="contained small button group"
                   style={{ marginLeft: "20px" }}
                 >
                   <Button>
@@ -234,7 +236,7 @@ class App extends Component {
                       component={RouterLink}
                       to="/AnonLogin"
                     >
-                      Anon Login
+                      Guest
                     </Link>
                   </Button>
                   <Button>
