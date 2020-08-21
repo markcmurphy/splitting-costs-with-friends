@@ -34,6 +34,8 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Menu from "@material-ui/core/Menu";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Button from "@material-ui/core/Button";
 
 import MenuItem from "@material-ui/core/MenuItem";
 import AccountCircle from "@material-ui/icons/AccountCircle";
@@ -212,34 +214,39 @@ class App extends Component {
                   </Menu>
                 </div>
               ) : (
-                <Typography
+                <ButtonGroup
+                  variant="contained"
+                  aria-label="contained  button group"
                   style={{ marginLeft: "20px" }}
-                  variant="h6"
-                  className={classes.title}
                 >
-                  <Link
-                    style={{ color: "white" }}
-                    component={RouterLink}
-                    to="/login"
-                  >
-                    Login
-                  </Link>
-                  <Link
-                    style={{ color: "white", marginLeft: "20px" }}
-                    component={RouterLink}
-                    to="/AnonLogin"
-                  >
-                    Anon Login
-                  </Link>
-
-                  <Link
-                    style={{ color: "white", marginLeft: "20px" }}
-                    component={RouterLink}
-                    to="/register"
-                  >
-                    Register
-                  </Link>
-                </Typography>
+                  <Button>
+                    <Link
+                      style={{ color: "#3f51b5", textDecoration: "none" }}
+                      component={RouterLink}
+                      to="/login"
+                    >
+                      Login
+                    </Link>
+                  </Button>
+                  <Button>
+                    <Link
+                      style={{ color: "#3f51b5", textDecoration: "none" }}
+                      component={RouterLink}
+                      to="/AnonLogin"
+                    >
+                      Anon Login
+                    </Link>
+                  </Button>
+                  <Button>
+                    <Link
+                      style={{ color: "#3f51b5", textDecoration: "none" }}
+                      component={RouterLink}
+                      to="/register"
+                    >
+                      Register
+                    </Link>
+                  </Button>
+                </ButtonGroup>
               )}
             </Toolbar>
           </AppBar>
