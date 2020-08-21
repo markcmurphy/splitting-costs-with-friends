@@ -96,8 +96,8 @@ export default function AddContact(props) {
           <DialogContent>
             {/* <div className={classes.root}> */}
             <Alert severity="info">
-              Contact must already be registered - use mark@murphymark.me as
-              example
+              New contact must already be registered as a user - use
+              mark@murphymark.me as example
             </Alert>
             {/* </div> */}
             {/* <DialogContentText>Enter your friends here!</DialogContentText> */}
