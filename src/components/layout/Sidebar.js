@@ -34,9 +34,10 @@ export default function Sidebar(props) {
           <>
             <div className={classes.root} style={{ paddingLeft: "10%" }}>
               <ButtonGroup
-                variant="contained"
+                orientation="vertical"
                 color="primary"
-                aria-label="contained primary button group"
+                aria-label="vertical contained primary button group"
+                variant="contained"
               >
                 <Button>
                   <AddNewTrip uid={props.uid} friends={props.friends} />
