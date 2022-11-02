@@ -11,7 +11,7 @@
     "classnames": "^2.2.6",
     "firebase": "^7.14.2",
     "lodash": "^4.17.15",
-    "material-table": "^1.67.1",
+    "material-table": "^1.69.3",
     "mui-datatables": "^3.3.1",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
